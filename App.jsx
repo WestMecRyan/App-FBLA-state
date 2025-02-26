@@ -26,5 +26,6 @@ export default function App() {
         <Stack.Screen name="Battle" component={BattleScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+        // <p>Hi</p>
   );
 }
