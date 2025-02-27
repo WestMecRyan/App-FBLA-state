@@ -2,21 +2,35 @@ import { Audio } from 'expo-av';
 import { loadGameState } from './game'; // Import loadGameState
 
 const sounds = {
-  battleStart: require('../assets/sounds/battle-start.mp3'),
-  hit: require('../assets/sounds/hit.mp3'),
-  correctAnswer: require('../assets/sounds/correct.mp3'),
-  wrongAnswer: require('../assets/sounds/wrong.mp3'),
-  victory: require('../assets/sounds/victory.mp3'),
-  defeat: require('../assets/sounds/defeat.mp3'),
-  switch: require('../assets/sounds/switch.mp3'),
-  faint: require('../assets/sounds/faint.mp3'),
-  question: require('../assets/sounds/question.mp3')
+  // battleStart: require('../assets/sounds/battle-start.mp3'),
+  // hit: require('../assets/sounds/hit.mp3'),
+  // correctAnswer: require('../assets/sounds/correct.mp3'),
+  // wrongAnswer: require('../assets/sounds/wrong.mp3'),
+  // victory: require('../assets/sounds/victory.mp3'),
+  // defeat: require('../assets/sounds/defeat.mp3'),
+  // switch: require('../assets/sounds/switch.mp3'),
+  // faint: require('../assets/sounds/faint.mp3'),
+  // question: require('../assets/sounds/question.mp3')
+
+  battleStart: require('../assets/sounds/test.mp3'),
+  hit: require('../assets/sounds/test.mp3'),
+  correctAnswer: require('../assets/sounds/test.mp3'),
+  wrongAnswer: require('../assets/sounds/test.mp3'),
+  victory: require('../assets/sounds/test.mp3'),
+  defeat: require('../assets/sounds/test.mp3'),
+  switch: require('../assets/sounds/test.mp3'),
+  faint: require('../assets/sounds/test.mp3'),
+  question: require('../assets/sounds/test.mp3')
 };
 
 const music = {
-  battle: require('../assets/music/battle.mp3'),
-  map: require('../assets/music/map.mp3'),
-  victory: require('../assets/music/victory.mp3')
+  // battle: require('../assets/music/battle.mp3'),
+  // map: require('../assets/music/map.mp3'),
+  // victory: require('../assets/music/victory.mp3')
+
+  battle: require('../assets/music/test.mp3'),
+  map: require('../assets/music/test.mp3'),
+  victory: require('../assets/music/test.mp3')
 };
 
 let backgroundMusic = null;
