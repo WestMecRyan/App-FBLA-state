@@ -13,7 +13,8 @@ export const MONSTERS = [
       { id: 3, name: 'Fire Fang', power: 50, type: 'fire' },
       { id: 4, name: 'Quick Attack', power: 35, type: 'normal' }
     ],
-    image: require('../assets/monsters/flamander.png')
+    // image: require('../assets/monsters/flamander.png')
+    image: require('../assets/monsters/test-mon.png')
   },
   {
     id: 2,
@@ -28,7 +29,8 @@ export const MONSTERS = [
       { id: 7, name: 'Dragon Breath', power: 60, type: 'dragon' },
       { id: 8, name: 'Slash', power: 55, type: 'normal' }
     ],
-    image: require('../assets/monsters/blazix.png')
+    // image: require('../assets/monsters/blazix.png')
+    image: require('../assets/monsters/test-mon.png')
   },
 
   // Water Types
@@ -45,7 +47,8 @@ export const MONSTERS = [
       { id: 11, name: 'Bubble', power: 45, type: 'water' },
       { id: 12, name: 'Quick Attack', power: 35, type: 'normal' }
     ],
-    image: require('../assets/monsters/aquatle.png')
+    // image: require('../assets/monsters/aquatle.png')
+    image: require('../assets/monsters/test-mon.png')
   },
   {
     id: 4,
@@ -60,7 +63,8 @@ export const MONSTERS = [
       { id: 15, name: 'Ice Beam', power: 70, type: 'ice' },
       { id: 16, name: 'Slam', power: 55, type: 'normal' }
     ],
-    image: require('../assets/monsters/hydrakon.png')
+    // image: require('../assets/monsters/hydrakon.png')
+    image: require('../assets/monsters/test-mon.png')
   },
 
   // Grass Types
@@ -77,7 +81,8 @@ export const MONSTERS = [
       { id: 19, name: 'Razor Leaf', power: 45, type: 'grass' },
       { id: 20, name: 'Quick Attack', power: 35, type: 'normal' }
     ],
-    image: require('../assets/monsters/leafling.png')
+    // image: require('../assets/monsters/leafling.png')
+    image: require('../assets/monsters/test-mon.png')
   },
   {
     id: 6,
@@ -92,6 +97,7 @@ export const MONSTERS = [
       { id: 23, name: 'Energy Ball', power: 65, type: 'grass' },
       { id: 24, name: 'Body Slam', power: 60, type: 'normal' }
     ],
-    image: require('../assets/monsters/florabeast.png')
+    // image: require('../assets/monsters/florabeast.png')
+    image: require('../assets/monsters/test-mon.png')
   }
 ];
