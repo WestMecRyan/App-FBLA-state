@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { loadGameState, saveGameState } from '../utils/storage';
+import { loadGameState, updateSettings } from '../utils/gameState';
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
@@ -30,7 +30,7 @@ export default function SettingsScreen() {
   const updateSetting = async (key, value) => {
     const newSettings = { ...settings, [key]: value };
     setSettings(newSettings);
-    await saveGameState({ settings: newSettings });
+    await updateSettings(newSettings);
   };
 
   return (

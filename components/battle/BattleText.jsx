@@ -18,7 +18,7 @@ export default function BattleText({
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
-        useNativeDriver: true
+        useNativeDriver: false
       }),
       Animated.delay(1000)
     ]).start(() => {

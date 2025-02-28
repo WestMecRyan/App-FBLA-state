@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { SCHOOLS } from '../data/schools';
+import { loadGameState } from '../utils/gameState';
 
 export default function MapScreen() {
   const navigation = useNavigation();

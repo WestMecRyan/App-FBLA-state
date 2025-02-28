@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import { loadGameState, saveGameState } from '../utils/storage';
+import { loadGameState, healTeam } from '../utils/gameState';
 import { PROBLEMS } from '../data/problems';
 
 export default function TeamManagementScreen() {
@@ -31,17 +31,13 @@ export default function TeamManagementScreen() {
 
   const handleHealAttempt = async (answer) => {
     if (answer === currentProblem.correctAnswer) {
-      const healedTeam = team.map(monster => ({
-        ...monster,
-        health: monster.maxHealth
-      }));
-      
-      await saveGameState({ playerTeam: healedTeam });
-      setTeam(healedTeam);
+      setHealingInProgress(true);
+      await healTeam();
+      const updatedState = await loadGameState();
+      setTeam(updatedState.playerTeam);
       setShowHealModal(false);
       setHealingInProgress(false);
     } else {
-      // Wrong answer - maybe show a message or shake animation
       setHealingInProgress(false);
     }
   };

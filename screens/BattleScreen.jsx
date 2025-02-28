@@ -15,7 +15,7 @@ import MonsterDisplay from '../components/battle/MonsterDisplay';
 import MovesPanel from '../components/battle/MovesPanel';
 import ProblemModal from '../components/battle/ProblemModal';
 import BattleText from '../components/battle/BattleText';
-import { loadGameState, saveGameState } from '../utils/storage';
+import { loadGameState, saveGameState, updatePlayerTeam } from '../utils/gameState';
 import { SCHOOLS } from '../data/schools';
 import { playSound, playBgMusic, stopBgMusic } from '../utils/audio';
 

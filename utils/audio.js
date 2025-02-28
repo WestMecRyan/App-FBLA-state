@@ -1,5 +1,5 @@
 import { Audio } from 'expo-av';
-import { loadGameState } from './game'; // Import loadGameState
+import { loadGameState } from './gameState'; // Import loadGameState
 
 const sounds = {
   // battleStart: require('../assets/sounds/battle-start.mp3'),
