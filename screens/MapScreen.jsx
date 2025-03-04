@@ -53,6 +53,7 @@ export default function MapScreen() {
 
   const handleTrainerSelect = (trainer) => {
     if (!isTrainerLocked(trainer)) {
+      setShowTrainers(false);
       navigation.navigate('Battle', { 
         trainerId: trainer.id,
         schoolId: trainer.schoolId

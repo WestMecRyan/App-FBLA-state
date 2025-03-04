@@ -39,7 +39,7 @@ export default function BattleScreen() {
   useEffect(() => {
     initializeBattle();
     playBgMusic('battle');
-    
+
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       handleBackPress
@@ -70,10 +70,10 @@ export default function BattleScreen() {
       setActiveMonster(gameState.playerTeam[0]);
       setEnemyTrainer(trainer);
       setEnemyMonster(trainer.monsters[0]);
-      
+
       playerHealthAnim.setValue(gameState.playerTeam[0].health);
       enemyHealthAnim.setValue(trainer.monsters[0].health);
-      
+
       setBattleText(`${trainer.name} wants to battle!`);
       playSound('battleStart');
     }
@@ -91,14 +91,14 @@ export default function BattleScreen() {
 
   const handleProblemAnswer = async (correct) => {
     setCurrentProblem(null);
-    
+
     if (correct && activeMonster && enemyMonster) {
       playSound('correctAnswer');
-      
+
       // Player's turn
       const damage = calculateDamage(activeMonster, enemyMonster);
       const newEnemyHealth = Math.max(0, enemyMonster.health - damage);
-      
+
       Animated.timing(enemyHealthAnim, {
         toValue: newEnemyHealth,
         duration: 1000,
@@ -164,7 +164,7 @@ export default function BattleScreen() {
   const handleEnemyMonsterFainted = () => {
     setBattleText(`Enemy ${enemyMonster?.name} fainted!`);
     playSound('faint');
-    
+
     const nextEnemyMonster = enemyTrainer?.monsters.find(
       m => m.health > 0 && m.id !== enemyMonster?.id
     );
@@ -184,7 +184,7 @@ export default function BattleScreen() {
   const handlePlayerMonsterFainted = () => {
     setBattleText(`${activeMonster?.name} fainted!`);
     playSound('faint');
-    
+
     const nextMonster = playerTeam.find(
       m => m.health > 0 && m.id !== activeMonster?.id
     );
@@ -199,14 +199,14 @@ export default function BattleScreen() {
   const handleBattleWin = async () => {
     setBattleText(`You defeated ${enemyTrainer?.name}!`);
     playSound('victory');
-    
+
     // Save progress
     const gameState = await loadGameState();
     await saveGameState({
       defeatedTrainers: [...gameState.defeatedTrainers, trainerId],
       playerTeam
     });
-    
+
     setIsBattleOver(true);
   };
 
@@ -390,3 +390,179 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 });
+
+
+
+
+
+
+
+// import React, { useState, useEffect, useRef } from 'react';
+// import {
+//   View,
+//   StyleSheet,
+//   Animated,
+//   BackHandler
+// } from 'react-native';
+// import { useNavigation, useRoute } from '@react-navigation/native';
+// import MonsterDisplay from '../components/battle/MonsterDisplay';
+// import MovesPanel from '../components/battle/MovesPanel';
+// import ProblemModal from '../components/battle/ProblemModal';
+// import BattleText from '../components/battle/BattleText';
+// import { loadGameState, saveGameState } from '../utils/gameState';
+// import { SCHOOLS } from '../data/schools';
+// import { playSound, playBgMusic, stopBgMusic } from '../utils/audio';
+
+// export default function BattleScreen() {
+//   const navigation = useNavigation();
+//   const route = useRoute();
+
+//   // Add console.log to debug params
+//   console.log('Battle Screen Params:', route.params);
+
+//   const { trainerId, schoolId } = route.params || {};
+
+//   // Add early return if params are missing
+//   if (!trainerId || !schoolId) {
+//     console.error('Missing required battle parameters');
+//     navigation.goBack();
+//     return null;
+//   }
+
+//   const [playerTeam, setPlayerTeam] = useState([]);
+//   const [activeMonster, setActiveMonster] = useState(null);
+//   const [enemyTrainer, setEnemyTrainer] = useState(null);
+//   const [enemyMonster, setEnemyMonster] = useState(null);
+//   const [currentProblem, setCurrentProblem] = useState(null);
+//   const [battleText, setBattleText] = useState('');
+//   const [isBattleOver, setIsBattleOver] = useState(false);
+//   const [showSwitchModal, setShowSwitchModal] = useState(false); // Added state variable
+
+//   const playerHealthAnim = useRef(new Animated.Value(100)).current;
+//   const enemyHealthAnim = useRef(new Animated.Value(100)).current;
+
+//   useEffect(() => {
+//     const initBattle = async () => {
+//       try {
+//         const gameState = await loadGameState();
+//         const school = SCHOOLS.find(s => s.id === schoolId);
+//         const trainer = school?.trainers.find(t => t.id === trainerId);
+
+//         console.log('Found trainer:', trainer); // Debug log
+
+
+//         // console.log(gameState);
+//         if (trainer && gameState.playerTeam.length > 0) {
+//           setPlayerTeam(gameState.playerTeam);
+//           setActiveMonster(gameState.playerTeam[0]);
+//           setEnemyTrainer(trainer);
+//           setEnemyMonster(trainer.monsters[0]);
+
+//           playerHealthAnim.setValue(gameState.playerTeam[0].health);
+//           enemyHealthAnim.setValue(trainer.monsters[0].health);
+
+//           setBattleText(`${trainer.name} wants to battle!`);
+//           playSound('battleStart');
+//         } else {
+//           console.error('Failed to initialize battle');
+//           navigation.goBack();
+//         }
+//       } catch (error) {
+//         console.error('Battle initialization error:', error);
+//         navigation.goBack();
+//       }
+//     };
+
+//     initBattle();
+//     playBgMusic('battle');
+
+//     const backHandler = BackHandler.addEventListener(
+//       'hardwareBackPress',
+//       handleBackPress
+//     );
+
+//     return () => {
+//       backHandler.remove();
+//       stopBgMusic();
+//     };
+//   }, [trainerId, schoolId, playerHealthAnim, enemyHealthAnim, navigation]); // Added dependencies
+
+//   const handleBackPress = () => {
+//     // Implement your back press logic here
+//     console.log('Back button pressed during battle');
+//     // For example, you might want to show a confirmation dialog
+//     // before allowing the user to exit the battle.
+//     return true; // Return true to prevent default back behavior
+//   };
+
+//   const handleMoveSelect = (move) => {
+//     // Implement your move selection logic here
+//     console.log('Move selected:', move);
+//     // Example: Update battleText, animate health, check for win/loss conditions
+//   };
+
+//   const handleProblemAnswer = (isCorrect) => {
+//     // Implement problem answer handling logic here
+//     console.log('Problem answered:', isCorrect);
+//     // Update battle state based on the answer
+//   };
+
+
+//   return (
+//     <View style={styles.container}>
+//       <View style={styles.battleScene}>
+//         {enemyMonster && (
+//           <MonsterDisplay
+//             monster={enemyMonster}
+//             isEnemy={true}
+//             animatedHealth={enemyHealthAnim}
+//           />
+//         )}
+//         {activeMonster && (
+//           <MonsterDisplay
+//             monster={activeMonster}
+//             animatedHealth={playerHealthAnim}
+//           />
+//         )}
+//       </View>
+
+//       {activeMonster && (
+//         <MovesPanel
+//           monster={activeMonster}
+//           onMoveSelect={handleMoveSelect}
+//           onSwitchPress={() => setShowSwitchModal(true)}
+//           disabled={!!currentProblem || isBattleOver}
+//         />
+//       )}
+
+//       {currentProblem && (
+//         <ProblemModal
+//           visible={true}
+//           problem={currentProblem}
+//           onAnswer={handleProblemAnswer}
+//         />
+//       )}
+
+//       <BattleText
+//         message={battleText}
+//         onComplete={() => {
+//           if (isBattleOver) {
+//             navigation.goBack();
+//           }
+//         }}
+//       />
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#87CEEB' // Sky blue background
+//   },
+//   battleScene: {
+//     flex: 1,
+//     justifyContent: 'space-between',
+//     padding: 20
+//   }
+// });

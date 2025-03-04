@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
@@ -6,10 +6,19 @@ import SettingsScreen from './screens/SettingsScreen';
 import MapScreen from './screens/MapScreen';
 import TeamManagementScreen from './screens/TeamManagementScreen';
 import BattleScreen from './screens/BattleScreen';
+import { resetGame, debugGameState } from './utils/gameState';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  useEffect(() => {
+    // Uncomment this line to reset the game state for testing
+    // resetGame().then(() => console.log('Game state reset'));
+    
+    // Debug current game state
+    debugGameState();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator 
@@ -26,6 +35,5 @@ export default function App() {
         <Stack.Screen name="Battle" component={BattleScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-        // <p>Hi</p>
   );
 }
