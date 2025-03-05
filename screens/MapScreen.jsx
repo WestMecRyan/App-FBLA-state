@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  ScrollView, 
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
   Image,
   Modal
 } from 'react-native';
@@ -20,16 +20,30 @@ export default function MapScreen() {
   const [defeatedTrainers, setDefeatedTrainers] = useState([]);
   const [showTrainers, setShowTrainers] = useState(false);
 
+  // useEffect(() => {
+  //   loadProgress();
+  // }, []);
+
+  // const loadProgress = async () => {
+  //   try {
+  //     const progress = await AsyncStorage.getItem('defeatedTrainers');
+  //     if (progress) {
+  //       setDefeatedTrainers(JSON.parse(progress));
+  //       console.log(progress);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error loading progress:', error);
+  //   }
+  // };
+
   useEffect(() => {
     loadProgress();
   }, []);
 
   const loadProgress = async () => {
     try {
-      const progress = await AsyncStorage.getItem('defeatedTrainers');
-      if (progress) {
-        setDefeatedTrainers(JSON.parse(progress));
-      }
+      const progress = await loadGameState();
+      setDefeatedTrainers(progress.defeatedTrainers);
     } catch (error) {
       console.error('Error loading progress:', error);
     }
@@ -37,7 +51,7 @@ export default function MapScreen() {
 
   const isSchoolLocked = (schoolId) => {
     if (schoolId === 1) return false; // First school is always unlocked
-    
+
     // Check if all trainers from previous school are defeated
     const previousSchoolTrainers = SCHOOLS[schoolId - 2].trainers.map(t => t.id);
     return !previousSchoolTrainers.every(id => defeatedTrainers.includes(id));
@@ -45,16 +59,17 @@ export default function MapScreen() {
 
   const isTrainerLocked = (trainer) => {
     if (trainer.id === 1) return false; // First trainer is always unlocked
-    
+
     // Check if previous trainer in the same school is defeated
     const previousTrainerId = trainer.id - 1;
+
     return !defeatedTrainers.includes(previousTrainerId);
   };
 
   const handleTrainerSelect = (trainer) => {
     if (!isTrainerLocked(trainer)) {
       setShowTrainers(false);
-      navigation.navigate('Battle', { 
+      navigation.navigate('Battle', {
         trainerId: trainer.id,
         schoolId: trainer.schoolId
       });
@@ -89,16 +104,16 @@ export default function MapScreen() {
             </TouchableOpacity>
           ))}
         </ScrollView>
-        
+
         {/* Navigation Icons */}
         <View style={styles.navIcons}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.iconButton}
             onPress={() => navigation.navigate('TeamManagement')}
           >
             <Ionicons name="people" size={24} color="#FFF" />
           </TouchableOpacity>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.iconButton}
             onPress={() => navigation.navigate('Settings')}
           >
@@ -122,15 +137,15 @@ export default function MapScreen() {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setShowTrainers(false)}
             >
               <Ionicons name="close" size={24} color="#000" />
             </TouchableOpacity>
-            
+
             <Text style={styles.modalTitle}>{selectedSchool?.name} Trainers</Text>
-            
+
             {selectedSchool?.trainers.map((trainer) => (
               <TouchableOpacity
                 key={trainer.id}
