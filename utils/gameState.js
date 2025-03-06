@@ -162,18 +162,23 @@ import { createMonster } from "../data/monsters"
 
 const GAME_STATE_KEY = "edumon_game_state"
 
-// Default game state with a starter monster
-const DEFAULT_GAME_STATE = {
-  playerTeam: [
-    createMonster(1, 5), // Start with a level 5 Mathling
-  ],
-  defeatedTrainers: [],
-  settings: {
-    soundEnabled: true,
-    musicEnabled: true,
-    difficulty: "normal",
-  },
+// Get initial game state with starter monster
+export const getInitialGameState = () => {
+  return {
+    playerTeam: [
+      createMonster(1, 5), // Start with a level 5 Mathling
+    ],
+    defeatedTrainers: [],
+    settings: {
+      soundEnabled: true,
+      musicEnabled: true,
+      difficulty: "normal",
+    },
+  }
 }
+
+// Default game state with a starter monster
+const DEFAULT_GAME_STATE = getInitialGameState()
 
 // Load game state from AsyncStorage
 export const loadGameState = async () => {
@@ -196,7 +201,10 @@ export const loadGameState = async () => {
           monster.expToNextLevel = calculateExpToNextLevel(monster.level)
         }
         if (monster.maxHealth === undefined) {
-          monster.maxHealth = monster.health
+          monster.maxHealth = monster.health || calculateHealth(monster.baseHealth, monster.level)
+        }
+        if (monster.health === undefined) {
+          monster.health = monster.maxHealth
         }
         return monster
       })
@@ -244,6 +252,11 @@ export const calculateExpToNextLevel = (level) => {
   return Math.floor(100 * Math.pow(1.5, level - 1))
 }
 
+// Calculate health based on base health and level
+export const calculateHealth = (baseHealth, level) => {
+  return Math.floor(baseHealth * (1 + (level - 1) * 0.1))
+}
+
 // Reset game state (for debugging or starting over)
 export const resetGameState = async () => {
   try {
@@ -254,3 +267,28 @@ export const resetGameState = async () => {
     throw error
   }
 }
+
+// Heal all monsters in the player's team
+export const healTeam = async () => {
+  const currentState = await loadGameState()
+
+  // If team is empty, initialize with starter monster
+  if (!currentState.playerTeam || currentState.playerTeam.length === 0) {
+    const initialState = getInitialGameState()
+    return saveGameState({
+      ...currentState,
+      playerTeam: initialState.playerTeam,
+    })
+  }
+
+  const healedTeam = currentState.playerTeam.map((monster) => ({
+    ...monster,
+    health: monster.maxHealth,
+  }))
+
+  return saveGameState({
+    ...currentState,
+    playerTeam: healedTeam,
+  })
+}
+
