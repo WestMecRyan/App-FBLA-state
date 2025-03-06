@@ -14,9 +14,6 @@ export default function App() {
   useEffect(() => {
     // Uncomment this line to reset the game state for testing
     // resetGame().then(() => console.log('Game state reset'));
-    
-    // Debug current game state
-    debugGameState();
   }, []);
 
   return (

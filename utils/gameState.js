@@ -1,254 +1,256 @@
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { MONSTERS } from '../data/monsters';
+// import asyncstorage from '@react-native-async-storage/async-storage';
+// import { monsters } from '../data/monsters';
 
-// // Initial game state with starter monster
-// const getInitialGameState = () => ({
-//   currentSchoolId: 1,
-//   defeatedTrainers: [],
-//   playerTeam: [
-//     // Give player their first monster (Flamander)
-//     {
-//       ...MONSTERS[0],
-//       // [MONSTERS[0]],
-//       health: MONSTERS[0].maxHealth,
+// // initial game state with starter monster
+// const getinitialgamestate = () => {
+//   // create a deep copy of the first monster to avoid reference issues
+//   const startermonster = {
+//     ...monsters[0],
+//     health: monsters[0].maxhealth,
+//   };
+
+//   return {
+//     currentschoolid: 1,
+//     defeatedtrainers: [],
+//     playerteam: [startermonster],
+//     activemonster: startermonster,
+//     settings: {
+//       audio: true,
+//       music: true,
+//       subject: 'math',
 //     }
-//   ],
-//   activeMonster: MONSTERS[0],
-//   settings: {
-//     audio: true,
-//     music: true,
-//     subject: 'math',
-//   },
-// });
+//   };
+// };
 
-// export const loadGameState = async () => {
+// export const loadgamestate = async () => {
 //   try {
-//     const state = await AsyncStorage.getItem('gameState');
+//     const state = await asyncstorage.getitem('gamestate');
 //     if (state) {
-//       return JSON.parse(state);
+//       const parsedstate = json.parse(state);
+
+//       // check if player team is empty and fix it if needed
+//       if (!parsedstate.playerteam || parsedstate.playerteam.length === 0) {
+//         console.warn('player team was empty, reinitializing with starter monster');
+//         const initialstate = getinitialgamestate();
+//         parsedstate.playerteam = initialstate.playerteam;
+//         parsedstate.activemonster = initialstate.activemonster;
+//         await asyncstorage.setitem('gamestate', json.stringify(parsedstate));
+//       }
+
+//       return parsedstate;
 //     }
-//     // If no saved state exists, return initial state
-//     const initialState = getInitialGameState();
-//     await saveGameState(initialState);
-//     return initialState;
+
+//     // if no saved state exists, create and save initial state
+//     console.log('no saved game state found, creating initial state');
+//     const initialstate = getinitialgamestate();
+//     await asyncstorage.setitem('gamestate', json.stringify(initialstate));
+//     return initialstate;
 //   } catch (error) {
-//     console.error('Error loading game state:', error);
-//     return getInitialGameState();
+//     console.error('error loading game state:', error);
+//     return getinitialgamestate();
 //   }
 // };
 
-// export const saveGameState = async (state) => {
+// export const savegamestate = async (state) => {
 //   try {
-//     const currentState = await loadGameState();
-//     const newState = { ...currentState, ...state };
-//     await AsyncStorage.setItem('gameState', JSON.stringify(newState));
-//     return newState;
+//     const currentstate = await loadgamestate();
+//     const newstate = { ...currentstate, ...state };
+
+//     // ensure player team is never empty
+//     if (!newstate.playerteam || newstate.playerteam.length === 0) {
+//       const initialstate = getinitialgamestate();
+//       newstate.playerteam = initialstate.playerteam;
+//       newstate.activemonster = initialstate.activemonster;
+//     }
+
+//     await asyncstorage.setitem('gamestate', json.stringify(newstate));
+//     return newstate;
 //   } catch (error) {
-//     console.error('Error saving game state:', error);
+//     console.error('error saving game state:', error);
 //   }
 // };
 
-// // Helper functions for specific game state updates
-// export const updateSettings = async (settings) => {
-//   const currentState = await loadGameState();
-//   return saveGameState({
-//     ...currentState,
-//     settings: { ...currentState.settings, ...settings }
+// // helper functions for specific game state updates
+// export const updatesettings = async (settings) => {
+//   const currentstate = await loadgamestate();
+//   return savegamestate({
+//     ...currentstate,
+//     settings: { ...currentstate.settings, ...settings }
 //   });
 // };
 
-// export const updatePlayerTeam = async (team) => {
-//   const currentState = await loadGameState();
-//   return saveGameState({
-//     ...currentState,
-//     playerTeam: team
+// export const updateplayerteam = async (team) => {
+//   // ensure team is never empty
+//   if (!team || team.length === 0) {
+//     console.error('attempted to save empty team, using starter monster instead');
+//     const initialstate = getinitialgamestate();
+//     team = initialstate.playerteam;
+//   }
+
+//   const currentstate = await loadgamestate();
+//   return savegamestate({
+//     ...currentstate,
+//     playerteam: team
 //   });
 // };
 
-// export const addDefeatedTrainer = async (trainerId) => {
-//   const currentState = await loadGameState();
-//   if (!currentState.defeatedTrainers.includes(trainerId)) {
-//     return saveGameState({
-//       ...currentState,
-//       defeatedTrainers: [...currentState.defeatedTrainers, trainerId]
+// export const adddefeatedtrainer = async (trainerid) => {
+//   const currentstate = await loadgamestate();
+//   if (!currentstate.defeatedtrainers.includes(trainerid)) {
+//     return savegamestate({
+//       ...currentstate,
+//       defeatedtrainers: [...currentstate.defeatedtrainers, trainerid]
 //     });
 //   }
-//   return currentState;
+//   return currentstate;
 // };
 
-// export const healTeam = async () => {
-//   const currentState = await loadGameState();
-//   const healedTeam = currentState.playerTeam.map(monster => ({
+// export const healteam = async () => {
+//   const currentstate = await loadgamestate();
+
+//   // if team is empty, initialize with starter monster
+//   if (!currentstate.playerteam || currentstate.playerteam.length === 0) {
+//     const initialstate = getinitialgamestate();
+//     return savegamestate({
+//       ...currentstate,
+//       playerteam: initialstate.playerteam,
+//       activemonster: initialstate.activemonster
+//     });
+//   }
+
+//   const healedteam = currentstate.playerteam.map(monster => ({
 //     ...monster,
-//     health: monster.maxHealth
+//     health: monster.maxhealth
 //   }));
-//   return saveGameState({
-//     ...currentState,
-//     playerTeam: healedTeam
+
+//   return savegamestate({
+//     ...currentstate,
+//     playerteam: healedteam
 //   });
 // };
 
-// // Reset game progress
-// export const resetGame = async () => {
+// // reset game progress
+// export const resetgame = async () => {
 //   try {
-//     const initialState = getInitialGameState();
-//     await AsyncStorage.setItem('gameState', JSON.stringify(initialState));
-//     return initialState;
+//     const initialstate = getinitialgamestate();
+//     await asyncstorage.setitem('gamestate', json.stringify(initialstate));
+//     return initialstate;
 //   } catch (error) {
-//     console.error('Error resetting game:', error);
+//     console.error('error resetting game:', error);
 //   }
 // };
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MONSTERS } from '../data/monsters';
+// // debug function to check current game state
+// export const debuggamestate = async () => {
+//   try {
+//     const state = await asyncstorage.getitem('gamestate');
+//     console.log('current game state:', state ? json.parse(state) : 'no state found');
+//     return state ? json.parse(state) : null;
+//   } catch (error) {
+//     console.error('error debugging game state:', error);
+//     return null;
+//   }
+// };
 
-// Initial game state with starter monster
-const getInitialGameState = () => {
-  // Create a deep copy of the first monster to avoid reference issues
-  const starterMonster = {
-    ...MONSTERS[0],
-    health: MONSTERS[0].maxHealth,
-  };
 
-  return {
-    currentSchoolId: 1,
-    defeatedTrainers: [],
-    playerTeam: [starterMonster],
-    activeMonster: starterMonster,
-    settings: {
-      audio: true,
-      music: true,
-      subject: 'math',
-    }
-  };
-};
 
+
+
+
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { createMonster } from "../data/monsters"
+
+const GAME_STATE_KEY = "edumon_game_state"
+
+// Default game state with a starter monster
+const DEFAULT_GAME_STATE = {
+  playerTeam: [
+    createMonster(1, 5), // Start with a level 5 Mathling
+  ],
+  defeatedTrainers: [],
+  settings: {
+    soundEnabled: true,
+    musicEnabled: true,
+    difficulty: "normal",
+  },
+}
+
+// Load game state from AsyncStorage
 export const loadGameState = async () => {
   try {
-    const state = await AsyncStorage.getItem('gameState');
-    if (state) {
-      const parsedState = JSON.parse(state);
-      
-      // Check if player team is empty and fix it if needed
+    const savedState = await AsyncStorage.getItem(GAME_STATE_KEY)
+    if (savedState) {
+      const parsedState = JSON.parse(savedState)
+
+      // Ensure player team is never empty
       if (!parsedState.playerTeam || parsedState.playerTeam.length === 0) {
-        console.warn('Player team was empty, reinitializing with starter monster');
-        const initialState = getInitialGameState();
-        parsedState.playerTeam = initialState.playerTeam;
-        parsedState.activeMonster = initialState.activeMonster;
-        await AsyncStorage.setItem('gameState', JSON.stringify(parsedState));
+        parsedState.playerTeam = DEFAULT_GAME_STATE.playerTeam
       }
-      
-      return parsedState;
-    }
-    
-    // If no saved state exists, create and save initial state
-    console.log('No saved game state found, creating initial state');
-    const initialState = getInitialGameState();
-    await AsyncStorage.setItem('gameState', JSON.stringify(initialState));
-    return initialState;
-  } catch (error) {
-    console.error('Error loading game state:', error);
-    return getInitialGameState();
-  }
-};
 
-export const saveGameState = async (state) => {
+      // Ensure each monster has the required exp properties
+      parsedState.playerTeam = parsedState.playerTeam.map((monster) => {
+        if (monster.exp === undefined) {
+          monster.exp = 0
+        }
+        if (monster.expToNextLevel === undefined) {
+          monster.expToNextLevel = calculateExpToNextLevel(monster.level)
+        }
+        if (monster.maxHealth === undefined) {
+          monster.maxHealth = monster.health
+        }
+        return monster
+      })
+
+      return parsedState
+    }
+    return DEFAULT_GAME_STATE
+  } catch (error) {
+    console.error("Error loading game state:", error)
+    return DEFAULT_GAME_STATE
+  }
+}
+
+// Save game state to AsyncStorage
+export const saveGameState = async (newState) => {
   try {
-    const currentState = await loadGameState();
-    const newState = { ...currentState, ...state };
-    
+    // Merge with existing state to avoid overwriting unspecified properties
+    const currentState = await loadGameState()
+    const mergedState = {
+      ...currentState,
+      ...newState,
+      // Special handling for nested objects
+      settings: {
+        ...currentState.settings,
+        ...(newState.settings || {}),
+      },
+    }
+
     // Ensure player team is never empty
-    if (!newState.playerTeam || newState.playerTeam.length === 0) {
-      const initialState = getInitialGameState();
-      newState.playerTeam = initialState.playerTeam;
-      newState.activeMonster = initialState.activeMonster;
+    if (!mergedState.playerTeam || mergedState.playerTeam.length === 0) {
+      mergedState.playerTeam = DEFAULT_GAME_STATE.playerTeam
     }
-    
-    await AsyncStorage.setItem('gameState', JSON.stringify(newState));
-    return newState;
+
+    await AsyncStorage.setItem(GAME_STATE_KEY, JSON.stringify(mergedState))
+    return mergedState
   } catch (error) {
-    console.error('Error saving game state:', error);
+    console.error("Error saving game state:", error)
+    throw error
   }
-};
+}
 
-// Helper functions for specific game state updates
-export const updateSettings = async (settings) => {
-  const currentState = await loadGameState();
-  return saveGameState({
-    ...currentState,
-    settings: { ...currentState.settings, ...settings }
-  });
-};
+// Calculate experience needed for next level
+export const calculateExpToNextLevel = (level) => {
+  // Exponential growth formula for exp requirements
+  return Math.floor(100 * Math.pow(1.5, level - 1))
+}
 
-export const updatePlayerTeam = async (team) => {
-  // Ensure team is never empty
-  if (!team || team.length === 0) {
-    console.error('Attempted to save empty team, using starter monster instead');
-    const initialState = getInitialGameState();
-    team = initialState.playerTeam;
-  }
-  
-  const currentState = await loadGameState();
-  return saveGameState({
-    ...currentState,
-    playerTeam: team
-  });
-};
-
-export const addDefeatedTrainer = async (trainerId) => {
-  const currentState = await loadGameState();
-  if (!currentState.defeatedTrainers.includes(trainerId)) {
-    return saveGameState({
-      ...currentState,
-      defeatedTrainers: [...currentState.defeatedTrainers, trainerId]
-    });
-  }
-  return currentState;
-};
-
-export const healTeam = async () => {
-  const currentState = await loadGameState();
-  
-  // If team is empty, initialize with starter monster
-  if (!currentState.playerTeam || currentState.playerTeam.length === 0) {
-    const initialState = getInitialGameState();
-    return saveGameState({
-      ...currentState,
-      playerTeam: initialState.playerTeam,
-      activeMonster: initialState.activeMonster
-    });
-  }
-  
-  const healedTeam = currentState.playerTeam.map(monster => ({
-    ...monster,
-    health: monster.maxHealth
-  }));
-  
-  return saveGameState({
-    ...currentState,
-    playerTeam: healedTeam
-  });
-};
-
-// Reset game progress
-export const resetGame = async () => {
+// Reset game state (for debugging or starting over)
+export const resetGameState = async () => {
   try {
-    const initialState = getInitialGameState();
-    await AsyncStorage.setItem('gameState', JSON.stringify(initialState));
-    return initialState;
+    await AsyncStorage.setItem(GAME_STATE_KEY, JSON.stringify(DEFAULT_GAME_STATE))
+    return DEFAULT_GAME_STATE
   } catch (error) {
-    console.error('Error resetting game:', error);
+    console.error("Error resetting game state:", error)
+    throw error
   }
-};
-
-// Debug function to check current game state
-export const debugGameState = async () => {
-  try {
-    const state = await AsyncStorage.getItem('gameState');
-    console.log('Current Game State:', state ? JSON.parse(state) : 'No state found');
-    return state ? JSON.parse(state) : null;
-  } catch (error) {
-    console.error('Error debugging game state:', error);
-    return null;
-  }
-};
+}

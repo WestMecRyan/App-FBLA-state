@@ -1,4 +1,5 @@
 import { MONSTERS } from './monsters';
+import { createMonster } from "../data/monsters"
 import { PROBLEMS } from './problems';
 
 export const SCHOOLS = [
@@ -11,7 +12,7 @@ export const SCHOOLS = [
         id: 1,
         name: 'Novice Flynn',
         type: 'fire',
-        monsters: [MONSTERS[0]],
+        monsters: [createMonster(1, 5)],
         problems: PROBLEMS.math.slice(0, 3),
         isLeader: false,
         schoolId: 1,
@@ -22,7 +23,8 @@ export const SCHOOLS = [
         id: 2,
         name: 'Apprentice Ember',
         type: 'fire',
-        monsters: [MONSTERS[0], MONSTERS[1]],
+        // monsters: [MONSTERS[0], MONSTERS[1]],
+        monsters: [createMonster(1, 5), createMonster(1, 6)],
         problems: PROBLEMS.math.slice(3, 6),
         isLeader: false,
         schoolId: 1,
