@@ -75,14 +75,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   modalContent: {
     backgroundColor: '#FFF',
+    // backgroundColor: 'red',
     borderRadius: 20,
     padding: 20,
     width: '90%',
-    maxWidth: 400
+    maxWidth: 400,
+    // overflow: "scroll"
   },
   question: {
     fontSize: 20,
@@ -91,13 +93,18 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   answersContainer: {
-    width: '100%'
+    width: '100%',
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap"
   },
   answerButton: {
     backgroundColor: '#F5F5F5',
     padding: 15,
     borderRadius: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    width: "48%",
+    margin: "auto"
   },
   answerText: {
     fontSize: 16,

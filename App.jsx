@@ -6,14 +6,14 @@ import SettingsScreen from './screens/SettingsScreen';
 import MapScreen from './screens/MapScreen';
 import TeamManagementScreen from './screens/TeamManagementScreen';
 import BattleScreen from './screens/BattleScreen';
-import { resetGame, debugGameState } from './utils/gameState';
+import { resetGameState, debugGameState } from './utils/gameState';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   useEffect(() => {
     // Uncomment this line to reset the game state for testing
-    // resetGame().then(() => console.log('Game state reset'));
+    // resetGameState().then(() => console.log('Game state reset'));
   }, []);
 
   return (

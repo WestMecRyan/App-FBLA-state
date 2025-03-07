@@ -49,14 +49,15 @@ const styles = StyleSheet.create({
     // right: 0,
     padding: 20,
     backgroundColor: 'rgba(0,0,0,0.8)',
-    minHeight: 100
+    // minHeight: 100
   },
   textContainer: {
-    padding: 10
+    // padding: 10
   },
   text: {
     color: '#FFF',
     fontSize: 16,
-    lineHeight: 24
+    lineHeight: 24,
+    textAlign: "center"
   }
 });

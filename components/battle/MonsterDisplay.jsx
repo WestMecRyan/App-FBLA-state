@@ -140,42 +140,63 @@ export default function MonsterDisplay({ monster, isEnemy = false, animatedHealt
   const expPercentage = !isEnemy ? (monster.exp / monster.expToNextLevel) * 100 : 0
 
   return (
-    <View style={[styles.container, isEnemy ? styles.enemyContainer : styles.playerContainer]}>
-      <View style={styles.infoContainer}>
-        <Text style={styles.name}>{monster.name}</Text>
-        <Text style={styles.level}>Lv. {monster.level}</Text>
-
-        {/* Health Bar */}
-        <View style={styles.healthBarContainer}>
-          <Animated.View
-            style={[
-              styles.healthBar,
-              healthBarWidth,
-              healthPercentage > 50
-                ? styles.healthHigh
-                : healthPercentage > 20
-                  ? styles.healthMedium
-                  : styles.healthLow,
-            ]}
-          />
-        </View>
-        <Text style={styles.healthText}>
-          {Math.floor(animatedHealth._value)}/{monster.maxHealth}
-        </Text>
-
-        {/* Exp Bar - Only show for player's monster */}
-        {!isEnemy && (
-          <View>
-            <View style={styles.expBarContainer}>
-              <View style={[styles.expBar, { width: `${expPercentage}%` }]} />
-            </View>
-            <Text style={styles.expText}>
-              EXP: {monster.exp}/{monster.expToNextLevel}
-            </Text>
+    <View style={styles.main}>
+      <View style={[styles.container, isEnemy ? styles.enemyContainer : styles.playerContainer]}>
+        <View style={styles.infoContainer}>
+          <View style={styles.textContainer}>
+            <Text style={styles.name}>{monster.name}</Text>
+            {/* <Text style={styles.level}>Lv. {monster.level}</Text> */}
+            <Text style={isEnemy ? styles.enemyLevel : styles.playerLevel}>Lv. {monster.level}</Text>
           </View>
-        )}
-      </View>
 
+          {!isEnemy && (
+            <View style={styles.expDisplay}>
+              <Text style={styles.expText}>
+                EXP: {monster.exp}/{monster.expToNextLevel}
+              </Text>
+              <View style={styles.expBarContainer}>
+                <View style={[styles.expBar, { width: `${expPercentage}%` }]} />
+              </View>
+            </View>
+          )}
+
+          {isEnemy && (
+            <Text style={styles.enemyExp}>.</Text>
+          )}
+
+
+          {/* Health Bar */}
+          <View style={styles.healthBarContainer}>
+            <Animated.View
+              style={[
+                styles.healthBar,
+                healthBarWidth,
+                healthPercentage > 50
+                  ? styles.healthHigh
+                  : healthPercentage > 20
+                    ? styles.healthMedium
+                    : styles.healthLow,
+              ]}
+            />
+          </View>
+          <Text style={styles.healthText}>
+            {Math.floor(animatedHealth._value)}/{monster.maxHealth}
+          </Text>
+
+          {/* Exp Bar - Only show for player's monster */}
+          {/* {!isEnemy && (
+            <View style={styles.expDisplay}>
+              <Text style={styles.expText}>
+                EXP: {monster.exp}/{monster.expToNextLevel}
+              </Text>
+              <View style={styles.expBarContainer}>
+                <View style={[styles.expBar, { width: `${expPercentage}%` }]} />
+              </View>
+            </View>
+          )} */}
+        </View>
+
+      </View>
       <Image
         source={monster.image}
         style={[styles.image, isEnemy ? styles.enemyImage : styles.playerImage]}
@@ -186,7 +207,11 @@ export default function MonsterDisplay({ monster, isEnemy = false, animatedHealt
 }
 
 const styles = StyleSheet.create({
+  main: {
+    width: "40%"
+  },
   container: {
+    width: "90%",
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
@@ -195,13 +220,18 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   playerContainer: {
-    alignSelf: "flex-end",
+    // alignSelf: "flex-end",
   },
   enemyContainer: {
-    alignSelf: "flex-start",
+    // alignSelf: "flex-start",
   },
   infoContainer: {
     flex: 1,
+  },
+  textContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   name: {
     fontSize: 18,
@@ -210,6 +240,9 @@ const styles = StyleSheet.create({
   level: {
     fontSize: 16,
     marginBottom: 5,
+  },
+  enemyExp: {
+    opacity: 0,
   },
   healthBarContainer: {
     height: 10,
@@ -234,12 +267,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 5,
   },
+  expDisplay: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 3,
+  },
   expBarContainer: {
     height: 8,
     backgroundColor: "#ddd",
     borderRadius: 4,
     overflow: "hidden",
     marginVertical: 5,
+    width: "70%"
   },
   expBar: {
     height: "100%",
@@ -247,10 +287,13 @@ const styles = StyleSheet.create({
   },
   expText: {
     fontSize: 12,
+    width: "25%"
   },
   image: {
     width: 100,
     height: 100,
+    display: "block",
+    margin: "auto"
   },
   playerImage: {
     transform: [{ scaleX: 1 }],
@@ -258,5 +301,5 @@ const styles = StyleSheet.create({
   enemyImage: {
     transform: [{ scaleX: -1 }],
   },
-})
+})// 
 

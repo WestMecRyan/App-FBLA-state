@@ -47,19 +47,21 @@ export default function MovesPanel({
         <View style={styles.modalContainer}>
           <View style={styles.movesContainer}>
             <Text style={styles.movesTitle}>Select a Move</Text>
-            {monster.moves.map((move, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.moveButton}
-                onPress={() => handleMoveSelect(move)}
-              >
-                <Text style={styles.moveName}>{move.name}</Text>
-                <View style={styles.moveInfo}>
-                  <Text style={styles.moveType}>{move.type}</Text>
-                  <Text style={styles.movePower}>Power: {move.power}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+            <View style={styles.movesFlex}>
+              {monster.moves.map((move, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.moveButton}
+                  onPress={() => handleMoveSelect(move)}
+                >
+                  <Text style={styles.moveName}>{move.name}</Text>
+                  <View style={styles.moveInfo}>
+                    <Text style={styles.moveType}>{move.type}</Text>
+                    <Text style={styles.movePower}>Power: {move.power}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
             <TouchableOpacity
               style={styles.cancelButton}
               onPress={() => setShowMoves(false)}
@@ -76,10 +78,11 @@ export default function MovesPanel({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    padding: 10,
+    // padding: 10,
     backgroundColor: 'rgba(255,255,255,0.9)',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
+    // borderTopLeftRadius: 20,
+    // borderTopRightRadius: 20
+    overflowY: "scroll"
   },
   actionButtons: {
     flexDirection: 'row',
@@ -104,26 +107,40 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
     backgroundColor: 'rgba(0,0,0,0.5)'
   },
   movesContainer: {
     backgroundColor: '#FFF',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    // backgroundColor: 'red',
+    height: 'fit-content',
+    width: "90vw",
+    margin: "auto",
+    overflow: "scroll",
+    borderRadius: 20,
+    // borderTopLeftRadius: 20,
+    // borderTopRightRadius: 20,
     padding: 20
   },
+  movesFlex: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
   movesTitle: {
+    backgroundColor: "#FFF",
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 15
   },
   moveButton: {
+    width: "48%",
+    margin: "auto",
     backgroundColor: '#F5F5F5',
     padding: 15,
     borderRadius: 10,
-    marginBottom: 10
+    marginBottom: 15
   },
   moveName: {
     fontSize: 16,

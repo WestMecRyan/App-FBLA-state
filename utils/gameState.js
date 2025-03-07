@@ -166,7 +166,7 @@ const GAME_STATE_KEY = "edumon_game_state"
 export const getInitialGameState = () => {
   return {
     playerTeam: [
-      createMonster(1, 5), // Start with a level 5 Mathling
+      createMonster(1, 10), // Start with a level 5 Mathling
     ],
     defeatedTrainers: [],
     settings: {

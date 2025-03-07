@@ -39,7 +39,7 @@ export default function BattleScreen() {
   const [battleText, setBattleText] = useState('');
   const [isBattleOver, setIsBattleOver] = useState(false);
   const [showSwitchModal, setShowSwitchModal] = useState(false);
-//   const [isProcessingTurn, setIsProcessingTurn] = useState(false)
+  //   const [isProcessingTurn, setIsProcessingTurn] = useState(false)
 
   const playerHealthAnim = useRef(new Animated.Value(100)).current;
   const enemyHealthAnim = useRef(new Animated.Value(100)).current;
@@ -107,6 +107,7 @@ export default function BattleScreen() {
 
       // Player's turn
       const damage = calculateDamage(activeMonster, enemyMonster);
+      console.log("Player Damage: ", damage);
       const newEnemyHealth = Math.max(0, enemyMonster.health - damage);
 
       Animated.timing(enemyHealthAnim, {
@@ -141,6 +142,7 @@ export default function BattleScreen() {
       Math.floor(Math.random() * enemyMonster.moves.length)
     ];
     const damage = calculateDamage(enemyMonster, activeMonster);
+    console.log("Enemy Damage: ", damage);
     const newPlayerHealth = Math.max(0, activeMonster.health - damage);
 
     Animated.timing(playerHealthAnim, {
@@ -171,40 +173,146 @@ export default function BattleScreen() {
     }, 2000);
   };
 
+  // const handleEnemyMonsterFainted = () => {
+  //   setBattleText(`Enemy ${enemyMonster?.name} fainted!`);
+  //   playSound('faint');
+
+  //   const nextEnemyMonster = enemyTrainer?.monsters.find(
+  //     m => m.health > 0 && m.id !== enemyMonster?.id
+  //   );
+
+  //   if (nextEnemyMonster) {
+  //     setTimeout(() => {
+  //       setEnemyMonster(nextEnemyMonster);
+  //       enemyHealthAnim.setValue(nextEnemyMonster.health);
+  //       setBattleText(`${enemyTrainer?.name} sent out ${nextEnemyMonster.name}!`);
+  //       playSound('switch');
+  //     }, 2000);
+  //   } else {
+  //     handleBattleWin();
+  //   }
+  // };
+
+
   const handleEnemyMonsterFainted = () => {
-    setBattleText(`Enemy ${enemyMonster?.name} fainted!`);
-    playSound('faint');
+    setBattleText(`Enemy ${enemyMonster?.name} fainted!`)
+    playSound("faint")
 
-    const nextEnemyMonster = enemyTrainer?.monsters.find(
-      m => m.health > 0 && m.id !== enemyMonster?.id
-    );
+    // Award experience to the active monster
+    const expGained = calculateExpGain(enemyMonster.level, activeMonster.level)
 
-    if (nextEnemyMonster) {
-      setTimeout(() => {
-        setEnemyMonster(nextEnemyMonster);
-        enemyHealthAnim.setValue(nextEnemyMonster.health);
-        setBattleText(`${enemyTrainer?.name} sent out ${nextEnemyMonster.name}!`);
-        playSound('switch');
-      }, 2000);
-    } else {
-      handleBattleWin();
+    // Create a copy of the active monster to update
+    const updatedMonster = { ...activeMonster }
+    updatedMonster.exp += expGained
+
+    // Check for level ups
+    let leveledUp = false
+    let evolvedMonster = null
+
+    while (updatedMonster.exp >= updatedMonster.expToNextLevel) {
+      // Level up the monster
+      updatedMonster.level += 1
+      updatedMonster.exp -= updatedMonster.expToNextLevel
+      updatedMonster.expToNextLevel = calculateExpToNextLevel(updatedMonster.level)
+      updatedMonster.maxHealth = Math.floor(updatedMonster.maxHealth * 1.1) // Increase max health by 10%
+      updatedMonster.health = updatedMonster.maxHealth // Heal on level up
+      leveledUp = true
+
+      // Check for evolution
+      const evolution = getEvolution(updatedMonster.id, updatedMonster.level)
+      if (evolution) {
+        const newMaxHealth = Math.floor(evolution.baseHealth * (1 + (updatedMonster.level - 1) * 0.1))
+        evolvedMonster = {
+          ...evolution,
+          level: updatedMonster.level,
+          exp: updatedMonster.exp,
+          expToNextLevel: updatedMonster.expToNextLevel,
+          health: newMaxHealth, // Set health to full with new max health
+          maxHealth: newMaxHealth,
+        }
+        break
+      }
     }
-  };
+
+    // Update the active monster and player team
+    const updatedTeam = playerTeam.map((monster) =>
+      monster.id === activeMonster.id ? evolvedMonster || updatedMonster : monster,
+    )
+
+    setPlayerTeam(updatedTeam)
+    setActiveMonster(evolvedMonster || updatedMonster)
+    playerHealthAnim.setValue((evolvedMonster || updatedMonster).health)
+
+    // Show appropriate messages
+    setTimeout(() => {
+      setBattleText(`${activeMonster.name} gained ${expGained} EXP!`)
+      playSound("expGain")
+
+      setTimeout(() => {
+        if (evolvedMonster) {
+          setBattleText(`${activeMonster.name} is evolving into ${evolvedMonster.name}!`)
+          playSound("evolution")
+        } else if (leveledUp) {
+          setBattleText(`${activeMonster.name} leveled up to level ${updatedMonster.level}!`)
+          playSound("levelUp")
+        }
+
+        // Check for next enemy monster
+        setTimeout(
+          () => {
+            const nextEnemyMonster = enemyTrainer?.monsters.find((m) => m.health > 0 && m.id !== enemyMonster?.id)
+
+            if (nextEnemyMonster) {
+              setEnemyMonster(nextEnemyMonster)
+              enemyHealthAnim.setValue(nextEnemyMonster.health)
+              setBattleText(`${enemyTrainer?.name} sent out ${nextEnemyMonster.name}!`)
+              playSound("switch")
+              setIsProcessingTurn(false)
+            } else {
+              handleBattleWin()
+            }
+          },
+          evolvedMonster || leveledUp ? 2000 : 0,
+        )
+      }, 2000)
+    }, 2000)
+  }
+
+  // const handlePlayerMonsterFainted = () => {
+  //   setBattleText(`${activeMonster?.name} fainted!`);
+  //   playSound('faint');
+
+  //   const nextMonster = playerTeam.find(
+  //     m => m.health > 0 && m.id !== activeMonster?.id
+  //   );
+
+  //   if (nextMonster) {
+  //     setShowSwitchModal(true);
+  //   } else {
+  //     handleBattleLoss();
+  //   }
+  // };
 
   const handlePlayerMonsterFainted = () => {
-    setBattleText(`${activeMonster?.name} fainted!`);
-    playSound('faint');
+    setBattleText(`${activeMonster?.name} fainted!`)
+    playSound("faint")
 
-    const nextMonster = playerTeam.find(
-      m => m.health > 0 && m.id !== activeMonster?.id
-    );
+    const nextMonster = playerTeam.find((m) => m.health > 0 && m.id !== activeMonster?.id)
 
     if (nextMonster) {
-      setShowSwitchModal(true);
+      setTimeout(() => {
+        setActiveMonster(nextMonster)
+        playerHealthAnim.setValue(nextMonster.health)
+        setBattleText(`Go, ${nextMonster.name}!`)
+        playSound("switch")
+        setIsProcessingTurn(false)
+      }, 2000)
     } else {
-      handleBattleLoss();
+      handleBattleLoss()
     }
-  };
+  }
+
+
 
   const handleBattleWin = async () => {
     setBattleText(`You defeated ${enemyTrainer?.name}!`);
@@ -261,6 +369,17 @@ export default function BattleScreen() {
           />
         )}
       </View>
+
+
+      {/* Battle Text */}
+      <BattleText
+        message={battleText}
+        onComplete={() => {
+          if (isBattleOver) {
+            navigation.goBack();
+          }
+        }}
+      />
 
       {/* Controls */}
       {activeMonster && (
@@ -321,14 +440,14 @@ export default function BattleScreen() {
       </Modal>
 
       {/* Battle Text */}
-      <BattleText
+      {/* <BattleText
         message={battleText}
         onComplete={() => {
           if (isBattleOver) {
             navigation.goBack();
           }
         }}
-      />
+      /> */}
     </View>
   );
 }
@@ -336,10 +455,12 @@ export default function BattleScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#87CEEB' // Sky blue background
+    backgroundColor: '#87CEEB' // blue background
   },
   battleScene: {
+    display: "flex",
     flex: 1,
+    flexDirection: "row",
     justifyContent: 'space-between',
     padding: 20
   },
