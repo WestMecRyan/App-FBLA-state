@@ -173,25 +173,7 @@ export default function BattleScreen() {
     }, 2000);
   };
 
-  // const handleEnemyMonsterFainted = () => {
-  //   setBattleText(`Enemy ${enemyMonster?.name} fainted!`);
-  //   playSound('faint');
 
-  //   const nextEnemyMonster = enemyTrainer?.monsters.find(
-  //     m => m.health > 0 && m.id !== enemyMonster?.id
-  //   );
-
-  //   if (nextEnemyMonster) {
-  //     setTimeout(() => {
-  //       setEnemyMonster(nextEnemyMonster);
-  //       enemyHealthAnim.setValue(nextEnemyMonster.health);
-  //       setBattleText(`${enemyTrainer?.name} sent out ${nextEnemyMonster.name}!`);
-  //       playSound('switch');
-  //     }, 2000);
-  //   } else {
-  //     handleBattleWin();
-  //   }
-  // };
 
 
   const handleEnemyMonsterFainted = () => {
@@ -242,6 +224,11 @@ export default function BattleScreen() {
     setPlayerTeam(updatedTeam)
     setActiveMonster(evolvedMonster || updatedMonster)
     playerHealthAnim.setValue((evolvedMonster || updatedMonster).health)
+
+    // Save the game state immediately after exp gain
+    saveGameState({
+      playerTeam: updatedTeam,
+    }).catch((error) => console.error("Error saving exp gain:", error))
 
     // Show appropriate messages
     setTimeout(() => {

@@ -122,6 +122,7 @@
 
 
 import { View, Text, Image, StyleSheet, Animated } from "react-native"
+import React, { useEffect } from 'react';
 
 export default function MonsterDisplay({ monster, isEnemy = false, animatedHealth }) {
   if (!monster) return null
@@ -137,7 +138,11 @@ export default function MonsterDisplay({ monster, isEnemy = false, animatedHealt
   }
 
   // Calculate exp percentage for the exp bar (only for player monsters)
-  const expPercentage = !isEnemy ? (monster.exp / monster.expToNextLevel) * 100 : 0
+  const expPercentage = !isEnemy ? (monster.exp / monster.expToNextLevel) * 100 : 0;
+
+  useEffect(() => {
+    console.log(expPercentage);
+  }, [expPercentage]);
 
   return (
     <View style={styles.main}>

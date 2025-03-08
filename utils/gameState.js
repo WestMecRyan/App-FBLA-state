@@ -159,6 +159,7 @@
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { createMonster } from "../data/monsters"
+import { calculateExpToNextLevel, calculateHealth } from "../data/monsters"
 
 const GAME_STATE_KEY = "edumon_game_state"
 
@@ -246,16 +247,16 @@ export const saveGameState = async (newState) => {
   }
 }
 
-// Calculate experience needed for next level
-export const calculateExpToNextLevel = (level) => {
-  // Exponential growth formula for exp requirements
-  return Math.floor(100 * Math.pow(1.5, level - 1))
-}
+// // Calculate experience needed for next level
+// export const calculateExpToNextLevel = (level) => {
+//   // Exponential growth formula for exp requirements
+//   return Math.floor(100 * Math.pow(1.5, level - 1))
+// }
 
-// Calculate health based on base health and level
-export const calculateHealth = (baseHealth, level) => {
-  return Math.floor(baseHealth * (1 + (level - 1) * 0.1))
-}
+// // Calculate health based on base health and level
+// export const calculateHealth = (baseHealth, level) => {
+//   return Math.floor(baseHealth * (1 + (level - 1) * 0.1))
+// }
 
 // Reset game state (for debugging or starting over)
 export const resetGameState = async () => {
