@@ -1,15 +1,15 @@
 export const MONSTERS = [
   {
     id: 1,
-    name: "Mathling",
-    type: "math",
+    name: "Flamander",
+    type: "fire",
     baseHealth: 100,
-    image: require('../assets/monsters/test-mon.png'),
+    image: require('../assets/monsters/flamander.png'),
     moves: [
-      { id: 1, name: "Number Crunch", power: 20, type: "math" },
-      { id: 2, name: "Equation Slam", power: 25, type: "math" },
-      { id: 3, name: "Fraction Blast", power: 30, type: "math" },
-      { id: 4, name: "Prime Strike", power: 35, type: "math" },
+      { id: 1, name: "Tail Whip", power: 20, type: "normal" },
+      { id: 2, name: "Fire Fang", power: 25, type: "fire" },
+      { id: 3, name: "Fast Attack", power: 30, type: "normal" },
+      { id: 4, name: "Ember", power: 35, type: "fire" },
     ],
     evolutions: [
       { level: 10, id: 11 }, // Evolves to Algebrex at level 10
@@ -18,15 +18,19 @@ export const MONSTERS = [
   },
   {
     id: 11,
-    name: "Algebrex",
-    type: "math",
+    name: "Pyrolisk",
+    type: "fire",
     baseHealth: 150,
     image: require('../assets/monsters/test-mon.png'),
     moves: [
-      { id: 1, name: "Number Crunch", power: 25, type: "math" },
-      { id: 2, name: "Equation Slam", power: 30, type: "math" },
-      { id: 3, name: "Quadratic Crush", power: 40, type: "math" },
-      { id: 4, name: "Variable Vortex", power: 45, type: "math" },
+      // { id: 1, name: "Number Crunch", power: 25, type: "math" },
+      // { id: 2, name: "Equation Slam", power: 30, type: "math" },
+      // { id: 3, name: "Quadratic Crush", power: 40, type: "math" },
+      // { id: 4, name: "Variable Vortex", power: 45, type: "math" },
+      { id: 1, name: "Tail Whip", power: 25, type: "normal" },
+      { id: 2, name: "Fire Fang", power: 30, type: "fire" },
+      { id: 3, name: "Fast Attack", power: 40, type: "normal" },
+      { id: 4, name: "Flame Wheel", power: 45, type: "fire" },
     ],
     evolutions: [
       { level: 25, id: 12 }, // Evolves to Calculord at level 25
@@ -34,16 +38,20 @@ export const MONSTERS = [
   },
   {
     id: 12,
-    name: "Calculord",
-    type: "math",
+    name: "Inferaptor",
+    type: "fire",
     baseHealth: 200,
     // image: require("../assets/monsters/algebrex.png"),
     image: require('../assets/monsters/test-mon.png'),
     moves: [
-      { id: 1, name: "Number Crunch", power: 30, type: "math" },
-      { id: 2, name: "Equation Slam", power: 35, type: "math" },
-      { id: 3, name: "Calculus Crash", power: 50, type: "math" },
-      { id: 4, name: "Integral Inferno", power: 60, type: "math" },
+      // { id: 1, name: "Number Crunch", power: 30, type: "math" },
+      // { id: 2, name: "Equation Slam", power: 35, type: "math" },
+      // { id: 3, name: "Calculus Crash", power: 50, type: "math" },
+      // { id: 4, name: "Integral Inferno", power: 60, type: "math" },
+      { id: 1, name: "Tail Whip", power: 30, type: "normal" },
+      { id: 2, name: "Fire Fang", power: 35, type: "fire" },
+      { id: 3, name: "Fast Attack", power: 50, type: "normal" },
+      { id: 4, name: "Inferno", power: 60, type: "fire" },
     ],
     evolutions: [], // Final evolution
   },
@@ -173,21 +181,14 @@ function calculateHealth(baseHealth, level) {
 // Calculate experience needed for next level
 export function calculateExpToNextLevel(level) {
   // Exponential growth formula for exp requirements
-  return Math.floor(100 * Math.pow(1.3, level - 1))
+  return Math.floor(50 * (1.3 * level))
 }
 
 // Calculate experience gained from defeating an enemy
 export function calculateExpGain(defeatedLevel, playerLevel) {
-  const baseExp = 150
-
-  // level difference multiplier: 0.2
-  const levelDifference = defeatedLevel - playerLevel
-  const multiplier = 1 + levelDifference * 0.2
-
   const bonusMultiplier = 1.5
 
-  // minimum exp gain: 50
-  return Math.max(50, Math.floor(baseExp * multiplier * bonusMultiplier))
+  return Math.floor(100 * bonusMultiplier * (defeatedLevel * 0.6));
 }
 
 // Find evolution for a monster at its current level

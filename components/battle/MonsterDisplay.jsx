@@ -301,10 +301,10 @@ const styles = StyleSheet.create({
     margin: "auto"
   },
   playerImage: {
-    transform: [{ scaleX: 1 }],
+    transform: [{ scaleX: -1 }],
   },
   enemyImage: {
-    transform: [{ scaleX: -1 }],
+    transform: [{ scaleX: 1 }],
   },
 })// 
 
