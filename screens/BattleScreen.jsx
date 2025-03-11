@@ -175,8 +175,7 @@ export default function BattleScreen() {
 
 
 
-
-  const handleEnemyMonsterFainted = () => {
+  const handleEnemyMonsterFainted = async () => {
     setBattleText(`Enemy ${enemyMonster?.name} fainted!`)
     playSound("faint")
 
@@ -222,6 +221,7 @@ export default function BattleScreen() {
     )
 
     setPlayerTeam(updatedTeam)
+    console.log("Updated Team: ", updatedTeam);
     setActiveMonster(evolvedMonster || updatedMonster)
     playerHealthAnim.setValue((evolvedMonster || updatedMonster).health)
 
@@ -229,6 +229,9 @@ export default function BattleScreen() {
     saveGameState({
       playerTeam: updatedTeam,
     }).catch((error) => console.error("Error saving exp gain:", error))
+
+    const tempState = await loadGameState();
+    console.log("Temp State: ", tempState);
 
     // Show appropriate messages
     setTimeout(() => {
