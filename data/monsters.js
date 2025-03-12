@@ -1,10 +1,10 @@
 export const MONSTERS = [
   {
     id: 1,
-    name: "Flamander",
+    name: "Ignekko",
     type: "fire",
     baseHealth: 100,
-    image: require('../assets/monsters/flamander.png'),
+    image: require('../assets/monsters/ignekko.png'),
     moves: [
       { id: 1, name: "Tail Whip", power: 20, type: "normal" },
       { id: 2, name: "Fire Fang", power: 25, type: "fire" },

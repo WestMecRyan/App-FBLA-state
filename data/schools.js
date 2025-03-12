@@ -12,7 +12,7 @@ export const SCHOOLS = [
         id: 1,
         name: 'Novice Flynn',
         type: 'fire',
-        monsters: [createMonster(1, 5)],
+        monsters: [createMonster(1, 4)],
         problems: PROBLEMS.math.slice(0, 3),
         isLeader: false,
         schoolId: 1,
