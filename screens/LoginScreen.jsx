@@ -37,6 +37,8 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert("Error", "Please enter both email and password")
+     
+  
       return
     }
 
@@ -69,7 +71,7 @@ export default function LoginScreen() {
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
-      <Pressable>
+      <Pressable onPress={handleLogin}>
         <View style={styles.inner}>
           <View style={styles.logoContainer}>
             <Image source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }} style={styles.logo} />
@@ -86,6 +88,7 @@ export default function LoginScreen() {
               autoCapitalize="none"
               autoCorrect={false}
               autoFocus={true}
+              onSubmitEditing={handleLogin}
               onFocus={() => {
                 /* Keyboard will automatically appear */
               }}
@@ -125,6 +128,8 @@ export default function LoginScreen() {
     </KeyboardAvoidingView>
   )
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
