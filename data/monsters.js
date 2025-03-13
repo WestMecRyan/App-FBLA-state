@@ -6,10 +6,10 @@ export const MONSTERS = [
     baseHealth: 100,
     image: require('../assets/monsters/ignekko.png'),
     moves: [
-      { id: 1, name: "Tail Whip", power: 20, type: "normal" },
-      { id: 2, name: "Fire Fang", power: 25, type: "fire" },
-      { id: 3, name: "Fast Attack", power: 30, type: "normal" },
-      { id: 4, name: "Ember", power: 35, type: "fire" },
+      { id: 1, name: "Tail Whip", power: 20, type: "Normal" },
+      { id: 2, name: "Fire Fang", power: 25, type: "Fire" },
+      { id: 3, name: "Fast Attack", power: 30, type: "Normal" },
+      { id: 4, name: "Ember", power: 35, type: "Fire" },
     ],
     evolutions: [
       { level: 10, id: 11 }, // Evolves to Algebrex at level 10
@@ -57,16 +57,16 @@ export const MONSTERS = [
   },
   {
     id: 2,
-    name: "Literabug",
-    type: "language",
+    name: "Aquotl",
+    type: "Water",
     baseHealth: 90,
     // image: require("../assets/monsters/calculord.png"),
-    image: require('../assets/monsters/test-mon.png'),
+    image: require('../assets/monsters/aquotl.png'),
     moves: [
-      { id: 5, name: "Word Whip", power: 20, type: "language" },
-      { id: 6, name: "Grammar Grapple", power: 25, type: "language" },
-      { id: 7, name: "Syntax Slash", power: 30, type: "language" },
-      { id: 8, name: "Vowel Vortex", power: 35, type: "language" },
+      { id: 5, name: "Tail Whip", power: 20, type: "Normal" },
+      { id: 6, name: "Punch", power: 25, type: "Normal" },
+      { id: 7, name: "Bubble", power: 30, type: "Water" },
+      { id: 8, name: "Water Blast", power: 35, type: "Water" },
     ],
     evolutions: [
       { level: 10, id: 21 }, // Evolves to Prosavant at level 10
