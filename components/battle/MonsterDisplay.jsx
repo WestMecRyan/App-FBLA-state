@@ -564,8 +564,14 @@
 // })
 
 
+
+
+
+
+
+
 import { View, Text, StyleSheet, Animated } from "react-native"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 
 export default function MonsterDisplay({
   monster,
@@ -585,39 +591,73 @@ export default function MonsterDisplay({
   const shakeAnim = useRef(new Animated.Value(0)).current
   const captureRotateAnim = useRef(new Animated.Value(0)).current
 
-  if (!monster) return null
+  // State to track animation triggers
+  const [attackTrigger, setAttackTrigger] = useState(false)
+  const [damageTrigger, setDamageTrigger] = useState(false)
+  const [faintTrigger, setFaintTrigger] = useState(false)
+  const [captureTrigger, setCaptureTrigger] = useState(false)
 
-  // Calculate health percentage for the health bar
-  const healthPercentage = (animatedHealth._value / monster.maxHealth) * 100
-  const healthBarWidth = {
-    width: animatedHealth.interpolate({
-      inputRange: [0, monster.maxHealth],
-      outputRange: ["0%", "100%"],
-      extrapolate: "clamp",
-    }),
+  // Animation trigger states, initialized to false
+  const [animationTriggers, setAnimationTriggers] = useState({
+    attack: false,
+    damage: false,
+    faint: false,
+    capture: false,
+  })
+
+  // Update animation triggers based on props
+  useEffect(() => {
+    setAnimationTriggers({
+      attack: isAttacking,
+      damage: isTakingDamage,
+      faint: isFainted,
+      capture: isCaptured,
+    })
+  }, [isAttacking, isTakingDamage, isFainted, isCaptured])
+
+  // Define healthPercentage and expPercentage outside the conditional
+  let healthPercentage = 0
+  let expPercentage = 0
+
+  if (monster) {
+    // Calculate health percentage for the health bar
+    healthPercentage = (animatedHealth._value / monster.maxHealth) * 100
   }
 
   // Calculate exp percentage for the exp bar (only for player monsters)
-  const expPercentage = !isEnemy && monster.expToNextLevel > 0 ? (monster.exp / monster.expToNextLevel) * 100 : 0
+  if (!isEnemy && monster && monster.expToNextLevel > 0) {
+    expPercentage = (monster.exp / monster.expToNextLevel) * 100
+  }
+
+  // Calculate health percentage for the health bar
+  const healthBarWidth = {
+    width: monster
+      ? animatedHealth.interpolate({
+          inputRange: [0, monster.maxHealth],
+          outputRange: ["0%", "100%"],
+          extrapolate: "clamp",
+        })
+      : "0%",
+  }
 
   // Use animatedExp for the exp bar if provided
   const expBarWidth =
     !isEnemy && animatedExp
       ? {
-        width: animatedExp.interpolate({
-          inputRange: [0, monster.expToNextLevel],
-          outputRange: ["0%", "100%"],
-          extrapolate: "clamp",
-        }),
-      }
+          width: animatedExp.interpolate({
+            inputRange: [0, monster?.expToNextLevel || 1],
+            outputRange: ["0%", "100%"],
+            extrapolate: "clamp",
+          }),
+        }
       : { width: `${expPercentage}%` }
 
   // Attack animation
   useEffect(() => {
-    if (isAttacking) {
+    if (animationTriggers.attack) {
       Animated.sequence([
         Animated.timing(attackAnim, {
-          toValue: isEnemy ? 30 : -30,
+          toValue: isEnemy ? -30 : 30,
           duration: 150,
           useNativeDriver: true,
         }),
@@ -628,11 +668,11 @@ export default function MonsterDisplay({
         }),
       ]).start()
     }
-  }, [isAttacking])
+  }, [animationTriggers.attack, isEnemy, attackAnim])
 
   // Damage animation
   useEffect(() => {
-    if (isTakingDamage) {
+    if (animationTriggers.damage) {
       // Flash red
       Animated.sequence([
         Animated.timing(damageAnim, {
@@ -681,11 +721,11 @@ export default function MonsterDisplay({
         }),
       ]).start()
     }
-  }, [isTakingDamage])
+  }, [animationTriggers.damage, damageAnim, shakeAnim])
 
   // Faint animation
   useEffect(() => {
-    if (isFainted) {
+    if (animationTriggers.faint) {
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 0,
@@ -704,11 +744,11 @@ export default function MonsterDisplay({
         }),
       ]).start()
     }
-  }, [isFainted])
+  }, [animationTriggers.faint, fadeAnim, scaleAnim, damageAnim])
 
   // Capture animation
   useEffect(() => {
-    if (isCaptured) {
+    if (animationTriggers.capture) {
       Animated.loop(
         Animated.sequence([
           Animated.timing(captureRotateAnim, {
@@ -745,7 +785,27 @@ export default function MonsterDisplay({
         { iterations: 2 },
       ).start()
     }
-  }, [isCaptured])
+  }, [animationTriggers.capture, captureRotateAnim])
+
+  // Reset animations when monster changes
+  useEffect(() => {
+    console.log("Monster changed, resetting animations:", monster?.name)
+    // Reset animation values when monster changes
+    fadeAnim.setValue(1)
+    scaleAnim.setValue(1)
+    attackAnim.setValue(0)
+    shakeAnim.setValue(0)
+    damageAnim.setValue(0)
+    captureRotateAnim.setValue(0)
+
+    // Also reset the animation triggers state
+    setAnimationTriggers({
+      attack: false,
+      damage: false,
+      faint: false,
+      capture: false,
+    })
+  }, [monster, fadeAnim, scaleAnim, attackAnim, shakeAnim, damageAnim, captureRotateAnim])
 
   // Combined animation styles
   const animatedStyle = {
