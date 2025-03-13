@@ -571,19 +571,17 @@
 
 
 
-// "use client"
 
-// import { Alert } from "@/components/ui/alert"
 
 import { useState, useEffect, useRef } from "react"
-import { View, StyleSheet, Animated, BackHandler, Modal, TouchableOpacity, Text, Image } from "react-native"
+import { View, StyleSheet, Animated, BackHandler, Modal, TouchableOpacity, Text, Image, Alert } from "react-native"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import MonsterDisplay from "../components/battle/MonsterDisplay"
 import MovesPanel from "../components/battle/MovesPanel"
 import ProblemModal from "../components/battle/ProblemModal"
 import BattleText from "../components/battle/BattleText"
-import { loadGameState, saveGameState } from "../utils/gameState"
-import { SCHOOLS } from "../data/schools"
+import { loadGameState, saveGameState, completeTrainerEncounter } from "../utils/gameState"
+import { SCHOOLS, getRandomEncounterForTrainer } from "../data/schools"
 import { playSound, playBgMusic, stopBgMusic } from "../utils/audio"
 import { calculateExpGain, getEvolution, calculateExpToNextLevel } from "../data/monsters"
 
@@ -598,7 +596,7 @@ const createFreshTrainerMonsters = (trainerMonsters) => {
 export default function BattleScreen() {
   const navigation = useNavigation()
   const route = useRoute()
-  const { trainerId, schoolId } = route.params || {}
+  const { trainerId, schoolId, isRandomEncounter, isPreTrainerEncounter } = route.params || {}
 
   const [playerTeam, setPlayerTeam] = useState([])
   const [activeMonster, setActiveMonster] = useState(null)
@@ -610,9 +608,22 @@ export default function BattleScreen() {
   const [showSwitchModal, setShowSwitchModal] = useState(false)
   const [isProcessingTurn, setIsProcessingTurn] = useState(false)
   const [initializationComplete, setInitializationComplete] = useState(false)
+  const [isRandomBattle, setIsRandomBattle] = useState(false)
+  const [showCatchButton, setShowCatchButton] = useState(false)
+  const [isCaptureAnimation, setIsCaptureAnimation] = useState(false)
+
+  // Animation states
+  const [isPlayerAttacking, setIsPlayerAttacking] = useState(false)
+  const [isEnemyAttacking, setIsEnemyAttacking] = useState(false)
+  const [isPlayerTakingDamage, setIsPlayerTakingDamage] = useState(false)
+  const [isEnemyTakingDamage, setIsEnemyTakingDamage] = useState(false)
+  const [isEnemyFainted, setIsEnemyFainted] = useState(false)
+  const [isPlayerFainted, setIsPlayerFainted] = useState(false)
 
   // Create a ref to store the latest team data that persists between function calls
   const latestTeamRef = useRef([])
+  // Create a ref to store the current active monster to prevent switching issues
+  const activeMonsterRef = useRef(null)
 
   const playerHealthAnim = useRef(new Animated.Value(100)).current
   const enemyHealthAnim = useRef(new Animated.Value(100)).current
@@ -630,6 +641,13 @@ export default function BattleScreen() {
     }
   }, [])
 
+  // Update the ref whenever activeMonster changes
+  useEffect(() => {
+    if (activeMonster) {
+      activeMonsterRef.current = activeMonster
+    }
+  }, [activeMonster])
+
   const handleBackPress = () => {
     if (isBattleOver) {
       navigation.goBack()
@@ -645,57 +663,112 @@ export default function BattleScreen() {
       // Check if player team is empty
       if (!gameState.playerTeam || gameState.playerTeam.length === 0) {
         console.error("Player team is empty, cannot start battle")
-        // Alert.alert("Error", "Your team is empty. Please restart the game.")
+        Alert.alert("Error", "Your team is empty. Please restart the game.")
         navigation.goBack()
         return
       }
 
-      const school = SCHOOLS.find((s) => s.id === schoolId)
-      if (!school) {
-        console.error(`School with ID ${schoolId} not found`)
-        navigation.goBack()
-        return
+      // Set if this is a random encounter
+      setIsRandomBattle(isRandomEncounter === true)
+
+      if (isRandomEncounter) {
+        // This is a random encounter before a trainer battle
+        let wildMonster
+
+        if (isPreTrainerEncounter) {
+          // Get the random encounter for this specific trainer
+          wildMonster = getRandomEncounterForTrainer(schoolId, trainerId)
+        }
+
+        if (!wildMonster) {
+          console.error("Failed to generate random encounter")
+          navigation.goBack()
+          return
+        }
+
+        // Create a fake trainer for the wild monster
+        const wildTrainer = {
+          id: `wild-${Date.now()}`, // Unique ID
+          name: "Wild Monster",
+          monsters: [wildMonster],
+          problems: SCHOOLS.find((s) => s.id === schoolId)?.trainers[0]?.problems || [],
+        }
+
+        // Make sure exp is set
+        const playerTeamWithExp = gameState.playerTeam.map((monster) => ({
+          ...monster,
+          exp: monster.exp || 0,
+          expToNextLevel: monster.expToNextLevel || calculateExpToNextLevel(monster.level),
+        }))
+
+        // Initialize the latestTeamRef with the player team
+        latestTeamRef.current = JSON.parse(JSON.stringify(playerTeamWithExp))
+
+        setPlayerTeam(playerTeamWithExp)
+        setActiveMonster(playerTeamWithExp[0])
+        activeMonsterRef.current = playerTeamWithExp[0] // Initialize the ref
+        setEnemyTrainer(wildTrainer)
+        setEnemyMonster(wildMonster)
+
+        playerHealthAnim.setValue(playerTeamWithExp[0].health)
+        enemyHealthAnim.setValue(wildMonster.health)
+
+        // Make sure to set the initial exp animation value
+        playerExpAnim.setValue(playerTeamWithExp[0].exp || 0)
+
+        setBattleText(`A wild ${wildMonster.name} appeared!`)
+        playSound("battleStart")
+        setInitializationComplete(true)
+      } else {
+        // Regular trainer battle
+        const school = SCHOOLS.find((s) => s.id === schoolId)
+        if (!school) {
+          console.error(`School with ID ${schoolId} not found`)
+          navigation.goBack()
+          return
+        }
+
+        const trainer = school.trainers.find((t) => t.id === trainerId)
+        if (!trainer) {
+          console.error(`Trainer with ID ${trainerId} not found in school ${schoolId}`)
+          navigation.goBack()
+          return
+        }
+
+        console.log("Found trainer:", trainer)
+        console.log("Player team:", gameState.playerTeam)
+
+        // Create a fresh copy of the trainer's monsters with full health
+        const freshTrainerMonsters = createFreshTrainerMonsters(trainer.monsters)
+        const freshTrainer = { ...trainer, monsters: freshTrainerMonsters }
+
+        // Make sure exp is set
+        const playerTeamWithExp = gameState.playerTeam.map((monster) => ({
+          ...monster,
+          exp: monster.exp || 0,
+          expToNextLevel: monster.expToNextLevel || calculateExpToNextLevel(monster.level),
+        }))
+
+        // Initialize the latestTeamRef with the player team
+        latestTeamRef.current = JSON.parse(JSON.stringify(playerTeamWithExp))
+
+        setPlayerTeam(playerTeamWithExp)
+        setActiveMonster(playerTeamWithExp[0])
+        activeMonsterRef.current = playerTeamWithExp[0] // Initialize the ref
+        setEnemyTrainer(freshTrainer)
+        setEnemyMonster(freshTrainer.monsters[0])
+
+        playerHealthAnim.setValue(playerTeamWithExp[0].health)
+        enemyHealthAnim.setValue(freshTrainer.monsters[0].health)
+
+        // Make sure to set the initial exp animation value
+        console.log("Setting initial exp:", playerTeamWithExp[0].exp)
+        playerExpAnim.setValue(playerTeamWithExp[0].exp || 0)
+
+        setBattleText(`${trainer.name} wants to battle!`)
+        playSound("battleStart")
+        setInitializationComplete(true) // Set to true after successful initialization
       }
-
-      const trainer = school.trainers.find((t) => t.id === trainerId)
-      if (!trainer) {
-        console.error(`Trainer with ID ${trainerId} not found in school ${schoolId}`)
-        navigation.goBack()
-        return
-      }
-
-      console.log("Found trainer:", trainer)
-      console.log("Player team:", gameState.playerTeam)
-
-      // Create a fresh copy of the trainer's monsters with full health
-      const freshTrainerMonsters = createFreshTrainerMonsters(trainer.monsters)
-      const freshTrainer = { ...trainer, monsters: freshTrainerMonsters }
-
-      // Make sure exp is set
-      const playerTeamWithExp = gameState.playerTeam.map((monster) => ({
-        ...monster,
-        exp: monster.exp || 0,
-        expToNextLevel: monster.expToNextLevel || calculateExpToNextLevel(monster.level),
-      }))
-
-      // Initialize the latestTeamRef with the player team
-      latestTeamRef.current = JSON.parse(JSON.stringify(playerTeamWithExp))
-
-      setPlayerTeam(playerTeamWithExp)
-      setActiveMonster(playerTeamWithExp[0])
-      setEnemyTrainer(freshTrainer)
-      setEnemyMonster(freshTrainer.monsters[0])
-
-      playerHealthAnim.setValue(playerTeamWithExp[0].health)
-      enemyHealthAnim.setValue(freshTrainer.monsters[0].health)
-
-      // Make sure to set the initial exp animation value
-      console.log("Setting initial exp:", playerTeamWithExp[0].exp)
-      playerExpAnim.setValue(playerTeamWithExp[0].exp || 0)
-
-      setBattleText(`${trainer.name} wants to battle!`)
-      playSound("battleStart")
-      setInitializationComplete(true) // Set to true after successful initialization
     } catch (error) {
       console.error("Battle initialization error:", error)
       navigation.goBack()
@@ -717,13 +790,35 @@ export default function BattleScreen() {
     setCurrentProblem(null)
     setIsProcessingTurn(true)
 
-    if (correct && activeMonster && enemyMonster) {
+    // Use the ref to ensure we have the latest active monster
+    const currentActiveMonster = activeMonsterRef.current
+
+    if (correct && currentActiveMonster && enemyMonster) {
       playSound("correctAnswer")
 
-      // Player's turn
-      const damage = calculateDamage(activeMonster, enemyMonster)
+      // Player's turn - attack animation
+      setIsPlayerAttacking(true)
+
+      // Wait for attack animation to complete
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      setIsPlayerAttacking(false)
+
+      // Enemy takes damage animation
+      setIsEnemyTakingDamage(true)
+
+      // Calculate and apply damage
+      const damage = calculateDamage(currentActiveMonster, enemyMonster)
       console.log("Player Damage: ", damage)
-      const newEnemyHealth = Math.max(0, enemyMonster.health - damage)
+
+      // Different HP handling for random encounters vs trainer battles
+      let newEnemyHealth
+      if (isRandomBattle) {
+        // For random encounters, stop at 1 HP to allow catching
+        newEnemyHealth = Math.max(1, enemyMonster.health - damage)
+      } else {
+        // For trainer battles, allow fainting (0 HP)
+        newEnemyHealth = Math.max(0, enemyMonster.health - damage)
+      }
 
       Animated.timing(enemyHealthAnim, {
         toValue: newEnemyHealth,
@@ -732,10 +827,24 @@ export default function BattleScreen() {
       }).start()
 
       enemyMonster.health = newEnemyHealth
-      setBattleText(`${activeMonster.name} dealt ${damage} damage!`)
+      setBattleText(`${currentActiveMonster.name} dealt ${damage} damage!`)
       playSound("hit")
 
+      // Wait for damage animation to complete
+      await new Promise((resolve) => setTimeout(resolve, 400))
+      setIsEnemyTakingDamage(false)
+
+      // Check if enemy is at 1 HP and this is a random encounter
+      if (newEnemyHealth <= 1 && isRandomBattle) {
+        setShowCatchButton(true)
+        setBattleText(`${enemyMonster.name} is weak, catch it!`)
+        setIsProcessingTurn(false)
+        return
+      }
+
+      // Check if enemy fainted
       if (newEnemyHealth <= 0) {
+        setIsEnemyFainted(true)
         handleEnemyMonsterFainted()
         return
       }
@@ -750,16 +859,29 @@ export default function BattleScreen() {
     }, 2000)
   }
 
-  const handleEnemyTurn = () => {
-    if (!activeMonster || !enemyMonster) {
+  const handleEnemyTurn = async () => {
+    if (!activeMonsterRef.current || !enemyMonster) {
       setIsProcessingTurn(false)
       return
     }
 
+    // Use the ref to ensure we have the latest active monster
+    const currentActiveMonster = activeMonsterRef.current
+
+    // Enemy attack animation
+    setIsEnemyAttacking(true)
+
+    // Wait for attack animation to complete
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    setIsEnemyAttacking(false)
+
+    // Player takes damage animation
+    setIsPlayerTakingDamage(true)
+
     const enemyMove = enemyMonster.moves[Math.floor(Math.random() * enemyMonster.moves.length)]
-    const damage = calculateDamage(enemyMonster, activeMonster)
+    const damage = calculateDamage(enemyMonster, currentActiveMonster)
     console.log("Enemy Damage: ", damage)
-    const newPlayerHealth = Math.max(0, activeMonster.health - damage)
+    const newPlayerHealth = Math.max(0, currentActiveMonster.health - damage)
 
     Animated.timing(playerHealthAnim, {
       toValue: newPlayerHealth,
@@ -768,12 +890,13 @@ export default function BattleScreen() {
     }).start()
 
     // Update the active monster's health
-    const updatedMonster = { ...activeMonster, health: newPlayerHealth }
+    const updatedMonster = { ...currentActiveMonster, health: newPlayerHealth }
     setActiveMonster(updatedMonster)
+    activeMonsterRef.current = updatedMonster // Update the ref
 
     // Also update the monster in our latestTeamRef
     const updatedTeam = JSON.parse(JSON.stringify(latestTeamRef.current))
-    const monsterIndex = updatedTeam.findIndex((m) => m.id === activeMonster.id)
+    const monsterIndex = updatedTeam.findIndex((m) => m.id === currentActiveMonster.id)
     if (monsterIndex !== -1) {
       updatedTeam[monsterIndex].health = newPlayerHealth
       latestTeamRef.current = updatedTeam
@@ -782,18 +905,33 @@ export default function BattleScreen() {
     setBattleText(`Enemy ${enemyMonster.name} used ${enemyMove.name}!`)
     playSound("hit")
 
+    // Wait for damage animation to complete
+    await new Promise((resolve) => setTimeout(resolve, 400))
+    setIsPlayerTakingDamage(false)
+
     if (newPlayerHealth <= 0) {
+      setIsPlayerFainted(true)
       handlePlayerMonsterFainted()
     } else {
       setIsProcessingTurn(false)
     }
   }
 
+  // Fix the switching monsters health restoration issue
   const handleSwitchMonster = (newMonster) => {
-    setActiveMonster(newMonster)
-    playerHealthAnim.setValue(newMonster.health)
-    playerExpAnim.setValue(newMonster.exp || 0)
-    setBattleText(`Go, ${newMonster.name}!`)
+    // Don't create a new monster object, use the one from the team
+    const monsterFromTeam = playerTeam.find((m) => m.id === newMonster.id && m.level === newMonster.level)
+
+    if (!monsterFromTeam) {
+      console.error("Could not find monster in team")
+      return
+    }
+
+    setActiveMonster(monsterFromTeam)
+    activeMonsterRef.current = monsterFromTeam // Update the ref
+    playerHealthAnim.setValue(monsterFromTeam.health)
+    playerExpAnim.setValue(monsterFromTeam.exp || 0)
+    setBattleText(`Go, ${monsterFromTeam.name}!`)
     playSound("switch")
     setShowSwitchModal(false)
 
@@ -803,22 +941,77 @@ export default function BattleScreen() {
     }, 2000)
   }
 
+  const handleCatchMonster = async () => {
+    setIsProcessingTurn(true)
+    setShowCatchButton(false)
+
+    // Start capture animation
+    setIsCaptureAnimation(true)
+    setBattleText(`Throwing a capture ball at ${enemyMonster.name}...`)
+    playSound("capture")
+
+    // Wait for the capture animation to complete
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+
+    // Monster is caught!
+    setBattleText(`${enemyMonster.name} has been caught!`)
+    playSound("captureSuccess")
+
+    // Add the caught monster to the player's team
+    try {
+      const gameState = await loadGameState()
+
+      // Create a copy of the caught monster with full health
+      const caughtMonster = {
+        ...enemyMonster,
+        health: enemyMonster.maxHealth, // Restore health
+        exp: 0,
+        expToNextLevel: calculateExpToNextLevel(enemyMonster.level),
+      }
+
+      // Add to player team
+      const updatedTeam = [...gameState.playerTeam, caughtMonster]
+
+      // Save the updated team
+      await saveGameState({
+        ...gameState,
+        playerTeam: updatedTeam,
+      })
+
+      // If this was a pre-trainer encounter, mark it as completed
+      if (isPreTrainerEncounter) {
+        await completeTrainerEncounter(trainerId)
+      }
+
+      // End battle after a delay
+      setTimeout(() => {
+        setIsBattleOver(true)
+        setIsProcessingTurn(false)
+      }, 2000)
+    } catch (error) {
+      console.error("Error catching monster:", error)
+      setIsProcessingTurn(false)
+    }
+  }
+
+  // Fix the issue with trainer's next monster not appearing
   const handleEnemyMonsterFainted = async () => {
     setBattleText(`Enemy ${enemyMonster?.name} fainted!`)
     playSound("faint")
 
     // Award experience to the active monster
-    const expGained = calculateExpGain(enemyMonster.level, activeMonster.level)
+    const currentActiveMonster = activeMonsterRef.current
+    const expGained = calculateExpGain(enemyMonster.level, currentActiveMonster.level)
 
     // Create a deep copy of the active monster to update
-    const updatedMonster = JSON.parse(JSON.stringify(activeMonster))
+    const updatedMonster = JSON.parse(JSON.stringify(currentActiveMonster))
     updatedMonster.exp += expGained
 
     // Create a deep copy of the player team from our ref
     const updatedTeam = JSON.parse(JSON.stringify(latestTeamRef.current))
 
     // Find the index of the active monster in the team
-    const activeMonsterIndex = updatedTeam.findIndex((m) => m.id === activeMonster.id)
+    const activeMonsterIndex = updatedTeam.findIndex((m) => m.id === currentActiveMonster.id)
 
     if (activeMonsterIndex === -1) {
       console.error("Active monster not found in player team")
@@ -845,8 +1038,7 @@ export default function BattleScreen() {
       updatedMonster.exp -= updatedMonster.expToNextLevel
       updatedMonster.expToNextLevel = calculateExpToNextLevel(updatedMonster.level)
       updatedMonster.maxHealth = Math.floor(updatedMonster.maxHealth * 1.1) // Increase max health by 10%
-      // updatedMonster.health = updatedMonster.maxHealth // Heal on level up
-      let tempHealth = updatedMonster.health;
+      updatedMonster.health = updatedMonster.maxHealth // Heal on level up
       leveledUp = true
 
       // Check for evolution
@@ -858,7 +1050,7 @@ export default function BattleScreen() {
           level: updatedMonster.level,
           exp: updatedMonster.exp,
           expToNextLevel: updatedMonster.expToNextLevel,
-          health: tempHealth, // Set health to full with new max health
+          health: newMaxHealth, // Set health to full with new max health
           maxHealth: newMaxHealth,
         }
 
@@ -880,11 +1072,13 @@ export default function BattleScreen() {
     // Update active monster
     if (evolvedMonster) {
       setActiveMonster(evolvedMonster)
+      activeMonsterRef.current = evolvedMonster // Update the ref
       playerHealthAnim.setValue(evolvedMonster.health)
       // Reset exp animation for evolved monster
       playerExpAnim.setValue(evolvedMonster.exp)
     } else {
       setActiveMonster(updatedMonster)
+      activeMonsterRef.current = updatedMonster // Update the ref
       playerHealthAnim.setValue(updatedMonster.health)
       // No need to reset exp animation here as we already animated it
     }
@@ -903,30 +1097,37 @@ export default function BattleScreen() {
 
     // Show appropriate messages
     setTimeout(() => {
-      setBattleText(`${activeMonster.name} gained ${expGained} EXP!`)
+      setBattleText(`${currentActiveMonster.name} gained ${expGained} EXP!`)
       playSound("expGain")
 
       setTimeout(() => {
         if (evolvedMonster) {
-          setBattleText(`${activeMonster.name} is evolving into ${evolvedMonster.name}!`)
+          setBattleText(`${currentActiveMonster.name} is evolving into ${evolvedMonster.name}!`)
           playSound("evolution")
         } else if (leveledUp) {
-          setBattleText(`${activeMonster.name} leveled up to level ${updatedMonster.level}!`)
+          setBattleText(`${currentActiveMonster.name} leveled up to level ${updatedMonster.level}!`)
           playSound("levelUp")
         }
 
         // Check for next enemy monster
         setTimeout(
           () => {
-            const nextEnemyMonster = enemyTrainer?.monsters.find((m) => m.health > 0 && m.id !== enemyMonster?.id)
+            // Reset the fainted animation
+            setIsEnemyFainted(false)
+
+            // Find the next enemy monster that has health > 0
+            const remainingMonsters = enemyTrainer?.monsters.filter((m) => m.health > 0 && m.id !== enemyMonster?.id)
+            const nextEnemyMonster = remainingMonsters && remainingMonsters.length > 0 ? remainingMonsters[0] : null
 
             if (nextEnemyMonster) {
+              console.log("Switching to next enemy monster:", nextEnemyMonster.name)
               setEnemyMonster(nextEnemyMonster)
               enemyHealthAnim.setValue(nextEnemyMonster.health)
               setBattleText(`${enemyTrainer?.name} sent out ${nextEnemyMonster.name}!`)
               playSound("switch")
               setIsProcessingTurn(false)
             } else {
+              console.log("No more enemy monsters, handling battle win")
               handleBattleWin()
             }
           },
@@ -937,14 +1138,18 @@ export default function BattleScreen() {
   }
 
   const handlePlayerMonsterFainted = () => {
-    setBattleText(`${activeMonster?.name} fainted!`)
+    setBattleText(`${activeMonsterRef.current?.name} fainted!`)
     playSound("faint")
 
-    const nextMonster = playerTeam.find((m) => m.health > 0 && m.id !== activeMonster?.id)
+    const nextMonster = playerTeam.find((m) => m.health > 0 && m.id !== activeMonsterRef.current?.id)
 
     if (nextMonster) {
       setTimeout(() => {
+        // Reset the fainted animation
+        setIsPlayerFainted(false)
+
         setActiveMonster(nextMonster)
+        activeMonsterRef.current = nextMonster // Update the ref
         playerHealthAnim.setValue(nextMonster.health)
         playerExpAnim.setValue(nextMonster.exp || 0)
         setBattleText(`Go, ${nextMonster.name}!`)
@@ -969,18 +1174,45 @@ export default function BattleScreen() {
 
       console.log("Final team from ref before saving:", JSON.stringify(finalTeam))
 
-      // Check if this trainer has already been defeated
-      const alreadyDefeated = gameState.defeatedTrainers.includes(trainerId)
+      // If this was a pre-trainer encounter, mark it as completed
+      if (isRandomBattle && isPreTrainerEncounter) {
+        await completeTrainerEncounter(trainerId)
 
-      // Only add to defeatedTrainers if this is the first time defeating this trainer
-      if (!alreadyDefeated) {
+        // Just save the team and return to map
         await saveGameState({
           ...gameState,
-          defeatedTrainers: [...gameState.defeatedTrainers, trainerId],
           playerTeam: finalTeam,
         })
+
+        // End battle after a delay
+        setTimeout(() => {
+          setIsBattleOver(true)
+          setIsProcessingTurn(false)
+        }, 2000)
+
+        return
+      }
+
+      // Only add to defeatedTrainers if this is a trainer battle (not random encounter)
+      // and if this is the first time defeating this trainer
+      if (!isRandomBattle) {
+        const alreadyDefeated = gameState.defeatedTrainers.includes(trainerId)
+
+        if (!alreadyDefeated) {
+          await saveGameState({
+            ...gameState,
+            defeatedTrainers: [...gameState.defeatedTrainers, trainerId],
+            playerTeam: finalTeam,
+          })
+        } else {
+          // Just save the player team state
+          await saveGameState({
+            ...gameState,
+            playerTeam: finalTeam,
+          })
+        }
       } else {
-        // Just save the player team state
+        // For random encounters, just save the team
         await saveGameState({
           ...gameState,
           playerTeam: finalTeam,
@@ -995,9 +1227,11 @@ export default function BattleScreen() {
       setIsProcessingTurn(false)
 
       // Add a message to indicate the player can battle this trainer again
-      setTimeout(() => {
-        setBattleText(`You can battle ${enemyTrainer?.name} again for more experience!`)
-      }, 3000)
+      if (!isRandomBattle) {
+        setTimeout(() => {
+          setBattleText(`You can battle ${enemyTrainer?.name} again for more experience!`)
+        }, 3000)
+      }
     } catch (error) {
       console.error("Error saving battle win:", error)
     }
@@ -1043,9 +1277,26 @@ export default function BattleScreen() {
       {/* Battle Scene */}
       <View style={styles.battleScene}>
         {activeMonster && (
-          <MonsterDisplay monster={activeMonster} animatedHealth={playerHealthAnim} animatedExp={playerExpAnim} />
+          <MonsterDisplay
+            monster={activeMonster}
+            animatedHealth={playerHealthAnim}
+            animatedExp={playerExpAnim}
+            isAttacking={isPlayerAttacking}
+            isTakingDamage={isPlayerTakingDamage}
+            isFainted={isPlayerFainted}
+          />
         )}
-        {enemyMonster && <MonsterDisplay monster={enemyMonster} isEnemy={true} animatedHealth={enemyHealthAnim} />}
+        {enemyMonster && (
+          <MonsterDisplay
+            monster={enemyMonster}
+            isEnemy={true}
+            animatedHealth={enemyHealthAnim}
+            isAttacking={isEnemyAttacking}
+            isTakingDamage={isEnemyTakingDamage}
+            isFainted={isEnemyFainted}
+            isCaptured={isCaptureAnimation}
+          />
+        )}
       </View>
 
       {/* Battle Text */}
@@ -1064,6 +1315,8 @@ export default function BattleScreen() {
           monster={activeMonster}
           onMoveSelect={handleMoveSelect}
           onSwitchPress={() => setShowSwitchModal(true)}
+          onCatchPress={handleCatchMonster}
+          showCatchButton={showCatchButton}
           disabled={!!currentProblem || isBattleOver || isProcessingTurn}
         />
       )}
@@ -1079,7 +1332,7 @@ export default function BattleScreen() {
             {playerTeam.map(
               (monster, index) =>
                 monster.health > 0 &&
-                monster.id !== activeMonster?.id && (
+                monster.id !== activeMonsterRef.current?.id && (
                   <TouchableOpacity
                     key={index}
                     style={styles.monsterOption}
