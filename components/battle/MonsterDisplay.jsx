@@ -657,7 +657,7 @@ export default function MonsterDisplay({
     if (animationTriggers.attack) {
       Animated.sequence([
         Animated.timing(attackAnim, {
-          toValue: isEnemy ? -30 : 30,
+          toValue: isEnemy ? 30 : -30,
           duration: 150,
           useNativeDriver: true,
         }),

@@ -12,8 +12,8 @@ export const MONSTERS = [
       { id: 4, name: "Ember", power: 35, type: "Fire" },
     ],
     evolutions: [
-      { level: 10, id: 11 }, // Evolves to Algebrex at level 10
-      { level: 25, id: 12 }, // Evolves to Calculord at level 25
+      { level: 10, id: 11 }, 
+      { level: 25, id: 12 }, 
     ],
   },
   {
@@ -23,17 +23,13 @@ export const MONSTERS = [
     baseHealth: 150,
     image: require('../assets/monsters/test-mon.png'),
     moves: [
-      // { id: 1, name: "Number Crunch", power: 25, type: "math" },
-      // { id: 2, name: "Equation Slam", power: 30, type: "math" },
-      // { id: 3, name: "Quadratic Crush", power: 40, type: "math" },
-      // { id: 4, name: "Variable Vortex", power: 45, type: "math" },
       { id: 1, name: "Tail Whip", power: 25, type: "normal" },
       { id: 2, name: "Fire Fang", power: 30, type: "fire" },
       { id: 3, name: "Fast Attack", power: 40, type: "normal" },
       { id: 4, name: "Flame Wheel", power: 45, type: "fire" },
     ],
     evolutions: [
-      { level: 25, id: 12 }, // Evolves to Calculord at level 25
+      { level: 25, id: 12 }, 
     ],
   },
   {
@@ -41,15 +37,10 @@ export const MONSTERS = [
     name: "Inferaptor",
     type: "fire",
     baseHealth: 200,
-    // image: require("../assets/monsters/algebrex.png"),
     image: require('../assets/monsters/test-mon.png'),
     moves: [
-      // { id: 1, name: "Number Crunch", power: 30, type: "math" },
-      // { id: 2, name: "Equation Slam", power: 35, type: "math" },
-      // { id: 3, name: "Calculus Crash", power: 50, type: "math" },
-      // { id: 4, name: "Integral Inferno", power: 60, type: "math" },
       { id: 1, name: "Tail Whip", power: 30, type: "normal" },
-      { id: 2, name: "Fire Fang", power: 35, type: "fire" },
+      { id: 2, name: "Flame Wheel", power: 35, type: "fire" },
       { id: 3, name: "Fast Attack", power: 50, type: "normal" },
       { id: 4, name: "Inferno", power: 60, type: "fire" },
     ],
@@ -60,7 +51,6 @@ export const MONSTERS = [
     name: "Aquotl",
     type: "Water",
     baseHealth: 90,
-    // image: require("../assets/monsters/calculord.png"),
     image: require('../assets/monsters/aquotl.png'),
     moves: [
       { id: 5, name: "Tail Whip", power: 20, type: "Normal" },
@@ -76,15 +66,14 @@ export const MONSTERS = [
   {
     id: 21,
     name: "Prosavant",
-    type: "language",
+    type: "Water",
     baseHealth: 140,
-    // image: require("../assets/monsters/prosavant.png"),
     image: require('../assets/monsters/test-mon.png'),
     moves: [
-      { id: 5, name: "Word Whip", power: 25, type: "language" },
-      { id: 6, name: "Grammar Grapple", power: 30, type: "language" },
-      { id: 7, name: "Metaphor Missile", power: 40, type: "language" },
-      { id: 8, name: "Narrative Nuke", power: 45, type: "language" },
+      { id: 5, name: "Tail Whip", power: 25, type: "Normal" },
+      { id: 6, name: "Spin Attack", power: 30, type: "Normal" },
+      { id: 7, name: "", power: 40, type: "Water" },
+      { id: 8, name: "Narrative Nuke", power: 45, type: "Water" },
     ],
     evolutions: [
       { level: 25, id: 22 }, // Evolves to Lexiconian at level 25
@@ -93,7 +82,7 @@ export const MONSTERS = [
   {
     id: 22,
     name: "Lexiconian",
-    type: "language",
+    type: "Water",
     baseHealth: 190,
     // image: require("../assets/monsters/lexiconian.png"),
     image: require('../assets/monsters/test-mon.png'),

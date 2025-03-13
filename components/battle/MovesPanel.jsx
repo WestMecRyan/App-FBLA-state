@@ -22,6 +22,30 @@ export default function MovesPanel({
     onMoveSelect(move);
   };
 
+  const getTypeColor = (type) => {
+    const typeColors = {
+      fire: "#FFE0B2", // Light Orange
+      water: "#BBDEFB", // Light Blue
+      grass: "#C8E6C9", // Light Green
+      // electric: "#FFF9C4", // Light Yellow
+      // psychic: "#E1BEE7", // Light Purple
+      // ice: "#B3E5FC", // Light Cyan
+      // dragon: "#FFCCBC", // Light Deep Orange
+      // dark: "#D7CCC8", // Light Brown
+      // fairy: "#F8BBD0", // Light Pink
+      // normal: "#E0E0E0", // Light Grey
+      // fighting: "#FFCDD2", // Light Red
+      // flying: "#B3E5FC", // Light Light Blue
+      // poison: "#E1BEE7", // Light Light Purple
+      // ground: "#FFE0B2", // Light Light Orange
+      // rock: "#D7CCC8", // Light Light Brown
+      // bug: "#DCEDC8", // Light Light Green
+      // ghost: "#D1C4E9", // Light Dark Purple
+      // steel: "#CFD8DC", // Light Blue Grey
+    }
+    return typeColors[type.toLowerCase()] || "#F5F5F5" // Default color
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.actionButtons}>
@@ -66,7 +90,7 @@ export default function MovesPanel({
               {monster.moves.map((move, index) => (
                 <TouchableOpacity
                   key={index}
-                  style={styles.moveButton}
+                  style={[styles.moveButton, { backgroundColor: getTypeColor(move.type) }]}
                   onPress={() => handleMoveSelect(move)}
                 >
                   <Text style={styles.moveName}>{move.name}</Text>
