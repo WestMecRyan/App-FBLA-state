@@ -313,7 +313,7 @@ export default function MapScreen() {
     const previousSchoolTrainers = previousSchool.trainers.map((t) => t.id)
     const allDefeated = previousSchoolTrainers.every((id) => defeatedTrainers.includes(id))
 
-    console.log(`School ${schoolId} locked status:`, !allDefeated)
+    // console.log(`School ${schoolId} locked status:`, !allDefeated)
     return !allDefeated
   }
 

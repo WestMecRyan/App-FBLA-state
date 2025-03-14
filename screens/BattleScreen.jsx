@@ -45,6 +45,8 @@ export default function BattleScreen() {
   const [showCatchButton, setShowCatchButton] = useState(false)
   const [isCaptureAnimation, setIsCaptureAnimation] = useState(false)
 
+  const [currentMove, setCurrentMove] = useState(null);
+
   // Track the original number of monsters the trainer had
   const [originalTrainerMonsterCount, setOriginalTrainerMonsterCount] = useState(0)
   // Track how many monsters have been defeated
@@ -240,6 +242,7 @@ export default function BattleScreen() {
 
   const handleMoveSelect = (move) => {
     if (isProcessingTurn) return
+    setCurrentMove(move);
 
     const problem = enemyTrainer?.problems[Math.floor(Math.random() * enemyTrainer.problems.length)]
     console.log(problem)
@@ -270,7 +273,8 @@ export default function BattleScreen() {
       setIsEnemyTakingDamage(true)
 
       // Calculate and apply damage
-      const damage = calculateDamage(currentActiveMonster, enemyMonster)
+      let move = currentMove;
+      const damage = calculateDamage(currentActiveMonster, enemyMonster, move)
       console.log("Player Damage: ", damage)
 
       // Different HP handling for random encounters vs trainer battles
@@ -342,7 +346,7 @@ export default function BattleScreen() {
     setIsPlayerTakingDamage(true)
 
     const enemyMove = enemyMonster.moves[Math.floor(Math.random() * enemyMonster.moves.length)]
-    const damage = calculateDamage(enemyMonster, currentActiveMonster)
+    const damage = calculateDamage(enemyMonster, currentActiveMonster, enemyMove)
     console.log("Enemy Damage: ", damage)
     const newPlayerHealth = Math.max(0, currentActiveMonster.health - damage)
 
@@ -405,6 +409,10 @@ export default function BattleScreen() {
       handleEnemyTurn()
     }, 2000)
   }
+
+  useEffect(() => { 
+    // console.log("isPlayerTakingDamage:", isPlayerTakingDamage);
+  }, [isPlayerTakingDamage])
 
   const handleCatchMonster = async () => {
     setIsProcessingTurn(true)
@@ -744,22 +752,21 @@ export default function BattleScreen() {
     setIsProcessingTurn(false)
   }
 
-  const calculateDamage = (attacker, defender) => {
-    const base = 20
+  const calculateDamage = (attacker, defender, move) => {
+    const base = move.power;
+    console.log("base power", base)
     const levelFactor = attacker.level / defender.level
-    const typeBonus = getTypeBonus(attacker.type.toLowerCase(), defender.type.toLowerCase())
-    const randomFactor = 0.85 + Math.random() * 0.3 // Random factor between 0.85 and 1.15
-    return Math.floor(base * levelFactor * typeBonus * randomFactor)
+    const typeBonus = getTypeBonus(move.type.toLowerCase(), defender.type.toLowerCase())
+    // const randomFactor = 0.9 + Math.random() * 0.3 // Random factor between 0.9 and 1.15
+    // return Math.floor(base * levelFactor * typeBonus * randomFactor)
+    return Math.floor(base * levelFactor * typeBonus);
   }
 
   const getTypeBonus = (attackerType, defenderType) => {
     const typeChart = {
-      fire: { grass: 2, water: 0.5 },
-      water: { fire: 2, grass: 0.5 },
-      grass: { water: 2, fire: 0.5 },
-      math: { science: 1.5, language: 0.75 },
-      science: { language: 1.5, math: 0.75 },
-      language: { math: 1.5, science: 0.75 },
+      fire: { grass: 1.5, water: 0.75 },
+      water: { fire: 1.5, grass: 0.75 },
+      grass: { water: 1.5, fire: 0.75 },
     }
     return typeChart[attackerType]?.[defenderType] || 1
   }

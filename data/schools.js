@@ -139,11 +139,10 @@ export const SCHOOLS = [
         id: 1,
         name: "Novice Flynn",
         type: "fire",
-        monsters: [createMonster(1, 4)],
+        monsters: [createMonster(1, 3)],
         problems: PROBLEMS.math.slice(0, 3),
         isLeader: false,
         schoolId: 1,
-        // image: require('../assets/trainers/flynn.png')
         image: require("../assets/trainers/test-trainer.png"),
         // No random encounter before the first trainer
         hasRandomEncounterBefore: false,
@@ -152,25 +151,18 @@ export const SCHOOLS = [
         id: 2,
         name: "Apprentice Ember",
         type: "fire",
-        // monsters: [MONSTERS[0], MONSTERS[1]],
         monsters: [createMonster(1, 5), createMonster(1, 6)],
         problems: PROBLEMS.math.slice(3, 6),
         isLeader: false,
         schoolId: 1,
-        // image: require('../assets/trainers/ember.png')
         image: require("../assets/trainers/test-trainer.png"),
         // Random encounter before this trainer
         hasRandomEncounterBefore: true,
         randomEncounterPool: [
           {
             monsterId: 1, // Mathling (fire type)
-            levelRange: { min: 3, max: 7 },
-            chance: 0.7, // 70% chance of encountering this monster
-          },
-          {
-            monsterId: 11, // Algebrex (fire type)
-            levelRange: { min: 8, max: 12 },
-            chance: 0.3, // 30% chance of encountering this monster
+            levelRange: { min: 3, max: 5 },
+            chance: 0.8, // 70% chance of encountering this monster
           },
         ],
       },
@@ -178,11 +170,10 @@ export const SCHOOLS = [
         id: 3,
         name: "Master Blaze",
         type: "fire",
-        monsters: [MONSTERS[0], MONSTERS[1], MONSTERS[1]],
+        monsters: [createMonster(11, 10), createMonster(11, 12)],
         problems: PROBLEMS.math.slice(6, 9),
         isLeader: true,
         schoolId: 1,
-        // image: require('../assets/trainers/blaze.png')
         image: require("../assets/trainers/test-trainer.png"),
         // Random encounter before the leader
         hasRandomEncounterBefore: true,
