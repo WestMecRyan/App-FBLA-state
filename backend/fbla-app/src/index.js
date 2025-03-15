@@ -49,7 +49,7 @@ app.post('/login', async (c) => {
 	}
 
 	try {
-		const query = 'SELECT * FROM user WHERE username = ? AND password = ?';
+		const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
 		const user = await DB.prepare(query).bind(username, password).first();
 
 		if (!user) {
