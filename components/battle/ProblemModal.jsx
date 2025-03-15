@@ -114,6 +114,9 @@
 
 
 
+
+
+
 import { useState, useEffect } from "react"
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native"
 
@@ -130,14 +133,29 @@ const shuffleArray = (array) => {
 export default function ProblemModal({ visible, problem, onAnswer }) {
   const [shuffledAnswers, setShuffledAnswers] = useState([])
 
-  // Shuffle answers when problem changes
+  // Fix the problem modal to use the answers array from problems.js
   useEffect(() => {
     if (problem) {
-      const answers = [
-        { text: problem.correctAnswer, isCorrect: true },
-        ...problem.wrongAnswers.map((answer) => ({ text: answer, isCorrect: false })),
-      ]
-      setShuffledAnswers(shuffleArray(answers))
+      // Create an array of answer objects with correct/incorrect flags
+      // This handles the format in problems.js which has an answers array
+      const answerObjects = problem.answers
+        ? problem.answers.map((answer) => ({
+            text: answer,
+            isCorrect: answer === problem.correctAnswer,
+          }))
+        : // Fallback to old format if needed
+          [
+            { text: problem.correctAnswer, isCorrect: true },
+            ...(problem.wrongAnswers || []).map((answer) => ({ text: answer, isCorrect: false })),
+          ]
+
+      console.log("Problem:", problem)
+      console.log("Answer objects before shuffle:", answerObjects)
+
+      // Shuffle the answers
+      const shuffled = shuffleArray(answerObjects)
+      console.log("Shuffled answers:", shuffled)
+      setShuffledAnswers(shuffled)
     }
   }, [problem])
 
@@ -151,11 +169,26 @@ export default function ProblemModal({ visible, problem, onAnswer }) {
           <Text style={styles.questionText}>{problem.question}</Text>
 
           <View style={styles.answersContainer}>
-            {shuffledAnswers.map((answer, index) => (
-              <TouchableOpacity key={index} style={styles.answerButton} onPress={() => onAnswer(answer.isCorrect)}>
-                <Text style={styles.answerText}>{answer.text}</Text>
-              </TouchableOpacity>
-            ))}
+            {shuffledAnswers && shuffledAnswers.length > 0 ? (
+              shuffledAnswers.map((answer, index) => (
+                <TouchableOpacity key={index} style={styles.answerButton} onPress={() => onAnswer(answer.isCorrect)}>
+                  <Text style={styles.answerText}>{answer.text}</Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              // Fallback if shuffling fails
+              <>
+                <TouchableOpacity style={styles.answerButton} onPress={() => onAnswer(true)}>
+                  <Text style={styles.answerText}>{problem.correctAnswer}</Text>
+                </TouchableOpacity>
+                {problem.wrongAnswers &&
+                  problem.wrongAnswers.map((answer, index) => (
+                    <TouchableOpacity key={index} style={styles.answerButton} onPress={() => onAnswer(false)}>
+                      <Text style={styles.answerText}>{answer}</Text>
+                    </TouchableOpacity>
+                  ))}
+              </>
+            )}
           </View>
         </View>
       </View>
