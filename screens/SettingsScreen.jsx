@@ -313,7 +313,11 @@ export default function SettingsScreen() {
     try {
       await resetGameState()
       setShowResetModal(false)
-      navigation.navigate("Home")
+      // navigation.navigate("Home")
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      })
     } catch (error) {
       console.error("Error resetting game state:", error)
     }
