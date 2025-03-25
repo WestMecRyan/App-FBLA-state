@@ -332,15 +332,16 @@ export default function MonsterDisplay({
     evolveAnim.setValue(1)
     flashAnim.setValue(0)
 
-    // setAnimationTriggers({
-    //   attack: false,
-    //   damage: false,
-    //   faint: false,
-    //   capture: false,
-    //   swap: false,
-    //   swapOut: false,
-    //   evolve: false,
-    // })
+    // Also reset the animation triggers state
+    setAnimationTriggers({
+      attack: false,
+      damage: false,
+      faint: false,
+      capture: false,
+      swap: false,
+      swapOut: false,
+      evolve: false,
+    })
   }, [
     monster,
     fadeAnim,

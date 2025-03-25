@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
     padding: 20,
     width: "90%",
     maxHeight: "80%",
+    overflow: "scroll",
   },
   questionTitle: {
     fontSize: 18,
@@ -223,17 +224,24 @@ const styles = StyleSheet.create({
   },
   answersContainer: {
     width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   answerButton: {
     backgroundColor: "#4CAF50",
+    // backgroundColor: '#F5F5F5',
     padding: 15,
+    paddingVertical: 25,
     borderRadius: 10,
     marginBottom: 10,
+    width: "48%",
+    margin: "auto",
   },
   answerText: {
     color: "#FFF",
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 17,
   },
 })
 

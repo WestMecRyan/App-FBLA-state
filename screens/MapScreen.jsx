@@ -361,8 +361,9 @@
 
 
 import { useState, useEffect } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal, SafeAreaView } from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal, SafeAreaView, Linking } from "react-native"
 import { useNavigation } from "@react-navigation/native"
+import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from "@expo/vector-icons"
 import { SCHOOLS } from "../data/schools"
 import { loadGameState } from "../utils/gameState"
@@ -417,7 +418,7 @@ export default function MapScreen() {
     const previousSchoolTrainers = previousSchool.trainers.map((t) => t.id)
     const allDefeated = previousSchoolTrainers.every((id) => defeatedTrainers.includes(id))
 
-    console.log(`School ${schoolId} locked status:`, !allDefeated)
+    // console.log(`School ${schoolId} locked status:`, !allDefeated)
     return !allDefeated
   }
 
@@ -473,8 +474,29 @@ export default function MapScreen() {
   }
 
   const handleShare = (platform) => {
-    // In a real app, you would implement platform-specific sharing
-    console.log(`Sharing to ${platform}`)
+    // Define the text you want to share
+    const shareText = "Check out Edumon! It's an educational game that makes learning fun and engaging!"
+    const encodedText = encodeURIComponent(shareText)
+
+    // Define URLs for different platforms
+    const urls = {
+      twitter: `https://twitter.com/intent/tweet?text=${encodedText}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=https://edumon.app&quote=${encodedText}`,
+      // Note: Instagram doesn't support direct sharing via URL schemes like this
+      instagram: "https://instagram.com/", // This will just open Instagram
+    }
+
+    // Try to open the appropriate URL
+    try {
+      Linking.openURL(urls[platform])
+    } catch (error) {
+      console.error(`Error opening ${platform} share URL:`, error)
+      Alert.alert(
+        "Sharing Failed",
+        `Could not open ${platform}. Make sure you have the app installed or try another method.`
+      )
+    }
+
     // Close the modal after sharing
     setShowShareModal(false)
   }
@@ -570,8 +592,8 @@ export default function MapScreen() {
                       isTrainerLocked(trainer) && styles.lockedTrainer,
                       defeatedTrainers.includes(trainer.id) && styles.defeatedTrainer,
                       trainer.hasRandomEncounterBefore &&
-                        !completedEncounters.includes(trainer.id) &&
-                        styles.trainerWithEncounter,
+                      !completedEncounters.includes(trainer.id) &&
+                      styles.trainerWithEncounter,
                     ]}
                     onPress={() => handleTrainerSelect(trainer)}
                     disabled={isTrainerLocked(trainer)}
@@ -611,39 +633,54 @@ export default function MapScreen() {
               <Text style={styles.shareModalTitle}>Share Your Progress</Text>
 
               <View style={styles.shareButtons}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={[styles.shareButton, styles.instagramButton]}
                   onPress={() => handleShare("instagram")}
                 >
                   <Ionicons name="logo-instagram" size={24} color="#FFF" />
                   <Text style={styles.shareButtonText}>Instagram</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
-                <TouchableOpacity
-                  style={[styles.shareButton, styles.twitterButton]}
-                  onPress={() => handleShare("twitter")}
+              <TouchableOpacity
+                style={styles.shareButton}
+                onPress={() => handleShare("instagram")}
+              >
+                <LinearGradient
+                  colors={['#f09433', '#e6683c', '#dc2743', '#cc2366', '#bc1888']}
+                  start={{ x: 0.0, y: 0.0 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  style={styles.instagramGradient}
                 >
-                  <Ionicons name="logo-twitter" size={24} color="#FFF" />
-                  <Text style={styles.shareButtonText}>X</Text>
-                </TouchableOpacity>
+                  <Ionicons name="logo-instagram" size={24} color="#FFF" />
+                  <Text style={styles.shareButtonText}>Share on Instagram</Text>
+                </LinearGradient>
+              </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[styles.shareButton, styles.facebookButton]}
-                  onPress={() => handleShare("facebook")}
-                >
-                  <Ionicons name="logo-facebook" size={24} color="#FFF" />
-                  <Text style={styles.shareButtonText}>Facebook</Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                style={[styles.shareButton, styles.twitterButton]}
+                onPress={() => handleShare("twitter")}
+              >
+                <Ionicons name="logo-twitter" size={24} color="#FFF" />
+                <Text style={styles.shareButtonText}>Share on X</Text>
+              </TouchableOpacity>
 
-              <TouchableOpacity style={styles.cancelShareButton} onPress={() => setShowShareModal(false)}>
-                <Text style={styles.cancelShareText}>Cancel</Text>
+              <TouchableOpacity
+                style={[styles.shareButton, styles.facebookButton]}
+                onPress={() => handleShare("facebook")}
+              >
+                <Ionicons name="logo-facebook" size={24} color="#FFF" />
+                <Text style={styles.shareButtonText}>Share on Facebook</Text>
               </TouchableOpacity>
             </View>
+
+            <TouchableOpacity style={styles.cancelShareButton} onPress={() => setShowShareModal(false)}>
+              <Text style={styles.cancelShareText}>Cancel</Text>
+            </TouchableOpacity>
           </View>
-        </Modal>
       </View>
-    </SafeAreaView>
+    </Modal>
+      </View >
+    </SafeAreaView >
   )
 }
 
@@ -659,8 +696,7 @@ const styles = StyleSheet.create({
   navbar: {
     flexDirection: "row",
     backgroundColor: "#333",
-    padding: 10,
-    paddingTop: 10,
+    padding: 15,
     justifyContent: "space-between",
     alignItems: "center",
   },
@@ -672,6 +708,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#4CAF50",
     flexDirection: "row",
     alignItems: "center",
+    textAlign: "center",
   },
   selectedSchoolTab: {
     backgroundColor: "#2E7D32",
@@ -835,21 +872,32 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   shareButton: {
+    marginBottom: 10,
+    borderRadius: 8,
+    overflow: 'hidden', // Important for the gradient to be contained
+  },
+  instagramGradient: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  instagramButton: {
-    backgroundColor: "#C13584", // Instagram color
+    width: '100%',
   },
   twitterButton: {
-    backgroundColor: "#1DA1F2", // Twitter/X color
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 12,
+    backgroundColor: "#272727",
+    borderRadius: 8,
   },
   facebookButton: {
-    backgroundColor: "#4267B2", // Facebook color
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 12,
+    backgroundColor: "#4267B2",
+    borderRadius: 8,
   },
   shareButtonText: {
     color: "white",

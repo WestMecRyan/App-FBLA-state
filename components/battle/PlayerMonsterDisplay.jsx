@@ -332,6 +332,7 @@ export default function MonsterDisplay({
     evolveAnim.setValue(1)
     flashAnim.setValue(0)
 
+    // Also reset the animation triggers state
     // setAnimationTriggers({
     //   attack: false,
     //   damage: false,

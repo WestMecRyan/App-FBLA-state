@@ -103,9 +103,10 @@
 
 
 import { useEffect, useState } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground, Modal, SafeAreaView } from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground, Modal, SafeAreaView, Linking, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
+import { LinearGradient } from 'expo-linear-gradient';
 import { hasSelectedStarter } from "../utils/gameState"
 
 export default function HomeScreen() {
@@ -131,8 +132,26 @@ export default function HomeScreen() {
   }
 
   const handleShare = (platform) => {
-    // In a real app, you would implement platform-specific sharing
-    console.log(`Sharing to ${platform}`)
+    const shareText = "Check out Edumon! It's an educational game that makes learning fun and engaging!"
+    const encodedText = encodeURIComponent(shareText)
+
+    const urls = {
+      twitter: `https://twitter.com/intent/tweet?text=${encodedText}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=https://edumon.app&quote=${encodedText}`,
+      // Note: Instagram doesn't support direct sharing via URL schemes like this
+      instagram: "https://instagram.com/", // This will just open Instagram
+    }
+
+    try {
+      Linking.openURL(urls[platform])
+    } catch (error) {
+      console.error(`Error opening ${platform} share URL:`, error)
+      Alert.alert(
+        "Sharing Failed", 
+        `Could not open ${platform}. Make sure you have the app installed or try another method.`
+      )
+    }
+
     // Close the modal after sharing
     setShowShareModal(false)
   }
@@ -141,21 +160,26 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.safeArea}>
       <ImageBackground source={require("../assets/home-background.png")} style={styles.background} resizeMode="cover">
         <View style={styles.container}>
-          <Image source={require("../assets/logo.png")} style={styles.logo} resizeMode="contain" />
+          {/* Split container into two halves */}
+          <View style={styles.leftHalf}>
+            <Image source={require("../assets/logo.png")} style={styles.logo} resizeMode="contain" />
+          </View>
+          
+          <View style={styles.rightHalf}>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.playButton} onPress={handlePlay}>
+                <Text style={styles.playButtonText}>Play</Text>
+              </TouchableOpacity>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.playButton} onPress={handlePlay}>
-              <Text style={styles.playButtonText}>Play</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}>
+                <Text style={styles.settingsButtonText}>Settings</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}>
-              <Text style={styles.settingsButtonText}>Settings</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.shareButton} onPress={() => setShowShareModal(true)}>
-              <Ionicons name="share-social" size={20} color="#FFF" />
-              <Text style={styles.shareButtonText}>Share</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.shareButtonHome} onPress={() => setShowShareModal(true)}>
+                <Ionicons name="share-social" size={20} color="#FFF" />
+                <Text style={styles.shareButtonText}>Share</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           <Text style={styles.versionText}>Version 1.0.0</Text>
@@ -175,27 +199,38 @@ export default function HomeScreen() {
 
             <View style={styles.shareButtons}>
               <TouchableOpacity
-                style={[styles.shareButton, styles.instagramButton]}
+                style={styles.shareButton}
                 onPress={() => handleShare("instagram")}
               >
-                <Ionicons name="logo-instagram" size={24} color="#FFF" />
-                <Text style={styles.shareButtonText}>Instagram</Text>
+                <LinearGradient
+                  colors={['#f09433', '#e6683c', '#dc2743', '#cc2366', '#bc1888']}
+                  start={{ x: 0.0, y: 0.0 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  style={styles.instagramGradient}
+                >
+                  <Ionicons name="logo-instagram" size={24} color="#FFF" />
+                  <Text style={styles.shareButtonText}>Instagram</Text>
+                </LinearGradient>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.shareButton, styles.twitterButton]}
+                style={styles.shareButton}
                 onPress={() => handleShare("twitter")}
               >
-                <Ionicons name="logo-twitter" size={24} color="#FFF" />
-                <Text style={styles.shareButtonText}>X</Text>
+                <View style={styles.twitterButton}>
+                  <Ionicons name="logo-twitter" size={24} color="#FFF" />
+                  <Text style={styles.shareButtonText}>X</Text>
+                </View>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.shareButton, styles.facebookButton]}
+                style={styles.shareButton}
                 onPress={() => handleShare("facebook")}
               >
-                <Ionicons name="logo-facebook" size={24} color="#FFF" />
-                <Text style={styles.shareButtonText}>Facebook</Text>
+                <View style={styles.facebookButton}>
+                  <Ionicons name="logo-facebook" size={24} color="#FFF" />
+                  <Text style={styles.shareButtonText}>Facebook</Text>
+                </View>
               </TouchableOpacity>
             </View>
 
@@ -220,26 +255,38 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: "row", // Make the container horizontal
     padding: 20,
   },
+  leftHalf: {
+    flex: 1, // Take half of the screen
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  rightHalf: {
+    flex: 1, // Take half of the screen
+    justifyContent: "center",
+    alignItems: "center",
+  },
   logo: {
-    width: "80%",
-    height: 150,
-    marginBottom: 50,
+    width: "100%", 
+    height: "60%",
+    maxWidth: 300,
   },
   buttonContainer: {
     width: "100%",
     alignItems: "center",
+    maxWidth: 250,
   },
   playButton: {
     backgroundColor: "#4CAF50",
     paddingVertical: 15,
-    paddingHorizontal: 60,
+    paddingHorizontal: 40,
     borderRadius: 30,
     marginBottom: 20,
     elevation: 5,
+    width: "100%",
+    alignItems: "center",
   },
   playButtonText: {
     color: "#FFF",
@@ -253,12 +300,14 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     elevation: 3,
     marginBottom: 15,
+    width: "100%",
+    alignItems: "center",
   },
   settingsButtonText: {
     color: "#FFF",
     fontSize: 18,
   },
-  shareButton: {
+  shareButtonHome: {
     backgroundColor: "#3F51B5",
     paddingVertical: 12,
     paddingHorizontal: 40,
@@ -267,6 +316,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
   },
   shareButtonText: {
     color: "#FFF",
@@ -276,6 +326,7 @@ const styles = StyleSheet.create({
   versionText: {
     position: "absolute",
     bottom: 20,
+    right: 20,
     color: "#FFF",
     fontSize: 12,
   },
@@ -301,20 +352,33 @@ const styles = StyleSheet.create({
   shareButtons: {
     width: "100%",
   },
-  instagramButton: {
-    backgroundColor: "#C13584", // Instagram color
+  shareButton: {
     marginBottom: 10,
-    width: "100%",
+    borderRadius: 8,
+    overflow: 'hidden', // Important for gradient to stay within bounds
+  },
+  instagramGradient: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 12,
+    width: '100%',
   },
   twitterButton: {
-    backgroundColor: "#1DA1F2", // Twitter/X color
-    marginBottom: 10,
-    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 12,
+    backgroundColor: "#000000", // Updated to black for X branding
+    borderRadius: 8,
   },
   facebookButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 12,
     backgroundColor: "#4267B2", // Facebook color
-    marginBottom: 10,
-    width: "100%",
+    borderRadius: 8,
   },
   cancelShareButton: {
     marginTop: 10,
@@ -327,4 +391,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 })
-

@@ -65,7 +65,7 @@ export default function TeamManagementScreen() {
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
-          <Ionicons name="arrow-back" size={24} color="#000" />
+          <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.title}>Team Management</Text>
         <TouchableOpacity
@@ -136,10 +136,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    paddingTop: 50
+    // paddingTop: 50
   },
   header: {
     flexDirection: 'row',
+    backgroundColor: "#333",
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
@@ -147,11 +148,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#DDD'
   },
   backButton: {
-    padding: 5
+    padding: 5,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: "white",
   },
   healButton: {
     padding: 5

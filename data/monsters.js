@@ -97,7 +97,7 @@ export const MONSTERS = [
   {
     id: 3,
     name: "Scienspark",
-    type: "science",
+    type: "Grass",
     baseHealth: 95,
     // image: require("../assets/monsters/scienspark.png"),
     image: require('../assets/monsters/test-mon.png'),
