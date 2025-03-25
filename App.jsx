@@ -69,6 +69,7 @@ import SettingsScreen from "./screens/SettingsScreen"
 import TeamManagementScreen from "./screens/TeamManagementScreen"
 import StarterSelectionScreen from "./screens/StarterSelectionScreen"
 import { hasSelectedStarter } from "./utils/gameState"
+import { loadFonts } from './utils/fonts';
 import { resetGameState } from './utils/gameState';
 
 // Enable layout animations for Android
@@ -81,7 +82,15 @@ if (Platform.OS === "android") {
 const Stack = createNativeStackNavigator()
 
 export default function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
   useEffect(() => {
+    const loadAppFonts = async () => {
+      await loadFonts();
+      setFontsLoaded(true);
+    };
+    
+    loadAppFonts();
+
     // Uncomment this line to reset the game state for testing
     // resetGameState().then(() => console.log('Game state reset'));
   }, []);
@@ -103,8 +112,12 @@ export default function App() {
     checkStarterSelection()
   }, [])
 
-  if (isLoading) {
-    return null // Or a loading screen
+  if (!fontsLoaded || isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
