@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const MONSTERS = [
   {
     id: 1,
@@ -156,6 +158,7 @@ export function createMonster(id, level = 1) {
     expToNextLevel: calculateExpToNextLevel(level),
     health: calculateHealth(baseMonster.baseHealth, level),
     maxHealth: calculateHealth(baseMonster.baseHealth, level),
+    uniqueId: uuidv4(),
   }
 }
 

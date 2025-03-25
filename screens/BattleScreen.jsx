@@ -395,7 +395,7 @@ export default function BattleScreen() {
 
     // Also update the monster in our latestTeamRef
     const updatedTeam = JSON.parse(JSON.stringify(latestTeamRef.current))
-    const monsterIndex = updatedTeam.findIndex((m) => m.id === currentActiveMonster.id)
+    const monsterIndex = updatedTeam.findIndex((m) => m.uniqueId === currentActiveMonster.uniqueId)
     if (monsterIndex !== -1) {
       updatedTeam[monsterIndex].health = newPlayerHealth
       latestTeamRef.current = updatedTeam
@@ -440,7 +440,7 @@ export default function BattleScreen() {
     setIsProcessingTurn(true)
 
     // Find the exact monster object in the team by ID
-    const monsterFromTeam = playerTeam.find((m) => m.id === newMonster.id)
+    const monsterFromTeam = playerTeam.find((m) => m.uniqueId === newMonster.uniqueId)
 
     if (!monsterFromTeam) {
       console.error("Could not find monster in team")
@@ -554,7 +554,7 @@ export default function BattleScreen() {
     const updatedTeam = JSON.parse(JSON.stringify(latestTeamRef.current))
 
     // Find the index of the active monster in the team
-    const activeMonsterIndex = updatedTeam.findIndex((m) => m.id === currentActiveMonster.id)
+    const activeMonsterIndex = updatedTeam.findIndex((m) => m.uniqueId === currentActiveMonster.uniqueId)
 
     if (activeMonsterIndex === -1) {
       console.error("Active monster not found in player team")
@@ -585,7 +585,7 @@ export default function BattleScreen() {
       leveledUp = true
 
       // Check for evolution
-      const evolution = getEvolution(updatedMonster.id, updatedMonster.level)
+      const evolution = getEvolution(updatedMonster.uniqueId, updatedMonster.level)
       if (evolution) {
         const newMaxHealth = Math.floor(evolution.baseHealth * (1 + (updatedMonster.level - 1) * 0.1))
         evolvedMonster = {
@@ -729,7 +729,7 @@ export default function BattleScreen() {
 
     // Mark the current monster as fainted with 0 health
     const updatedTeam = JSON.parse(JSON.stringify(latestTeamRef.current))
-    const faintedMonsterIndex = updatedTeam.findIndex((m) => m.id === activeMonsterRef.current?.id)
+    const faintedMonsterIndex = updatedTeam.findIndex((m) => m.uniqueId === activeMonsterRef.current?.uniqueId)
 
     if (faintedMonsterIndex !== -1) {
       updatedTeam[faintedMonsterIndex].health = 0
@@ -969,7 +969,7 @@ export default function BattleScreen() {
               <View style={styles.monsterListContainer}>
                 {playerTeam.map((monster, index) => {
                   // Show all monsters, but disable those with 0 health
-                  const isActive = monster.id === activeMonsterRef.current?.id
+                  const isActive = monster.uniqueId === activeMonsterRef.current?.uniqueId
                   const isFainted = monster.health <= 0
 
                   return (
@@ -1137,6 +1137,7 @@ const styles = StyleSheet.create({
   },
   faintedMonsterText: {
     color: "#999",
+    fontFamily: "pixel-font",
   },
   faintedText: {
     color: "#F44336",

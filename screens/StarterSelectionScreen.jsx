@@ -118,16 +118,18 @@ const styles = StyleSheet.create({
         paddingTop: 20,
     },
     title: {
-        fontSize: 28,
-        fontWeight: "bold",
+        fontSize: 26,
+        // fontWeight: "bold",
         textAlign: "center",
         marginBottom: 10,
+        fontFamily: "pixel-font",
     },
     subtitle: {
-        fontSize: 16,
+        fontSize: 14,
         textAlign: "center",
         marginBottom: 30,
         color: "#666",
+        fontFamily: "pixel-font",
     },
     startersContainer: {
         flexDirection: "row",
@@ -158,28 +160,32 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     starterName: {
-        fontSize: 18,
-        fontWeight: "bold",
+        fontSize: 16,
+        // fontWeight: "bold",
         marginBottom: 5,
+        fontFamily: "pixel-font",
     },
     starterType: {
-        fontSize: 14,
+        fontSize: 12,
         color: "#666",
         marginBottom: 5,
+        fontFamily: "pixel-font",
     },
     starterLevel: {
-        fontSize: 14,
+        fontSize: 12,
         color: "#666",
         marginBottom: 10,
+        fontFamily: "pixel-font",
     },
     movesContainer: {
         width: "100%",
         marginTop: 5,
     },
     movesTitle: {
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: "bold",
         marginBottom: 5,
+        fontFamily: "pixel-font",
     },
     movesWrapper: {
         width: "100%",
@@ -189,8 +195,9 @@ const styles = StyleSheet.create({
     },
     moveText: {
         width: "50%",
-        fontSize: 12,
+        fontSize: 10,
         color: "gray",
+        fontFamily: "pixel-font",
     },
     selectedIndicator: {
         position: "absolute",
@@ -210,8 +217,9 @@ const styles = StyleSheet.create({
     },
     confirmButtonText: {
         color: "#FFF",
-        fontSize: 18,
-        fontWeight: "bold",
+        fontSize: 16,
+        // fontWeight: "bold",
+        fontFamily: "pixel-font",
     },
 })
 
