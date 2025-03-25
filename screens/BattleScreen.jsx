@@ -1053,10 +1053,11 @@ const styles = StyleSheet.create({
     overflow: "scroll",
   },
   modalTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 22,
+    // fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: "pixel-font",
   },
   monsterOption: {
     display: "flex",
@@ -1078,12 +1079,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   monsterOptionName: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
   },
   monsterOptionHealth: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#666",
+    fontFamily: "pixel-font",
   },
   monsterListContainer: {
     flex: 1,
@@ -1115,8 +1118,9 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: "#FFF",
     textAlign: "center",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
   },
 
   // Add these new styles

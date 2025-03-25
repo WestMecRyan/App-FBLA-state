@@ -291,7 +291,8 @@ const styles = StyleSheet.create({
   playButtonText: {
     color: "#FFF",
     fontSize: 24,
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
   },
   settingsButton: {
     backgroundColor: "#607D8B",
@@ -306,6 +307,7 @@ const styles = StyleSheet.create({
   settingsButtonText: {
     color: "#FFF",
     fontSize: 18,
+    fontFamily: "pixel-font",
   },
   shareButtonHome: {
     backgroundColor: "#3F51B5",
@@ -322,6 +324,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 18,
     marginLeft: 8,
+    fontFamily: "pixel-font",
   },
   versionText: {
     position: "absolute",
@@ -346,8 +349,9 @@ const styles = StyleSheet.create({
   },
   shareModalTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginBottom: 20,
+    fontFamily: "pixel-font",
   },
   shareButtons: {
     width: "100%",
@@ -388,6 +392,7 @@ const styles = StyleSheet.create({
   cancelShareText: {
     color: "#666",
     textAlign: "center",
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
   },
 })

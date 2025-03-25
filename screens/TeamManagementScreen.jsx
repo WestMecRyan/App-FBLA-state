@@ -152,8 +152,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     color: "white",
+    fontFamily: "pixel-font",
   },
   healButton: {
     padding: 5
@@ -188,13 +189,15 @@ const styles = StyleSheet.create({
   },
   monsterName: {
     fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5
+    // fontWeight: 'bold',
+    marginBottom: 5,
+    fontFamily: "pixel-font",
   },
   monsterLevel: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 10
+    marginBottom: 10,
+    fontFamily: "pixel-font",
   },
   healthBarContainer: {
     height: 10,
@@ -208,7 +211,8 @@ const styles = StyleSheet.create({
   healthText: {
     fontSize: 12,
     color: '#666',
-    marginTop: 5
+    marginTop: 5,
+    fontFamily: "pixel-font",
   },
   modalContainer: {
     flex: 1,

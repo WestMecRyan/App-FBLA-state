@@ -719,6 +719,7 @@ const styles = StyleSheet.create({
   schoolTabText: {
     color: "#FFF",
     marginRight: 5,
+    fontFamily: "pixel-font",
   },
   navIcons: {
     flexDirection: "row",
@@ -762,12 +763,13 @@ const styles = StyleSheet.create({
   },
   schoolAreaText: {
     color: "#FFF",
-    fontWeight: "bold",
+    // fontWeight: "bold",
     textAlign: "center",
     textShadowColor: "rgba(0,0,0,0.75)",
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 10,
-    fontSize: 12,
+    fontSize: 13,
+    fontFamily: "pixel-font",
   },
   modalContainer: {
     flex: 1,
@@ -790,9 +792,10 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 24,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+    fontFamily: "pixel-font",
   },
   // New grid layout for trainers
   trainersGrid: {
@@ -830,19 +833,22 @@ const styles = StyleSheet.create({
   },
   trainerName: {
     fontSize: 14,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     textAlign: "center",
+    fontFamily: "pixel-font",
   },
   trainerType: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#666",
     textAlign: "center",
+    fontFamily: "pixel-font",
   },
   encounterWarning: {
     fontSize: 10,
     color: "#FF9800",
     marginTop: 4,
     textAlign: "center",
+    fontFamily: "pixel-font",
   },
   trainerIcon: {
     position: "absolute",
@@ -865,8 +871,9 @@ const styles = StyleSheet.create({
   },
   shareModalTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginBottom: 20,
+    fontFamily: "pixel-font",
   },
   shareButtons: {
     width: "100%",
@@ -901,8 +908,9 @@ const styles = StyleSheet.create({
   },
   shareButtonText: {
     color: "white",
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginLeft: 10,
+    fontFamily: "pixel-font",
   },
   cancelShareButton: {
     marginTop: 10,
@@ -912,7 +920,8 @@ const styles = StyleSheet.create({
   cancelShareText: {
     color: "#666",
     textAlign: "center",
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
   },
 })
 

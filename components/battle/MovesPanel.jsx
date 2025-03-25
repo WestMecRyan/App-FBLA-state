@@ -143,8 +143,9 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     color: '#FFF',
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    // fontWeight: 'bold'
+    fontFamily: "pixel-font",
   },
   modalContainer: {
     flex: 1,
@@ -170,10 +171,11 @@ const styles = StyleSheet.create({
   },
   movesTitle: {
     backgroundColor: "#FFF",
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    // fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 15
+    marginBottom: 15,
+    fontFamily: "pixel-font",
   },
   moveButton: {
     width: "48%",
@@ -184,8 +186,9 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
   moveName: {
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    // fontWeight: 'bold'
+    fontFamily: "pixel-font",
   },
   moveInfo: {
     flexDirection: 'row',
@@ -194,11 +197,13 @@ const styles = StyleSheet.create({
   },
   moveType: {
     color: '#666',
-    fontSize: 14
+    fontSize: 12,
+    fontFamily: "pixel-font",
   },
   movePower: {
     color: '#666',
-    fontSize: 14
+    fontSize: 12,
+    fontFamily: "pixel-font",
   },
   cancelButton: {
     backgroundColor: '#666',
@@ -209,8 +214,9 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: '#FFF',
     textAlign: 'center',
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 14,
+    // fontWeight: 'bold',
+    fontFamily: "pixel-font",
   }
 });
 

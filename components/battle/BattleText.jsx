@@ -56,8 +56,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#FFF',
-    fontSize: 16,
+    fontSize: 14,
     lineHeight: 24,
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: "pixel-font",
   }
 });

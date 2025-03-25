@@ -212,15 +212,17 @@ const styles = StyleSheet.create({
     overflow: "scroll",
   },
   questionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 16,
+    // fontWeight: "bold",
     marginBottom: 10,
     textAlign: "center",
+    fontFamily: "pixel-font",
   },
   questionText: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 20,
     textAlign: "center",
+    fontFamily: "pixel-font",
   },
   answersContainer: {
     width: "100%",
@@ -241,7 +243,8 @@ const styles = StyleSheet.create({
   answerText: {
     color: "#FFF",
     textAlign: "center",
-    fontSize: 17,
+    fontSize: 15,
+    fontFamily: "pixel-font",
   },
 })
 

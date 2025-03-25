@@ -456,7 +456,8 @@ const styles = StyleSheet.create({
   headerTitle: {
     color: "#FFF",
     fontSize: 20,
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
   },
   settingsContainer: {
     flex: 1,
@@ -475,9 +476,10 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginBottom: 15,
     color: "#333",
+    fontFamily: "pixel-font",
   },
   settingRow: {
     flexDirection: "row",
@@ -488,8 +490,9 @@ const styles = StyleSheet.create({
     borderBottomColor: "#EEE",
   },
   settingLabel: {
-    fontSize: 16,
+    fontSize: 13,
     color: "#333",
+    fontFamily: "pixel-font",
   },
   difficultyButtons: {
     flexDirection: "row",
@@ -508,8 +511,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#4CAF50",
   },
   difficultyText: {
-    fontWeight: "bold",
+    // fontWeight: "bold",
     color: "#333",
+    fontFamily: "pixel-font",
   },
   resetButton: {
     backgroundColor: "#F44336",
@@ -520,13 +524,15 @@ const styles = StyleSheet.create({
   },
   resetButtonText: {
     color: "#FFF",
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
   },
   resetWarning: {
     color: "#F44336",
     fontSize: 12,
     marginTop: 10,
     textAlign: "center",
+    fontFamily: "pixel-font",
   },
   versionInfo: {
     alignItems: "center",
@@ -536,6 +542,7 @@ const styles = StyleSheet.create({
   versionText: {
     color: "#999",
     fontSize: 14,
+    fontFamily: "pixel-font",
   },
   // Modal styles
   modalOverlay: {
@@ -554,13 +561,15 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginBottom: 15,
+    fontFamily: "pixel-font",
   },
   modalText: {
     fontSize: 16,
     textAlign: "center",
     marginBottom: 20,
+    fontFamily: "pixel-font",
   },
   modalButtons: {
     flexDirection: "row",
@@ -581,11 +590,13 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     color: "white",
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
   },
   confirmButtonText: {
     color: "white",
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
   },
 })
 
