@@ -17,7 +17,8 @@ export default function TeamManagementScreen() {
   const navigation = useNavigation();
   const [team, setTeam] = useState([]);
   const [showHealModal, setShowHealModal] = useState(false);
-  const [currentProblem, setCurrentProblem] = useState(PROBLEMS.math[0]);
+  // const [currentProblem, setCurrentProblem] = useState(PROBLEMS.math[0]);
+  const [currentProblem, setCurrentProblem] = useState(null);
   const [healingInProgress, setHealingInProgress] = useState(false);
 
   useEffect(() => {
@@ -27,6 +28,28 @@ export default function TeamManagementScreen() {
   const loadTeam = async () => {
     const gameState = await loadGameState();
     setTeam(gameState.playerTeam);
+  };
+
+  const getRandomProblem = () => {
+    const getSubjectProblems = async () => {
+      try {
+        const gameState = await loadGameState();
+        const subject = gameState.settings?.subject || "math"; // Default to math if no subject is set
+        const subjectProblems = PROBLEMS[subject] || PROBLEMS.math; // Default to math if subject doesn't exist
+        
+        // Select a random problem from indices 0-29 (problems 1-30)
+        const randomIndex = Math.floor(Math.random() * Math.min(30, subjectProblems.length));
+        setCurrentProblem(subjectProblems[randomIndex]);
+      } catch (error) {
+        console.error("Error getting random problem:", error);
+        // Fallback to a math problem if there's an error
+        const mathProblems = PROBLEMS.math;
+        const randomIndex = Math.floor(Math.random() * Math.min(30, mathProblems.length));
+        setCurrentProblem(mathProblems[randomIndex]);
+      }
+    };
+
+    getSubjectProblems();
   };
 
   const handleHealAttempt = async (answer) => {
@@ -39,6 +62,7 @@ export default function TeamManagementScreen() {
       setHealingInProgress(false);
     } else {
       setHealingInProgress(false);
+      setShowHealModal(false);
     }
   };
 
@@ -62,14 +86,17 @@ export default function TeamManagementScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("Map")}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.title}>Team Management</Text>
         <TouchableOpacity
-          onPress={() => setShowHealModal(true)}
+          onPress={() => {
+            getRandomProblem(); // Get a random problem when heal button is pressed
+            setShowHealModal(true);
+          }}
           style={styles.healButton}
           disabled={healingInProgress}
         >
@@ -104,27 +131,33 @@ export default function TeamManagementScreen() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Answer to Heal Your Team</Text>
-            <Text style={styles.question}>{currentProblem.question}</Text>
-            
-            <View style={styles.answersContainer}>
-              {currentProblem.answers.map((answer, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.answerButton}
-                  onPress={() => handleHealAttempt(answer)}
-                  disabled={healingInProgress}
-                >
-                  <Text style={styles.answerText}>{answer}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+            {currentProblem ? (
+              <>
+                <Text style={styles.question}>{currentProblem.question}</Text>
+                
+                <View style={styles.answersContainer}>
+                  {currentProblem.answers.map((answer, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={styles.answerButton}
+                      onPress={() => handleHealAttempt(answer)}
+                      disabled={healingInProgress}
+                    >
+                      <Text style={styles.answerText}>{answer}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </>
+            ) : (
+              <Text style={styles.question}>Loading problem...</Text>
+            )}
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.closeButton}
               onPress={() => setShowHealModal(false)}
             >
               <Text style={styles.closeButtonText}>Cancel</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
@@ -181,7 +214,7 @@ const styles = StyleSheet.create({
   monsterImage: {
     width: 80,
     height: 80,
-    borderRadius: 40,
+    // borderRadius: 40,
     marginRight: 15
   },
   monsterInfo: {
@@ -228,38 +261,54 @@ const styles = StyleSheet.create({
     maxHeight: '80%'
   },
   modalTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 22,
+    // fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20
+    marginBottom: 20,
+    fontFamily: "pixel-font",
   },
   question: {
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center',
-    marginBottom: 20
+    marginBottom: 20,
+    fontFamily: "pixel-font",
   },
   answersContainer: {
-    marginBottom: 20
+    // marginBottom: 20
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   answerButton: {
-    backgroundColor: '#F5F5F5',
+    // backgroundColor: '#F5F5F5',
+    // padding: 15,
+    // borderRadius: 10,
+    // marginBottom: 10
+    backgroundColor: "#4CAF50",
     padding: 15,
+    paddingVertical: 25,
     borderRadius: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    width: "48%",
+    margin: "auto",
   },
   answerText: {
-    fontSize: 16,
-    textAlign: 'center'
-  },
-  closeButton: {
-    backgroundColor: '#666',
-    padding: 15,
-    borderRadius: 10
-  },
-  closeButtonText: {
-    color: '#FFF',
+    color: "#FFF",
+    fontSize: 14,
     textAlign: 'center',
-    fontSize: 16,
-    fontWeight: 'bold'
-  }
+    fontFamily: "pixel-font",
+  },
+  // closeButton: {
+  //   backgroundColor: '#666',
+  //   padding: 15,
+  //   borderRadius: 10
+  // },
+  // closeButtonText: {
+  //   color: '#FFF',
+  //   textAlign: 'center',
+  //   fontSize: 14,
+  //   // fontWeight: 'bold'
+  //   fontFamily: "pixel-font",
+  // }
 });

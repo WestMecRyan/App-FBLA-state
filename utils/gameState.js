@@ -221,6 +221,7 @@ export const getInitialGameState = () => {
       soundEnabled: true,
       musicEnabled: true,
       difficulty: "normal",
+      subject: "math", 
     },
   }
 }

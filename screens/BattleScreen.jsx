@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from "react"
 import { View, StyleSheet, Animated, BackHandler, Modal, TouchableOpacity, Text, Image, Alert, ScrollView } from "react-native"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import MonsterDisplay from "../components/battle/MonsterDisplay"
-// import PlayerMonsterDisplay from "../components/battle/PlayerMonsterDisplay"
-// import EnemyMonsterDisplay from "../components/battle/EnemyMonsterDisplay"
 import MovesPanel from "../components/battle/MovesPanel"
 import ProblemModal from "../components/battle/ProblemModal"
 import BattleText from "../components/battle/BattleText"
@@ -11,6 +9,7 @@ import { loadGameState, saveGameState, completeTrainerEncounter } from "../utils
 import { SCHOOLS, getRandomEncounterForTrainer } from "../data/schools"
 import { playSound, playBgMusic, stopBgMusic } from "../utils/audio"
 import { calculateExpGain, getEvolution, calculateExpToNextLevel } from "../data/monsters"
+import { Ionicons } from "@expo/vector-icons"
 
 // Add this debugging function at the top of the component
 const logTeamHealth = (team, label = "Team") => {
@@ -46,6 +45,7 @@ export default function BattleScreen() {
   const [isRandomBattle, setIsRandomBattle] = useState(false)
   const [showCatchButton, setShowCatchButton] = useState(false)
   const [isCaptureAnimation, setIsCaptureAnimation] = useState(false)
+  const [previousProblemId, setPreviousProblemId] = useState(null);
 
   const [currentMove, setCurrentMove] = useState(null)
 
@@ -71,6 +71,8 @@ export default function BattleScreen() {
   const latestTeamRef = useRef([])
   // Create a ref to store the current active monster to prevent switching issues
   const activeMonsterRef = useRef(null)
+
+  const [showFaintedTeamScreen, setShowFaintedTeamScreen] = useState(false);
 
   const playerHealthAnim = useRef(new Animated.Value(100)).current
   const enemyHealthAnim = useRef(new Animated.Value(100)).current
@@ -106,6 +108,12 @@ export default function BattleScreen() {
   // Fix the issue with trainer monsters not being properly initialized
   const initializeBattle = async () => {
     try {
+      const validTeam = await checkTeamHealth();
+      if (!validTeam) {
+        // navigation.goBack();
+        setShowFaintedTeamScreen(true);
+      }
+
       const gameState = await loadGameState()
 
       // Check if player team is empty
@@ -248,16 +256,93 @@ export default function BattleScreen() {
   }
 
   const handleMoveSelect = (move) => {
-    if (isProcessingTurn) return
-    setCurrentMove(move)
+    if (isProcessingTurn) return;
+    setCurrentMove(move);
 
-    const problem = enemyTrainer?.problems[Math.floor(Math.random() * enemyTrainer.problems.length)]
-    console.log(problem)
-    if (problem) {
-      setCurrentProblem(problem)
-      playSound("question")
+    // Get all available problems from the trainer
+    const availableProblems = enemyTrainer?.problems || [];
+
+    if (availableProblems.length === 0) {
+      console.error("No problems available for this trainer");
+      return;
     }
-  }
+
+    // If there's only one problem, we have no choice but to use it
+    if (availableProblems.length === 1) {
+      setCurrentProblem(availableProblems[0]);
+      setPreviousProblemId(availableProblems[0].id);
+      playSound("question");
+      return;
+    }
+
+    // Filter out the previous problem to avoid repetition
+    const eligibleProblems = availableProblems.filter(
+      problem => problem.id !== previousProblemId
+    );
+
+    // Select a random problem from eligible problems
+    const randomIndex = Math.floor(Math.random() * eligibleProblems.length);
+    const selectedProblem = eligibleProblems[randomIndex];
+
+    // Save the selected problem ID for next time
+    setPreviousProblemId(selectedProblem.id);
+
+    // Set the current problem and play sound
+    setCurrentProblem(selectedProblem);
+    playSound("question");
+  };
+
+  const checkTeamHealth = async () => {
+    try {
+      const gameState = await loadGameState();
+
+      if (!gameState.playerTeam || gameState.playerTeam.length === 0) {
+        Alert.alert("Error", "Your team is empty. Please restart the game.");
+        navigation.goBack();
+        return false;
+      }
+
+      // Check if all monsters are fainted
+      const allFainted = gameState.playerTeam.every(monster => monster.health <= 0);
+      if (allFainted) {
+        Alert.alert(
+          "Team Fainted",
+          "All your monsters have fainted. Please heal your team at the Pokémon Center.",
+          [{ text: "OK", onPress: () => navigation.goBack() }]
+        );
+        return false;
+      }
+
+      // Make sure a non-fainted monster is used as active
+      if (gameState.playerTeam[0].health <= 0) {
+        // Find the first non-fainted monster
+        const firstHealthyMonster = gameState.playerTeam.find(monster => monster.health > 0);
+
+        if (firstHealthyMonster) {
+          // Reorder the team to put the healthy monster first
+          const reorderedTeam = [
+            firstHealthyMonster,
+            ...gameState.playerTeam.filter(m => m.uniqueId !== firstHealthyMonster.uniqueId)
+          ];
+
+          // Save the reordered team
+          await saveGameState({
+            ...gameState,
+            playerTeam: reorderedTeam
+          });
+
+          return reorderedTeam;
+        }
+      }
+
+      return gameState.playerTeam;
+    } catch (error) {
+      console.error("Error checking team health:", error);
+      Alert.alert("Error", "Something went wrong checking your team's health.");
+      navigation.goBack();
+      return false;
+    }
+  };
 
   const handleProblemAnswer = async (correct) => {
     setCurrentProblem(null)
@@ -502,13 +587,17 @@ export default function BattleScreen() {
       // Create a copy of the caught monster with full health
       const caughtMonster = {
         ...enemyMonster,
-        health: enemyMonster.maxHealth, // Restore health
+        // health: enemyMonster.maxHealth, // Restore health
         exp: 0,
         expToNextLevel: calculateExpToNextLevel(enemyMonster.level),
+        uniqueId: `${enemyMonster.id}-${Date.now()}`,
       }
 
+      const currentTeam = JSON.parse(JSON.stringify(latestTeamRef.current));
+
       // Add to player team
-      const updatedTeam = [...gameState.playerTeam, caughtMonster]
+      const updatedTeam = [...currentTeam, caughtMonster]
+      console.log("Updated player team:", updatedTeam);
 
       // Save the updated team
       await saveGameState({
@@ -532,7 +621,6 @@ export default function BattleScreen() {
     }
   }
 
-  // Fix the issue with trainer's next monster not appearing
   const handleEnemyMonsterFainted = async () => {
     setBattleText(`Enemy ${enemyMonster?.name} fainted!`)
     playSound("faint")
@@ -846,10 +934,36 @@ export default function BattleScreen() {
   }
 
   // Make sure handleBattleLoss properly ends the battle
-  const handleBattleLoss = () => {
+  const handleBattleLoss = async () => {
     console.log("Battle lost - ending battle")
     setBattleText("You lost the battle...")
     playSound("defeat")
+
+    try {
+      // Save the team state with fainted monsters
+      const gameState = await loadGameState();
+
+      // Use the final team state from our latestTeamRef
+      const finalTeam = JSON.parse(JSON.stringify(latestTeamRef.current));
+
+      console.log("Saving team after loss:", finalTeam);
+
+      // Save the updated game state
+      await saveGameState({
+        ...gameState,
+        playerTeam: finalTeam,
+      });
+
+      // Verify the save worked
+      const verifiedState = await loadGameState();
+      console.log("Verified team health after loss:",
+        verifiedState.playerTeam.map(m => `${m.name}: ${m.health}/${m.maxHealth}`)
+      );
+
+    } catch (error) {
+      console.error("Error saving team state after loss:", error);
+    }
+
     setIsBattleOver(true)
     setIsProcessingTurn(false)
 
@@ -1019,13 +1133,52 @@ export default function BattleScreen() {
           </View>
         </View>
       </Modal>
+
+
+      {/* Fainted Team Screen */}
+      <Modal
+        visible={showFaintedTeamScreen}
+        transparent={false}
+        animationType="fade"
+      >
+        <View style={styles.faintedTeamContainer}>
+          <View style={styles.faintedTeamHeader}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => {
+                setShowFaintedTeamScreen(false);
+                navigation.goBack();
+              }}
+            >
+              <Ionicons name="arrow-back" size={24} color="white" />
+            </TouchableOpacity>
+            <Text style={styles.faintedTeamTitle}>Team Fainted</Text>
+          </View>
+
+          <View style={styles.faintedTeamContent}>
+            <Ionicons name="alert-circle" size={80} color="#F44336" />
+            <Text style={styles.faintedTeamMessage}>
+              All of your monsters have fainted! Visit the healing center to restore your team's health.
+            </Text>
+
+            <TouchableOpacity
+              style={styles.healingCenterButton}
+              onPress={() => {
+                setShowFaintedTeamScreen(false);
+                navigation.navigate("TeamManagement");
+              }}
+            >
+              <Ionicons name="medical" size={24} color="white" />
+              <Text style={styles.healingCenterButtonText}>Healing Center</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }
 
-// Add these styles to the StyleSheet
 const styles = StyleSheet.create({
-  // ... existing styles
   container: {
     flex: 1,
     backgroundColor: "#87CEEB", // blue background
@@ -1145,66 +1298,52 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
   },
+  faintedTeamContainer: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  faintedTeamHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    // backgroundColor: "#4CAF50", // Green header
+    backgroundColor: "#333",
+    padding: 20,
+  },
+  backButton: {
+    marginRight: 15,
+  },
+  faintedTeamTitle: {
+    color: "white",
+    fontSize: 20,
+    fontFamily: "pixel-font",
+  },
+  faintedTeamContent: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 30,
+    marginTop: 10,
+  },
+  faintedTeamMessage: {
+    fontSize: 20,
+    textAlign: "center",
+    marginVertical: 15,
+    fontFamily: "pixel-font",
+    // lineHeight: 30,
+  },
+  healingCenterButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#4CAF50", // Green to match healing theme
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    borderRadius: 30,
+    // marginTop: 20,
+  },
+  healingCenterButtonText: {
+    color: "white",
+    fontSize: 18,
+    marginLeft: 10,
+    fontFamily: "pixel-font",
+  },
 })
-
-// // Fix the handleSwitchMonster function to properly close the modal and handle animations
-// const handleSwitchMonster = (newMonster) => {
-//   // Close the modal immediately to prevent duplicate sprites
-//   setShowSwitchModal(false)
-
-//   // Set processing turn to true to prevent actions during switch
-//   setIsProcessingTurn(true)
-
-//   // Find the exact monster object in the team by ID
-//   const monsterFromTeam = playerTeam.find((m) => m.id === newMonster.id)
-
-//   if (!monsterFromTeam) {
-//     console.error("Could not find monster in team")
-//     setIsProcessingTurn(false)
-//     return
-//   }
-
-//   console.log("Switching to monster:", monsterFromTeam.name, "with health:", monsterFromTeam.health)
-
-//   // Trigger swap animation
-//   setIsSwapping(true)
-
-//   // Set the monster that's being swapped out
-//   setSwappingOutMonster(activeMonsterRef.current)
-
-//   // Wait for the swap animation to start
-//   setTimeout(() => {
-//     // Update the active monster
-//     setActiveMonster(monsterFromTeam)
-//     activeMonsterRef.current = monsterFromTeam // Update the ref
-//     playerHealthAnim.setValue(monsterFromTeam.health)
-//     playerExpAnim.setValue(monsterFromTeam.exp || 0)
-//     setBattleText(`Go, ${monsterFromTeam.name}!`)
-//     playSound("switch")
-
-//     // End swap animation after a delay
-//     setTimeout(() => {
-//       setIsSwapping(false)
-//       setSwappingOutMonster(null)
-
-//       // Enemy's turn after switch
-//       setTimeout(() => {
-//         handleEnemyTurn()
-//       }, 1000)
-//     }, 500)
-//   }, 500)
-// }
-
-// // Fix the handleBattleLoss function to properly end the battle
-// const handleBattleLoss = () => {
-//   console.log("Battle lost - ending battle")
-//   setBattleText("You lost the battle...")
-//   playSound("defeat")
-//   setIsBattleOver(true)
-//   setIsProcessingTurn(false)
-
-//   // Ensure we navigate back after a delay
-//   setTimeout(() => {
-//     navigation.goBack()
-//   }, 3000)
-// }

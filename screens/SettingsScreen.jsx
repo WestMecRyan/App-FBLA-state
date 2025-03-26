@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Modal, ScrollView, SafeAreaView } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { loadGameState, saveGameState, resetGameState } from "../utils/gameState"
+import { notifySettingsChanged } from '../utils/audio';
 import { Ionicons } from "@expo/vector-icons"
 
 export default function SettingsScreen() {
@@ -23,6 +24,7 @@ export default function SettingsScreen() {
       const gameState = await loadGameState()
       if (gameState.settings) {
         setSettings(gameState.settings)
+        console.log("Settings loaded:", gameState.settings);
       }
     } catch (error) {
       console.error("Error loading settings:", error)
@@ -39,6 +41,10 @@ export default function SettingsScreen() {
         ...gameState,
         settings: newSettings,
       })
+
+      if (key === 'musicEnabled' || key === 'soundEnabled') {
+        await notifySettingsChanged();
+      }
     } catch (error) {
       console.error("Error updating setting:", error)
     }
@@ -49,10 +55,7 @@ export default function SettingsScreen() {
   }
 
   const handleSubjectChange = (subject) => {
-    setSettings((prevSettings) => ({
-      ...prevSettings,
-      subject,
-    }));
+    updateSetting("subject", subject)
   };
 
   const handleResetProgress = async () => {

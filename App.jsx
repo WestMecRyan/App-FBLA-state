@@ -71,6 +71,7 @@ import StarterSelectionScreen from "./screens/StarterSelectionScreen"
 import { hasSelectedStarter } from "./utils/gameState"
 import { loadFonts } from './utils/fonts';
 import { resetGameState } from './utils/gameState';
+import { Audio } from 'expo-av';
 
 // Enable layout animations for Android
 if (Platform.OS === "android") {
@@ -83,13 +84,23 @@ const Stack = createNativeStackNavigator()
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  const setupAudio = async () => {
+    await Audio.setAudioModeAsync({
+      playsInSilentModeIOS: true,
+      staysActiveInBackground: true,
+      shouldDuckAndroid: true,
+    });
+  };
+
   useEffect(() => {
     const loadAppFonts = async () => {
       await loadFonts();
       setFontsLoaded(true);
     };
-    
+
     loadAppFonts();
+    setupAudio();
 
     // Uncomment this line to reset the game state for testing
     // resetGameState().then(() => console.log('Game state reset'));
