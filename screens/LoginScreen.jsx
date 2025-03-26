@@ -35,27 +35,32 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please enter both email and password")
-      return
+      Alert.alert("Error", "Please enter both email and password");
+      return;
     }
-
-    setIsLoading(true)
+  
+    setIsLoading(true);
     try {
-      const success = await authenticateUser(email, password)
-      if (success) {
+      const response = await fetch(`http://127.0.0.1:8787/login?username=gabe&password=1234`, {
+        method: "POST",
+      });
+  
+      if (response.ok) {
+        const message = await response.text();
+        Alert.alert("Success", message);
         // Navigate to the main app
-        navigation.replace("Home")
+        navigation.replace("Home");
       } else {
-        Alert.alert("Login Failed", "Invalid email or password")
+        const errorMessage = await response.text();
+        Alert.alert("Login Failed", errorMessage);
       }
     } catch (error) {
-      Alert.alert("Error", "An error occurred during login")
-      console.error(error)
+      Alert.alert("Error", "An error occurred during login");
+      console.error(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
-
+  };
   const handleRegister = () => {
     // Navigate to registration screen (to be implemented)
     Alert.alert("Register", "Registration functionality to be implemented")
