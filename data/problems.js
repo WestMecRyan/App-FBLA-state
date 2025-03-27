@@ -442,105 +442,1104 @@ export const PROBLEMS = {
           { answer: "10", explanation: "This is too high. Recheck the equation with x = 2." }
         ],
         correctAnswer: "8"
+      },
+      {
+        id: 41,
+        question: "What is the area of a circle with radius 5?",
+        answers: [
+          { answer: "78.5", explanation: "Correct! The area of a circle is πr^2. Using r = 5, A = π(5)^2 = 25π ≈ 78.5." },
+          { answer: "80", explanation: "This is too high. Recheck the calculation for the area using π." },
+          { answer: "82", explanation: "This is too high. Recheck the formula and substitute correctly." },
+          { answer: "85", explanation: "This is too high. Double-check your calculation using π." }
+        ],
+        correctAnswer: "78.5"
+      },
+      {
+        id: 42,
+        question: "Simplify the expression: 4x + 3 - 2x",
+        answers: [
+          { answer: "2x + 3", explanation: "Correct! Combine like terms: 4x - 2x = 2x, so the simplified expression is 2x + 3." },
+          { answer: "2x + 5", explanation: "This is too high. Check the combination of the x terms." },
+          { answer: "3x + 3", explanation: "This is incorrect. Combine the x terms and keep the constant term." },
+          { answer: "3x + 5", explanation: "This is incorrect. Simplify the x terms and add the constant correctly." }
+        ],
+        correctAnswer: "2x + 3"
+      },
+      {
+        id: 43,
+        question: "Solve for x: 4x - 7 = 9",
+        answers: [
+          { answer: "3", explanation: "This is incorrect. Recheck the equation and solve step-by-step." },
+          { answer: "4", explanation: "Correct! Add 7 to both sides, then divide by 4 to get x = 4." },
+          { answer: "5", explanation: "This is incorrect. Double-check the solution steps." },
+          { answer: "6", explanation: "This is incorrect. Recheck the equation and solve step-by-step." }
+        ],
+        correctAnswer: "4"
+      },
+      {
+        id: 44,
+        question: "What is 2(x + 4) = 18?",
+        answers: [
+          { answer: "7", explanation: "Correct! First, divide both sides by 2 to get x + 4 = 9, then subtract 4 to get x = 7." },
+          { answer: "8", explanation: "This is too high. Recheck the steps to solve for x." },
+          { answer: "9", explanation: "This is too high. Double-check your division and subtraction." },
+          { answer: "10", explanation: "This is too high. Recheck the equation and solve it step-by-step." }
+        ],
+        correctAnswer: "7"
+      },
+      {
+        id: 45,
+        question: "Solve for x: 3x + 7 = 22",
+        answers: [
+          { answer: "5", explanation: "Correct! Subtract 7 from both sides to get 3x = 15, then divide by 3 to get x = 5." },
+          { answer: "6", explanation: "This is too high. Recheck the steps for solving x." },
+          { answer: "7", explanation: "This is too high. Double-check your subtraction and division." },
+          { answer: "8", explanation: "This is too high. Recheck the equation and solve for x." }
+        ],
+        correctAnswer: "5"
+      },
+      {
+        id: 46,
+        question: "What is the area of a triangle with base 10 and height 6?",
+        answers: [
+          { answer: "30", explanation: "Correct! The area of a triangle is 1/2 * base * height. So, 1/2 * 10 * 6 = 30." },
+          { answer: "32", explanation: "This is too high. Recheck the calculation for the area." },
+          { answer: "35", explanation: "This is too high. Double-check your multiplication." },
+          { answer: "36", explanation: "This is too high. Recheck the area formula." }
+        ],
+        correctAnswer: "30"
+      },
+      {
+        id: 47,
+        question: "What is the result of 4^2 + 3^2?",
+        answers: [
+          { answer: "16", explanation: "This is too low. Try squaring both numbers first." },
+          { answer: "18", explanation: "This is too low. Try squaring 4 and 3 first, then add them together." },
+          { answer: "25", explanation: "Correct! 4^2 = 16 and 3^2 = 9, so 16 + 9 = 25." },
+          { answer: "29", explanation: "This is too high. Recheck your addition." }
+        ],
+        correctAnswer: "25"
+      },
+      {
+        id: 48,
+        question: "Simplify the expression: 2(x - 3) + 4",
+        answers: [
+          { answer: "2x - 2", explanation: "Correct! Distribute 2 across the parentheses: 2(x) - 2(3) = 2x - 6, then add 4 to get 2x - 2." },
+          { answer: "2x - 6", explanation: "This is incorrect. Recheck the final steps after distribution." },
+          { answer: "2x + 2", explanation: "This is incorrect. Recheck the addition after distributing." },
+          { answer: "2x + 6", explanation: "This is incorrect. Check the final step after distributing and adding." }
+        ],
+        correctAnswer: "2x - 2"
+      },
+      {
+        id: 49,
+        question: "What is the slope of the line represented by the equation y = 2x + 3?",
+        answers: [
+          { answer: "1", explanation: "This is incorrect. The coefficient of x represents the slope." },
+          { answer: "2", explanation: "Correct! In the equation y = 2x + 3, the slope is the coefficient of x, which is 2." },
+          { answer: "3", explanation: "This is incorrect. The slope is the coefficient of x." },
+          { answer: "4", explanation: "This is incorrect. The slope is the number in front of x." }
+        ],
+        correctAnswer: "2"
+      },
+      {
+        id: 50,
+        question: "Solve for x: 5x + 10 = 30",
+        answers: [
+          { answer: "4", explanation: "Correct! Subtract 10 from both sides to get 5x = 20, then divide by 5 to get x = 4." },
+          { answer: "5", explanation: "This is too high. Recheck your subtraction and division." },
+          { answer: "6", explanation: "This is too high. Recheck the equation step by step." },
+          { answer: "7", explanation: "This is too high. Double-check your steps for solving x." }
+        ],
+        correctAnswer: "4"
+      },
+      {
+        id: 51,
+        question: "What is the volume of a cube with side length 6?",
+        answers: [
+          { answer: "216", explanation: "Correct! The volume of a cube is calculated as side^3, so 6^3 = 216." },
+          { answer: "126", explanation: "This is too low. Recheck the cube volume formula." },
+          { answer: "144", explanation: "This is too low. Double-check the cube volume formula." },
+          { answer: "160", explanation: "This is too low. The correct calculation is side^3." }
+        ],
+        correctAnswer: "216"
+      },
+      {
+        id: 52,
+        question: "What is the surface area of a cube with side length 4?",
+        answers: [
+          { answer: "24", explanation: "This is too low. Recheck the surface area formula for a cube." },
+          { answer: "48", explanation: "This is too low. Double-check your calculation using the formula 6 * side^2." },
+          { answer: "64", explanation: "This is too low. Check the formula again." },
+          { answer: "96", explanation: "Correct! The surface area of a cube is calculated as 6 * side^2. So, 6 * 4^2 = 96." }
+        ],
+        correctAnswer: "96"
+      },
+      {
+        id: 53,
+        question: "Simplify the expression: (x + 3)(x - 5)",
+        answers: [
+          { answer: "x^2 - 2x - 15", explanation: "Correct! Use the distributive property to expand the expression: x(x - 5) + 3(x - 5) = x^2 - 5x + 3x - 15 = x^2 - 2x - 15." },
+          { answer: "x^2 - 5x + 15", explanation: "This is incorrect. Recheck the multiplication of the terms." },
+          { answer: "x^2 + 5x - 15", explanation: "This is incorrect. Recheck the signs when distributing." },
+          { answer: "x^2 + 2x - 15", explanation: "This is incorrect. Recheck the middle term after expanding." }
+        ],
+        correctAnswer: "x^2 - 2x - 15"
+      },
+      {
+        id: 54,
+        question: "Solve for x: x^2 - 4 = 12",
+        answers: [
+          { answer: "2", explanation: "This is incorrect. Recheck your square roots after isolating x^2." },
+          { answer: "3", explanation: "This is incorrect. Recheck your steps after adding 4 to both sides." },
+          { answer: "4", explanation: "Correct! Add 4 to both sides to get x^2 = 16, then take the square root of both sides to get x = ±4." },
+          { answer: "5", explanation: "This is incorrect. Recheck your solution steps after isolating x^2." }
+        ],
+        correctAnswer: "4"
+      },
+      {
+        id: 55,
+        question: "What is the result of 5^3?",
+        answers: [
+          { answer: "100", explanation: "This is incorrect. Recheck the calculation of 5 cubed." },
+          { answer: "120", explanation: "This is incorrect. 5^3 = 5 * 5 * 5." },
+          { answer: "125", explanation: "Correct! 5^3 = 5 * 5 * 5 = 125." },
+          { answer: "150", explanation: "This is incorrect. Recheck your multiplication." }
+        ],
+        correctAnswer: "125"
+      },
+      {
+        id: 56,
+        question: "Solve for x: 2(x + 3) = 14",
+        answers: [
+          { answer: "5", explanation: "This is incorrect. Recheck your distribution and solving steps." },
+          { answer: "6", explanation: "This is incorrect. Recheck the division step after distributing." },
+          { answer: "7", explanation: "This is incorrect. Double-check the steps after isolating x." },
+          { answer: "4", explanation: "Correct! First, divide both sides by 2 to get x + 3 = 7, then subtract 3 to get x = 4." }
+        ],
+        correctAnswer: "4"
+      },
+      {
+        id: 57,
+        question: "What is 3x - 2x + 5?",
+        answers: [
+          { answer: "x + 5", explanation: "Correct! Combine like terms: 3x - 2x = x, so the simplified expression is x + 5." },
+          { answer: "x + 6", explanation: "This is incorrect. Check the coefficient of x after simplifying." },
+          { answer: "x + 7", explanation: "This is incorrect. Recheck the addition after combining like terms." },
+          { answer: "x + 8", explanation: "This is incorrect. Double-check the simplification of the expression." }
+        ],
+        correctAnswer: "x + 5"
+      },
+      {
+        id: 58,
+        question: "What is the result of 7x^2 when x = 3?",
+        answers: [
+          { answer: "63", explanation: "Correct! Substitute x = 3 into 7x^2: 7(3^2) = 7(9) = 63." },
+          { answer: "65", explanation: "This is too high. Check your multiplication of 7 and 9." },
+          { answer: "72", explanation: "This is too high. Recheck the multiplication and exponents." },
+          { answer: "75", explanation: "This is too high. Double-check your calculation of x^2." }
+        ],
+        correctAnswer: "63"
+      },
+      {
+        id: 59,
+        question: "What is the value of x in the equation: 5x - 3 = 2x + 9?",
+        answers: [
+          { answer: "3", explanation: "This is incorrect. Recheck your subtraction and solving steps." },
+          { answer: "4", explanation: "Correct! Subtract 2x from both sides to get 3x - 3 = 9, then add 3 to both sides to get 3x = 12, and divide by 3 to get x = 4." },
+          { answer: "5", explanation: "This is incorrect. Recheck your solving steps." },
+          { answer: "6", explanation: "This is incorrect. Double-check your equation and solving method." }
+        ],
+        correctAnswer: "4"
+      },
+      {
+        id: 60,
+        question: "Solve for x: 4(x + 6) = 32",
+        answers: [
+          { answer: "5", explanation: "This is incorrect. Recheck your distribution and solving steps." },
+          { answer: "6", explanation: "This is incorrect. Recheck the equation and simplify it properly." },
+          { answer: "7", explanation: "This is incorrect. Double-check the steps after distributing the 4." },
+          { answer: "4", explanation: "Correct! First, divide both sides by 4 to get x + 6 = 8, then subtract 6 to get x = 4." }
+        ],
+        correctAnswer: "4"
       }
     ],
     hard: [
-      { id: 61, question: "Solve for x: 2x + 6 = 16", answers: ["4", "5", "6", "7"], correctAnswer: "5" },
-      { id: 62, question: "What is the value of x in the equation: 5x - 7 = 18?", answers: ["4", "5", "6", "7"], correctAnswer: "5" },
-      { id: 63, question: "Solve for x: 3x - 4 = 11", answers: ["4", "5", "6", "7"], correctAnswer: "5" },
-      { id: 64, question: "Solve for x: x^2 + 6x - 7 = 0", answers: ["-7, 1", "-1, 7", "-6, 1", "1, -7"], correctAnswer: "-7, 1" },
-      { id: 65, question: "Simplify the expression: (x + 2)(x - 3)", answers: ["x^2 - x - 6", "x^2 + x - 6", "x^2 - 6x - 6", "x^2 - 5x - 6"], correctAnswer: "x^2 - x - 6" },
-      { id: 66, question: "What is the result of 3x^2 - 2x + 5 when x = 2?", answers: ["11", "12", "13", "14"], correctAnswer: "11" },
-      { id: 67, question: "What is the solution for the system of equations: 2x + y = 10 and x - y = 2?", answers: ["x = 3, y = 4", "x = 4, y = 3", "x = 5, y = 2", "x = 6, y = 1"], correctAnswer: "x = 6, y = 1" },
-      { id: 68, question: "Solve for x: 4x^2 + 3x - 5 = 0", answers: ["-1, 5/4", "1, -5/4", "-5/4, 1", "-5/4, -1"], correctAnswer: "-5/4, 1" },
-      { id: 69, question: "Simplify the expression: 6x - 3(x + 2)", answers: ["3x + 6", "3x + 5", "3x - 6", "3x - 5"], correctAnswer: "3x - 6" },
-      { id: 70, question: "Solve the quadratic equation: x^2 - 4x - 5 = 0", answers: ["-5, 1", "5, -1", "-1, 5", "1, -5"], correctAnswer: "-5, 1" },
-      { id: 71, question: "What is the solution for the system of equations: 3x + y = 10 and 2x - y = 3?", answers: ["x = 3, y = 1", "x = 2, y = 4", "x = 1, y = 2", "x = 2, y = 1"], correctAnswer: "x = 3, y = 1" },
-      { id: 72, question: "What is the value of x in the equation: 5x + 2 = 3x + 10?", answers: ["4", "3", "5", "6"], correctAnswer: "4" },
-      { id: 73, question: "Solve for x: x^2 - 5x + 6 = 0", answers: ["2, 3", "-2, -3", "1, 6", "4, -2"], correctAnswer: "2, 3" },
-      { id: 74, question: "Simplify: 2x^2 + 3x + 5 - x^2 - 2x", answers: ["x^2 + x + 5", "x^2 + x + 7", "x^2 + 5x + 7", "x^2 + 5x + 5"], correctAnswer: "x^2 + x + 5" },
-      { id: 75, question: "What is the value of x in the equation: 3(x - 4) = 18?", answers: ["5", "6", "7", "8"], correctAnswer: "10" },
-      { id: 76, question: "Solve for x: x^2 - 3x = 18", answers: ["6, -3", "-6, 3", "3, -6", "-3, 6"], correctAnswer: "6, -3" },
-      { id: 77, question: "What is the value of x in the equation: x^2 + 2x - 35 = 0?", answers: ["5, -7", "7, -5", "5, -6", "-5, 6"], correctAnswer: "7, -5" },
-      { id: 78, question: "Solve the equation: 3(x + 2) = 2(x + 4)", answers: ["2", "3", "4", "5"], correctAnswer: "4" },
-      { id: 79, question: "What is the solution to the system of equations: 2x + 3y = 14 and 4x - y = 10?", answers: ["x = 3, y = 2", "x = 4, y = 1", "x = 2, y = 3", "x = 1, y = 5"], correctAnswer: "x = 3, y = 2" },
-      { id: 80, question: "Simplify: (x + 1)(x - 3)", answers: ["x^2 - 2x - 3", "x^2 - 2x + 3", "x^2 + 2x - 3", "x^2 - 3x + 3"], correctAnswer: "x^2 - 2x - 3" },
-      { id: 81, question: "What is the area of a circle with a radius of 7?", answers: ["49π", "14π", "21π", "49"], correctAnswer: "49π" },
-      { id: 82, question: "What is the volume of a cylinder with radius 3 and height 5? (Use π = 3.14)", answers: ["141.3", "141.4", "145.5", "135.2"], correctAnswer: "141.3" },
-      { id: 83, question: "What is the sine of a 30° angle?", answers: ["1/2", "√3/2", "√2/2", "1"], correctAnswer: "1/2" },
-      { id: 84, question: "What is the cosine of a 45° angle?", answers: ["√2/2", "1/2", "√3/2", "1"], correctAnswer: "√2/2" },
-      { id: 85, question: "What is the area of a triangle with base 10 and height 8?", answers: ["40", "30", "50", "60"], correctAnswer: "40" },
-      { id: 86, question: "Find the angle θ in a right triangle where the opposite side is 5 and the adjacent side is 12.", answers: ["22.6°", "45°", "36.87°", "53.13°"], correctAnswer: "22.6°" },
-      { id: 87, question: "Find the length of the hypotenuse of a right triangle with legs 6 and 8.", answers: ["10", "12", "14", "16"], correctAnswer: "10" },
-      { id: 88, question: "What is the area of a sector with a radius of 6 and a central angle of 60°?", answers: ["6π", "9π", "3π", "12π"], correctAnswer: "3π" },
-      { id: 89, question: "What is the value of sin(60°)?", answers: ["√3/2", "1/2", "√2/2", "1"], correctAnswer: "√3/2" },
-      { id: 90, question: "Find the volume of a cone with a radius of 4 and a height of 9. (Use π = 3.14)", answers: ["113.04", "114.04", "116.04", "115.04"], correctAnswer: "113.04" }
+      {
+        id: 61,
+        question: "Solve for x: 2x + 6 = 16",
+        answers: [
+          { answer: "4", explanation: "This is incorrect. Try isolating the variable by first subtracting 6 from both sides." },
+          { answer: "5", explanation: "Correct! Subtracting 6 from both sides leaves 2x = 10. Dividing both sides by 2 gives x = 5." },
+          { answer: "6", explanation: "This is incorrect. Carefully review your steps after simplifying the equation." },
+          { answer: "7", explanation: "This is incorrect. Double-check your calculations when isolating x." }
+        ],
+        correctAnswer: "5"
+      },
+      {
+        id: 62,
+        question: "What is the value of x in the equation: 5x - 7 = 18?",
+        answers: [
+          { answer: "4", explanation: "This is incorrect. Make sure you correctly add 7 to both sides before dividing." },
+          { answer: "5", explanation: "Correct! Adding 7 to both sides results in 5x = 25. Dividing both sides by 5 gives x = 5." },
+          { answer: "6", explanation: "This is incorrect. Recheck the arithmetic after isolating the variable." },
+          { answer: "7", explanation: "This is incorrect. Carefully revisit your steps from the start." }
+        ],
+        correctAnswer: "5"
+      },
+      {
+        id: 63,
+        question: "Solve for x: 3x - 4 = 11",
+        answers: [
+          { answer: "4", explanation: "This is incorrect. Try adding 4 to both sides first, then isolate x." },
+          { answer: "5", explanation: "Correct! Adding 4 to both sides results in 3x = 15. Dividing both sides by 3 gives x = 5." },
+          { answer: "6", explanation: "This is incorrect. Double-check your calculations after simplifying." },
+          { answer: "7", explanation: "This is incorrect. Carefully review each step to ensure accuracy." }
+        ],
+        correctAnswer: "5"
+      },
+      {
+        id: 64,
+        question: "Solve for x: x^2 + 6x - 7 = 0",
+        answers: [
+          { answer: "-7, 1", explanation: "Correct! Factoring the quadratic into (x + 7)(x - 1) = 0 leads to x = -7 or 1." },
+          { answer: "-1, 7", explanation: "This is incorrect. Be sure to factor the quadratic carefully and verify each root." },
+          { answer: "-6, 1", explanation: "This is incorrect. Check the factor pairs that correctly multiply to -7 and add to 6." },
+          { answer: "1, -7", explanation: "This is incorrect. Be sure your factor signs match the original equation." }
+        ],
+        correctAnswer: "-7, 1"
+      },
+      {
+        id: 65,
+        question: "Simplify the expression: (x + 2)(x - 3)",
+        answers: [
+          { answer: "x^2 - x - 6", explanation: "Correct! Distributing each term and combining like terms results in this expression." },
+          { answer: "x^2 + x - 6", explanation: "This is incorrect. Pay close attention to the signs when expanding." },
+          { answer: "x^2 - 6x - 6", explanation: "This is incorrect. Carefully review your distribution steps." },
+          { answer: "x^2 - 5x - 6", explanation: "This is incorrect. Make sure you combine like terms correctly." }
+        ],
+        correctAnswer: "x^2 - x - 6"
+      },
+      {
+        id: 66,
+        question: "What is the result of 3x^2 - 2x + 5 when x = 2?",
+        answers: [
+          { answer: "11", explanation: "Correct! Substituting x = 2 gives 3(2)^2 - 2(2) + 5 = 12 - 4 + 5 = 11." },
+          { answer: "12", explanation: "This is incorrect. Double-check your calculations after multiplying and combining terms." },
+          { answer: "13", explanation: "This is incorrect. Review your steps after squaring the x value." },
+          { answer: "14", explanation: "This is incorrect. Carefully track each step to ensure accuracy." }
+        ],
+        correctAnswer: "11"
+      },
+      {
+        id: 67,
+        question: "What is the solution for the system of equations: 2x + y = 10 and x - y = 2?",
+        answers: [
+          { answer: "x = 3, y = 4", explanation: "This is incorrect. Try isolating one variable before substituting into the other equation." },
+          { answer: "x = 4, y = 3", explanation: "This is incorrect. Carefully check the substitution step." },
+          { answer: "x = 5, y = 2", explanation: "This is incorrect. Revisit your calculations to ensure both equations are satisfied." },
+          { answer: "x = 6, y = 1", explanation: "Correct! Solving step by step shows these values satisfy both equations." }
+        ],
+        correctAnswer: "x = 6, y = 1"
+      },
+      {
+        id: 68,
+        question: "Solve for x: 4x^2 + 3x - 5 = 0",
+        answers: [
+          { answer: "-1, 5/4", explanation: "This is incorrect. Review your factorization process carefully." },
+          { answer: "1, -5/4", explanation: "This is incorrect. Verify your solution by substituting back into the original equation." },
+          { answer: "-5/4, 1", explanation: "Correct! Factoring the quadratic correctly gives these roots." },
+          { answer: "-5/4, -1", explanation: "This is incorrect. Ensure your factoring aligns with the original equation." }
+        ],
+        correctAnswer: "-5/4, 1"
+      },
+      {
+        id: 69,
+        question: "Simplify the expression: 6x - 3(x + 2)",
+        answers: [
+          { answer: "3x + 6", explanation: "This is incorrect. Carefully distribute the -3 and combine like terms." },
+          { answer: "3x + 5", explanation: "This is incorrect. Ensure you simplify the constants correctly." },
+          { answer: "3x - 6", explanation: "Correct! Distributing -3 and combining like terms results in this expression." },
+          { answer: "3x - 5", explanation: "This is incorrect. Review your steps and track each term carefully." }
+        ],
+        correctAnswer: "3x - 6"
+      },
+      {
+        id: 71,
+        question: "What is the solution for the system of equations: 3x + y = 10 and 2x - y = 3?",
+        answers: [
+          { answer: "x = 3, y = 1", explanation: "Correct! Solving the system using elimination or substitution leads to these values." },
+          { answer: "x = 2, y = 4", explanation: "This is incorrect. Review your substitution steps carefully." },
+          { answer: "x = 1, y = 2", explanation: "This is incorrect. Revisit your equation-solving process to isolate the variables correctly." },
+          { answer: "x = 2, y = 1", explanation: "This is incorrect. Recheck how you combined the equations." }
+        ],
+        correctAnswer: "x = 3, y = 1"
+      },
+      {
+        id: 72,
+        question: "What is the value of x in the equation: 5x + 2 = 3x + 10?",
+        answers: [
+          { answer: "4", explanation: "Correct! Combine like terms and isolate x to find the solution." },
+          { answer: "3", explanation: "This is incorrect. Carefully simplify both sides of the equation first." },
+          { answer: "5", explanation: "This is incorrect. Try combining like terms again and isolate x." },
+          { answer: "6", explanation: "This is incorrect. Ensure you're moving terms across the equal sign correctly." }
+        ],
+        correctAnswer: "4"
+      },
+      {
+        id: 73,
+        question: "Solve for x: x^2 - 5x + 6 = 0",
+        answers: [
+          { answer: "2, 3", explanation: "Correct! Factoring the quadratic leads to these values." },
+          { answer: "-2, -3", explanation: "This is incorrect. Recheck your factoring steps." },
+          { answer: "1, 6", explanation: "This is incorrect. Review how you split the middle term." },
+          { answer: "4, -2", explanation: "This is incorrect. Carefully factor the equation again." }
+        ],
+        correctAnswer: "2, 3"
+      },
+      {
+        id: 74,
+        question: "Simplify: 2x^2 + 3x + 5 - x^2 - 2x",
+        answers: [
+          { answer: "x^2 + x + 5", explanation: "Correct! Combine like terms by grouping similar variables." },
+          { answer: "x^2 + x + 7", explanation: "This is incorrect. Double-check how you simplified the constants." },
+          { answer: "x^2 + 5x + 7", explanation: "This is incorrect. Review how you combined the x terms." },
+          { answer: "x^2 + 5x + 5", explanation: "This is incorrect. Ensure you simplified each variable properly." }
+        ],
+        correctAnswer: "x^2 + x + 5"
+      },
+      {
+        id: 75,
+        question: "What is the value of x in the equation: 3(x - 4) = 18?",
+        answers: [
+          { answer: "5", explanation: "This is incorrect. Carefully distribute the 3 and simplify." },
+          { answer: "6", explanation: "This is incorrect. Recheck your steps after distributing the 3." },
+          { answer: "7", explanation: "This is incorrect. Double-check your steps after isolating x." },
+          { answer: "10", explanation: "Correct! Distribute the 3 and isolate x to find the solution." }
+        ],
+        correctAnswer: "10"
+      },
+      {
+        id: 76,
+        question: "Solve for x: x^2 - 3x = 18",
+        answers: [
+          { answer: "6, -3", explanation: "Correct! Factoring and setting both parts equal to zero leads to these solutions." },
+          { answer: "-6, 3", explanation: "This is incorrect. Review how you moved terms and factored the equation." },
+          { answer: "3, -6", explanation: "This is incorrect. Carefully isolate x and factor correctly." },
+          { answer: "-3, 6", explanation: "This is incorrect. Revisit your factoring process." }
+        ],
+        correctAnswer: "6, -3"
+      },
+      {
+        id: 77,
+        question: "What is the value of x in the equation: x^2 + 2x - 35 = 0?",
+        answers: [
+          { answer: "5, -7", explanation: "This is incorrect. Double-check how you factored the quadratic." },
+          { answer: "7, -5", explanation: "Correct! Factoring the equation properly leads to these values." },
+          { answer: "5, -6", explanation: "This is incorrect. Review your factoring process carefully." },
+          { answer: "-5, 6", explanation: "This is incorrect. Double-check the values when setting factors equal to zero." }
+        ],
+        correctAnswer: "7, -5"
+      },
+      {
+        id: 78,
+        question: "Solve the equation: 3(x + 2) = 2(x + 4)",
+        answers: [
+          { answer: "2", explanation: "This is incorrect. Revisit how you distributed on both sides." },
+          { answer: "3", explanation: "This is incorrect. Ensure you isolated x correctly." },
+          { answer: "4", explanation: "Correct! Distributing both sides and combining like terms leads to this solution." },
+          { answer: "5", explanation: "This is incorrect. Check your simplification steps carefully." }
+        ],
+        correctAnswer: "4"
+      },
+      {
+        id: 79,
+        question: "What is the solution to the system of equations: 2x + 3y = 14 and 4x - y = 10?",
+        answers: [
+          { answer: "x = 3, y = 2", explanation: "Correct! Solving the system step by step leads to these values." },
+          { answer: "x = 4, y = 1", explanation: "This is incorrect. Review how you substituted values into the equations." },
+          { answer: "x = 2, y = 3", explanation: "This is incorrect. Recheck the steps when combining the two equations." },
+          { answer: "x = 1, y = 5", explanation: "This is incorrect. Ensure both equations are properly simplified before substitution." }
+        ],
+        correctAnswer: "x = 3, y = 2"
+      },
+      {
+        id: 80,
+        question: "Simplify: (x + 1)(x - 3)",
+        answers: [
+          { answer: "x^2 - 2x - 3", explanation: "Correct! Expanding the binomials gives this result." },
+          { answer: "x^2 - 2x + 3", explanation: "This is incorrect. Recheck the signs when multiplying terms." },
+          { answer: "x^2 + 2x - 3", explanation: "This is incorrect. Carefully expand and combine like terms." },
+          { answer: "x^2 - 3x + 3", explanation: "This is incorrect. Review your distribution steps carefully." }
+        ],
+        correctAnswer: "x^2 - 2x - 3"
+      },
+      {
+        id: 81,
+        question: "What is the solution to the inequality: 2x - 5 > 7?",
+        answers: [
+          { answer: "x > 6", explanation: "Correct! Isolating x leads to this inequality." },
+          { answer: "x > 5", explanation: "This is incorrect. Review your steps after moving terms to isolate x." },
+          { answer: "x > 4", explanation: "This is incorrect. Ensure you correctly handled the inequality sign." },
+          { answer: "x > 3", explanation: "This is incorrect. Recheck the step where you divided both sides." }
+        ],
+        correctAnswer: "x > 6"
+      },
+      {
+        id: 82,
+        question: "Solve for x: 4x + 7 = 2x - 5",
+        answers: [
+          { answer: "x = -6", explanation: "Correct! Isolating x leads to this solution." },
+          { answer: "x = -7", explanation: "This is incorrect. Revisit your steps for combining like terms." },
+          { answer: "x = -5", explanation: "This is incorrect. Ensure you moved terms across the equal sign properly." },
+          { answer: "x = -8", explanation: "This is incorrect. Review how you simplified both sides." }
+        ],
+        correctAnswer: "x = -6"
+      },
+      {
+        id: 83,
+        question: "What is the value of x in the equation: 3x^2 - 12 = 0?",
+        answers: [
+          { answer: "2, -2", explanation: "Correct! Factoring the equation leads to these values." },
+          { answer: "3, -3", explanation: "This is incorrect. Review how you isolated x." },
+          { answer: "4, -4", explanation: "This is incorrect. Recheck the steps when dividing both sides by 3." },
+          { answer: "1, -1", explanation: "This is incorrect. Carefully revisit your factoring process." }
+        ],
+        correctAnswer: "2, -2"
+      },
+      {
+        id: 84,
+        question: "Simplify: (x + 2)^2",
+        answers: [
+          { answer: "x^2 + 4x + 4", explanation: "Correct! Expanding the binomial gives this result." },
+          { answer: "x^2 + 2x + 2", explanation: "This is incorrect. Double-check the middle term's coefficient." },
+          { answer: "x^2 + 4x + 2", explanation: "This is incorrect. Revisit how you expanded the terms." },
+          { answer: "x^2 + 2x + 4", explanation: "This is incorrect. Ensure you've correctly multiplied all terms." }
+        ],
+        correctAnswer: "x^2 + 4x + 4"
+      },
+      {
+        id: 85,
+        question: "What is the value of x in the equation: 2(x - 3) = x + 5?",
+        answers: [
+          { answer: "x = 11", explanation: "Correct! Distributing and isolating x leads to this solution." },
+          { answer: "x = 10", explanation: "This is incorrect. Review your steps after distributing the 2." },
+          { answer: "x = 12", explanation: "This is incorrect. Ensure you correctly combined like terms." },
+          { answer: "x = 9", explanation: "This is incorrect. Revisit the steps when moving terms." }
+        ],
+        correctAnswer: "x = 11"
+      },
+      {
+        id: 86,
+        question: "Solve for x: 5x - 3 = 2x + 6",
+        answers: [
+          { answer: "x = 3", explanation: "Correct! Isolating x leads to this solution." },
+          { answer: "x = 4", explanation: "This is incorrect. Review your steps after combining like terms." },
+          { answer: "x = 2", explanation: "This is incorrect. Recheck how you moved terms across the equal sign." },
+          { answer: "x = 5", explanation: "This is incorrect. Carefully revisit your equation-solving steps." }
+        ],
+        correctAnswer: "x = 3"
+      },
+      {
+        id: 87,
+        question: "Simplify: (2x - 1)(x + 3)",
+        answers: [
+          { answer: "2x^2 + 5x - 3", explanation: "Correct! Expanding the binomials gives this result." },
+          { answer: "2x^2 + 7x - 3", explanation: "This is incorrect. Carefully check the middle term." },
+          { answer: "2x^2 + 5x + 3", explanation: "This is incorrect. Review the signs when distributing." },
+          { answer: "2x^2 + 6x - 3", explanation: "This is incorrect. Ensure you've combined like terms properly." }
+        ],
+        correctAnswer: "2x^2 + 5x - 3"
+      },
+      {
+        id: 88,
+        question: "What is the solution for the system of equations: x + y = 7 and x - y = 1?",
+        answers: [
+          { answer: "x = 4, y = 3", explanation: "Correct! Solving step by step leads to these values." },
+          { answer: "x = 3, y = 4", explanation: "This is incorrect. Revisit how you combined the equations." },
+          { answer: "x = 5, y = 2", explanation: "This is incorrect. Carefully check how you isolated the variables." },
+          { answer: "x = 2, y = 5", explanation: "This is incorrect. Double-check the steps when combining the equations." }
+        ],
+        correctAnswer: "x = 4, y = 3"
+      },
+      {
+        id: 89,
+        question: "Solve for x: x/3 + 2 = 5",
+        answers: [
+          { answer: "x = 9", explanation: "Correct! Multiplying both sides by 3 isolates x." },
+          { answer: "x = 8", explanation: "This is incorrect. Review your steps after moving constants." },
+          { answer: "x = 7", explanation: "This is incorrect. Carefully revisit how you isolated x." },
+          { answer: "x = 10", explanation: "This is incorrect. Ensure you simplified correctly after multiplying by 3." }
+        ],
+        correctAnswer: "x = 9"
+      },
+      {
+        id: 90,
+        question: "Simplify: (3x - 2)(x + 4)",
+        answers: [
+          { answer: "3x^2 + 10x - 8", explanation: "Correct! Expanding the binomials gives this result." },
+          { answer: "3x^2 + 12x - 2", explanation: "This is incorrect. Review the middle term carefully." },
+          { answer: "3x^2 + 8x - 4", explanation: "This is incorrect. Recheck the steps when multiplying terms." },
+          { answer: "3x^2 + 10x + 8", explanation: "This is incorrect. Ensure you’ve correctly combined all terms." }
+        ],
+        correctAnswer: "3x^2 + 10x - 8"
+      }
     ]
   },
   science: {
     easy: [
-      { id: 91, question: "What is the chemical symbol for water?", answers: ["H2O", "O2", "CO2", "HO2"], correctAnswer: "H2O" },
-      { id: 92, question: "What gas do plants absorb from the atmosphere?", answers: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], correctAnswer: "Carbon Dioxide" },
-      { id: 93, question: "What is the main source of energy for the Earth?", answers: ["The Moon", "The Sun", "The Earth’s core", "Clouds"], correctAnswer: "The Sun" },
-      { id: 94, question: "What is the boiling point of water at sea level in Celsius?", answers: ["90°C", "100°C", "110°C", "120°C"], correctAnswer: "100°C" },
-      { id: 95, question: "What is the process by which plants make their own food?", answers: ["Photosynthesis", "Respiration", "Digestion", "Metabolism"], correctAnswer: "Photosynthesis" },
-      { id: 96, question: "Which planet is known as the Red Planet?", answers: ["Mars", "Venus", "Earth", "Jupiter"], correctAnswer: "Mars" },
-      { id: 97, question: "What is the primary function of red blood cells?", answers: ["To fight infections", "To carry oxygen", "To form blood clots", "To digest food"], correctAnswer: "To carry oxygen" },
-      { id: 98, question: "What type of rock is formed from cooling lava or magma?", answers: ["Sedimentary", "Metamorphic", "Igneous", "Organic"], correctAnswer: "Igneous" },
-      { id: 99, question: "Which of the following is a renewable resource?", answers: ["Coal", "Natural Gas", "Solar Energy", "Oil"], correctAnswer: "Solar Energy" },
-      { id: 100, question: "What is the process by which a caterpillar turns into a butterfly?", answers: ["Metamorphosis", "Fission", "Evolution", "Transmutation"], correctAnswer: "Metamorphosis" },
-      { id: 101, question: "What part of the plant absorbs water and nutrients?", answers: ["Leaf", "Stem", "Root", "Flower"], correctAnswer: "Root" },
-      { id: 102, question: "What type of energy is stored in food?", answers: ["Chemical Energy", "Kinetic Energy", "Thermal Energy", "Electrical Energy"], correctAnswer: "Chemical Energy" },
-      { id: 103, question: "What is the force that pulls objects towards the Earth?", answers: ["Magnetism", "Friction", "Gravity", "Inertia"], correctAnswer: "Gravity" },
-      { id: 104, question: "Which organ is responsible for pumping blood throughout the body?", answers: ["Liver", "Lungs", "Heart", "Stomach"], correctAnswer: "Heart" },
-      { id: 105, question: "What is the chemical symbol for oxygen?", answers: ["O", "O2", "O3", "Ox"], correctAnswer: "O" },
-      { id: 106, question: "What type of energy is produced by the movement of electrons?", answers: ["Electrical Energy", "Chemical Energy", "Potential Energy", "Thermal Energy"], correctAnswer: "Electrical Energy" },
-      { id: 107, question: "What is the largest organ in the human body?", answers: ["Heart", "Brain", "Lung", "Skin"], correctAnswer: "Skin" },
-      { id: 108, question: "Which part of the brain controls balance and coordination?", answers: ["Cerebrum", "Cerebellum", "Medulla", "Thalamus"], correctAnswer: "Cerebellum" },
-      { id: 109, question: "What type of bond is formed when electrons are shared between two atoms?", answers: ["Ionic bond", "Covalent bond", "Hydrogen bond", "Metallic bond"], correctAnswer: "Covalent bond" },
-      { id: 110, question: "Which gas do humans exhale during respiration?", answers: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"], correctAnswer: "Carbon Dioxide" },
-      { id: 111, question: "What is the most common element in the Earth's crust?", answers: ["Oxygen", "Silicon", "Iron", "Carbon"], correctAnswer: "Oxygen" },
-      { id: 112, question: "What kind of energy does a stretched spring have?", answers: ["Kinetic Energy", "Elastic Potential Energy", "Chemical Energy", "Gravitational Potential Energy"], correctAnswer: "Elastic Potential Energy" },
-      { id: 113, question: "What is the main component of the Earth's atmosphere?", answers: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], correctAnswer: "Nitrogen" },
-      { id: 114, question: "What is the smallest unit of matter?", answers: ["Atom", "Molecule", "Electron", "Proton"], correctAnswer: "Atom" },
-      { id: 115, question: "What is the study of living organisms called?", answers: ["Physics", "Chemistry", "Biology", "Geology"], correctAnswer: "Biology" },
-      { id: 116, question: "What is the process by which water changes from a liquid to a gas?", answers: ["Evaporation", "Condensation", "Precipitation", "Sublimation"], correctAnswer: "Evaporation" },
-      { id: 117, question: "Which of the following is a type of galaxy?", answers: ["Spiral", "Pyramid", "Spherical", "Triangular"], correctAnswer: "Spiral" },
-      { id: 118, question: "What is the function of the chloroplast in plant cells?", answers: ["To control the cell", "To produce energy", "To carry out photosynthesis", "To transport proteins"], correctAnswer: "To carry out photosynthesis" },
-      { id: 119, question: "What type of energy is stored in an object due to its position above the ground?", answers: ["Gravitational Potential Energy", "Chemical Energy", "Mechanical Energy", "Kinetic Energy"], correctAnswer: "Gravitational Potential Energy" },
-      { id: 120, question: "Which of the following is a nonrenewable resource?", answers: ["Solar Power", "Wind Power", "Natural Gas", "Geothermal Energy"], correctAnswer: "Natural Gas" }
+      {
+        id: 91,
+        question: "What is the chemical symbol for water?",
+        answers: [
+          { answer: "H2O", explanation: "Correct! Water is composed of two hydrogen atoms and one oxygen atom." },
+          { answer: "O2", explanation: "This is incorrect. O2 represents oxygen gas, not water." },
+          { answer: "CO2", explanation: "This is incorrect. CO2 is carbon dioxide, a gas plants absorb." },
+          { answer: "HO2", explanation: "This is incorrect. HO2 is not a valid chemical symbol for water." }
+        ],
+        correctAnswer: "H2O"
+      },
+      {
+        id: 92,
+        question: "What gas do plants absorb from the atmosphere?",
+        answers: [
+          { answer: "Oxygen", explanation: "This is incorrect. While plants release oxygen, they absorb a different gas." },
+          { answer: "Carbon Dioxide", explanation: "Correct! Plants take in carbon dioxide during photosynthesis." },
+          { answer: "Nitrogen", explanation: "This is incorrect. Nitrogen is present in the air but is not absorbed by plants during photosynthesis." },
+          { answer: "Hydrogen", explanation: "This is incorrect. Hydrogen is not the gas that plants absorb from the atmosphere." }
+        ],
+        correctAnswer: "Carbon Dioxide"
+      },
+      {
+        id: 93,
+        question: "What is the main source of energy for the Earth?",
+        answers: [
+          { answer: "The Moon", explanation: "This is incorrect. The Moon reflects light but does not provide energy like the Sun." },
+          { answer: "The Sun", explanation: "Correct! The Sun's energy drives weather, climate, and life processes." },
+          { answer: "The Earth’s core", explanation: "This is incorrect. While Earth's core generates some heat, it’s not the primary energy source." },
+          { answer: "Clouds", explanation: "This is incorrect. Clouds influence weather but do not provide energy." }
+        ],
+        correctAnswer: "The Sun"
+      },
+      {
+        id: 94,
+        question: "What is the boiling point of water at sea level in Celsius?",
+        answers: [
+          { answer: "90°C", explanation: "This is incorrect. Water boils at a higher temperature than this." },
+          { answer: "100°C", explanation: "Correct! Water boils at 100°C at sea level under normal conditions." },
+          { answer: "110°C", explanation: "This is incorrect. Water boils at a lower temperature than this." },
+          { answer: "120°C", explanation: "This is incorrect. Water boils before reaching this temperature under normal conditions." }
+        ],
+        correctAnswer: "100°C"
+      },
+      {
+        id: 95,
+        question: "What is the process by which plants make their own food?",
+        answers: [
+          { answer: "Photosynthesis", explanation: "Correct! Photosynthesis is the process plants use to create food using sunlight." },
+          { answer: "Respiration", explanation: "This is incorrect. Respiration is the process of breaking down energy, not creating food." },
+          { answer: "Digestion", explanation: "This is incorrect. Digestion occurs in animals, not plants." },
+          { answer: "Metabolism", explanation: "This is incorrect. Metabolism is a broad term for energy processes, not specific to food creation in plants." }
+        ],
+        correctAnswer: "Photosynthesis"
+      },
+      {
+        id: 96,
+        question: "Which planet is known as the Red Planet?",
+        answers: [
+          { answer: "Mars", explanation: "Correct! Mars is often called the Red Planet due to its reddish appearance." },
+          { answer: "Venus", explanation: "This is incorrect. Venus appears bright white or yellowish in the sky." },
+          { answer: "Earth", explanation: "This is incorrect. Earth is known as the Blue Planet due to its oceans." },
+          { answer: "Jupiter", explanation: "This is incorrect. Jupiter is a gas giant with distinctive cloud bands." }
+        ],
+        correctAnswer: "Mars"
+      },
+      {
+        id: 97,
+        question: "What is the primary function of red blood cells?",
+        answers: [
+          { answer: "To fight infections", explanation: "This is incorrect. White blood cells are responsible for fighting infections." },
+          { answer: "To carry oxygen", explanation: "Correct! Red blood cells transport oxygen from the lungs to body tissues." },
+          { answer: "To form blood clots", explanation: "This is incorrect. Platelets are responsible for blood clotting." },
+          { answer: "To digest food", explanation: "This is incorrect. Digestion occurs in the stomach and intestines." }
+        ],
+        correctAnswer: "To carry oxygen"
+      },
+      {
+        id: 98,
+        question: "What type of rock is formed from cooling lava or magma?",
+        answers: [
+          { answer: "Sedimentary", explanation: "This is incorrect. Sedimentary rocks form from compressed layers of sediments." },
+          { answer: "Metamorphic", explanation: "This is incorrect. Metamorphic rocks form from heat and pressure altering existing rocks." },
+          { answer: "Igneous", explanation: "Correct! Igneous rocks form when lava or magma cools and solidifies." },
+          { answer: "Organic", explanation: "This is incorrect. Organic materials are not types of rocks." }
+        ],
+        correctAnswer: "Igneous"
+      },
+      {
+        id: 99,
+        question: "Which of the following is a renewable resource?",
+        answers: [
+          { answer: "Coal", explanation: "This is incorrect. Coal is a nonrenewable fossil fuel." },
+          { answer: "Natural Gas", explanation: "This is incorrect. Natural gas is also a nonrenewable resource." },
+          { answer: "Solar Energy", explanation: "Correct! Solar energy is renewable because it is continuously available." },
+          { answer: "Oil", explanation: "This is incorrect. Oil is a nonrenewable fossil fuel." }
+        ],
+        correctAnswer: "Solar Energy"
+      },
+      {
+        id: 100,
+        question: "What is the process by which a caterpillar turns into a butterfly?",
+        answers: [
+          { answer: "Metamorphosis", explanation: "Correct! Metamorphosis is the biological process where a caterpillar transforms into a butterfly." },
+          { answer: "Fission", explanation: "This is incorrect. Fission is a type of cell division, not a transformation process." },
+          { answer: "Evolution", explanation: "This is incorrect. Evolution refers to gradual change in species over generations." },
+          { answer: "Transmutation", explanation: "This is incorrect. Transmutation is a term used in physics, not biology." }
+        ],
+        correctAnswer: "Metamorphosis"
+      },
+      {
+        id: 101,
+        question: "What part of the plant absorbs water and nutrients?",
+        answers: [
+          { answer: "Leaf", explanation: "This is incorrect. The leaf is responsible for photosynthesis, not nutrient absorption." },
+          { answer: "Stem", explanation: "This is incorrect. The stem supports the plant but does not absorb water and nutrients." },
+          { answer: "Root", explanation: "Correct! The roots absorb water and nutrients from the soil." },
+          { answer: "Flower", explanation: "This is incorrect. The flower's role is reproduction, not nutrient absorption." }
+        ],
+        correctAnswer: "Root"
+      },
+      {
+        id: 102,
+        question: "What type of energy is stored in food?",
+        answers: [
+          { answer: "Kinetic Energy", explanation: "This is incorrect. Kinetic energy is energy of motion, not stored in food." },
+          { answer: "Thermal Energy", explanation: "This is incorrect. Thermal energy is heat, not what is stored in food." },
+          { answer: "Chemical Energy", explanation: "Correct! Food stores energy in the form of chemical energy, which the body can convert into other forms of energy." },
+          { answer: "Electrical Energy", explanation: "This is incorrect. Electrical energy is used in electrical devices, not stored in food." }
+        ],
+        correctAnswer: "Chemical Energy"
+      },
+      {
+        id: 103,
+        question: "What is the force that pulls objects towards the Earth?",
+        answers: [
+          { answer: "Magnetism", explanation: "This is incorrect. Magnetism pulls magnetic objects but not all objects toward Earth." },
+          { answer: "Friction", explanation: "This is incorrect. Friction resists motion, it does not pull objects down to the Earth." },
+          { answer: "Gravity", explanation: "Correct! Gravity is the force that pulls objects toward the center of the Earth." },
+          { answer: "Inertia", explanation: "This is incorrect. Inertia resists changes in motion, but does not pull objects toward Earth." }
+        ],
+        correctAnswer: "Gravity"
+      },
+      {
+        id: 104,
+        question: "Which organ is responsible for pumping blood throughout the body?",
+        answers: [
+          { answer: "Liver", explanation: "This is incorrect. The liver processes toxins and produces bile, not pumping blood." },
+          { answer: "Lungs", explanation: "This is incorrect. The lungs are involved in gas exchange, not pumping blood." },
+          { answer: "Heart", explanation: "Correct! The heart pumps blood throughout the body, delivering oxygen and nutrients." },
+          { answer: "Stomach", explanation: "This is incorrect. The stomach digests food, but it does not pump blood." }
+        ],
+        correctAnswer: "Heart"
+      },
+      {
+        id: 105,
+        question: "What is the chemical symbol for oxygen?",
+        answers: [
+          { answer: "O", explanation: "Correct! 'O' is the chemical symbol for oxygen." },
+          { answer: "O2", explanation: "This is incorrect. 'O2' represents two oxygen atoms, but we are looking for the symbol for a single oxygen atom." },
+          { answer: "O3", explanation: "This is incorrect. 'O3' is the chemical formula for ozone, not oxygen." },
+          { answer: "Ox", explanation: "This is incorrect. 'Ox' is not the chemical symbol for any element." }
+        ],
+        correctAnswer: "O"
+      },
+      {
+        id: 106,
+        question: "What type of energy is produced by the movement of electrons?",
+        answers: [
+          { answer: "Chemical Energy", explanation: "This is incorrect. Chemical energy is stored in bonds between atoms, not from electron movement." },
+          { answer: "Potential Energy", explanation: "This is incorrect. Potential energy is stored energy, not from the movement of electrons." },
+          { answer: "Electrical Energy", explanation: "Correct! Electrical energy is generated by the movement of electrons through conductors." },
+          { answer: "Thermal Energy", explanation: "This is incorrect. Thermal energy is heat energy, not produced directly by electron movement." }
+        ],
+        correctAnswer: "Electrical Energy"
+      },
+      {
+        id: 107,
+        question: "What is the largest organ in the human body?",
+        answers: [
+          { answer: "Heart", explanation: "This is incorrect. The heart is a vital organ, but it is not the largest." },
+          { answer: "Brain", explanation: "This is incorrect. While the brain is large, it is not the largest organ." },
+          { answer: "Lung", explanation: "This is incorrect. The lungs are large, but the skin is the largest organ in the body." },
+          { answer: "Skin", explanation: "Correct! The skin is the largest organ in the human body, covering and protecting the body." }
+        ],
+        correctAnswer: "Skin"
+      },
+      {
+        id: 108,
+        question: "Which part of the brain controls balance and coordination?",
+        answers: [
+          { answer: "Cerebrum", explanation: "This is incorrect. The cerebrum controls higher brain functions such as thinking and movement." },
+          { answer: "Cerebellum", explanation: "Correct! The cerebellum controls balance, coordination, and motor control." },
+          { answer: "Medulla", explanation: "This is incorrect. The medulla controls involuntary functions like breathing and heart rate." },
+          { answer: "Thalamus", explanation: "This is incorrect. The thalamus processes sensory information but does not control balance." }
+        ],
+        correctAnswer: "Cerebellum"
+      },
+      {
+        id: 109,
+        question: "What type of bond is formed when electrons are shared between two atoms?",
+        answers: [
+          { answer: "Ionic bond", explanation: "This is incorrect. An ionic bond occurs when electrons are transferred, not shared." },
+          { answer: "Covalent bond", explanation: "Correct! A covalent bond forms when two atoms share electrons." },
+          { answer: "Hydrogen bond", explanation: "This is incorrect. Hydrogen bonds are weaker interactions involving hydrogen atoms." },
+          { answer: "Metallic bond", explanation: "This is incorrect. Metallic bonds occur between metal atoms and involve free-moving electrons." }
+        ],
+        correctAnswer: "Covalent bond"
+      },
+      {
+        id: 110,
+        question: "Which gas do humans exhale during respiration?",
+        answers: [
+          { answer: "Oxygen", explanation: "This is incorrect. Humans inhale oxygen, but they exhale carbon dioxide." },
+          { answer: "Nitrogen", explanation: "This is incorrect. Nitrogen makes up most of the air, but humans do not exhale it in large amounts." },
+          { answer: "Carbon Dioxide", explanation: "Correct! Humans exhale carbon dioxide as a byproduct of respiration." },
+          { answer: "Hydrogen", explanation: "This is incorrect. Hydrogen is not a major gas exhaled during respiration." }
+        ],
+        correctAnswer: "Carbon Dioxide"
+      },
+      {
+        id: 111,
+        question: "What is the most common element in the Earth's crust?",
+        answers: [
+          { answer: "Oxygen", explanation: "Correct! Oxygen makes up about 46% of the Earth's crust by weight." },
+          { answer: "Silicon", explanation: "This is incorrect. While silicon is abundant, oxygen is the most common element in the Earth's crust." },
+          { answer: "Iron", explanation: "This is incorrect. Iron is a major component of the Earth's core, but not the crust." },
+          { answer: "Carbon", explanation: "This is incorrect. Carbon is much less abundant in the Earth's crust." }
+        ],
+        correctAnswer: "Oxygen"
+      },
+      {
+        id: 112,
+        question: "What kind of energy does a stretched spring have?",
+        answers: [
+          { answer: "Kinetic Energy", explanation: "This is incorrect. Kinetic energy is the energy of motion, but the spring is at rest when stretched." },
+          { answer: "Chemical Energy", explanation: "This is incorrect. Chemical energy is stored in molecules, not in a stretched spring." },
+          { answer: "Gravitational Potential Energy", explanation: "This is incorrect. Gravitational potential energy depends on height, not on the stretching of a spring." },
+          { answer: "Elastic Potential Energy", explanation: "Correct! A stretched spring has elastic potential energy, which is stored energy due to its deformation." }
+        ],
+        correctAnswer: "Elastic Potential Energy"
+      },
+      {
+        id: 113,
+        question: "What is the main component of the Earth's atmosphere?",
+        answers: [
+          { answer: "Oxygen", explanation: "This is incorrect. While oxygen is essential for respiration, nitrogen makes up most of the atmosphere." },
+          { answer: "Carbon Dioxide", explanation: "This is incorrect. Carbon dioxide is present in small amounts, but nitrogen is the most abundant gas." },
+          { answer: "Nitrogen", explanation: "Correct! Nitrogen makes up about 78% of the Earth's atmosphere." },
+          { answer: "Hydrogen", explanation: "This is incorrect. Hydrogen is very light and is present in trace amounts in the atmosphere." }
+        ],
+        correctAnswer: "Nitrogen"
+      },
+      {
+        id: 114,
+        question: "What is the smallest unit of matter?",
+        answers: [
+          { answer: "Atom", explanation: "Correct! An atom is the basic building block of matter and the smallest unit that retains the properties of an element." },
+          { answer: "Molecule", explanation: "This is incorrect. A molecule is made up of two or more atoms bonded together." },
+          { answer: "Electron", explanation: "This is incorrect. Electrons are subatomic particles, not the smallest unit of matter." },
+          { answer: "Proton", explanation: "This is incorrect. Protons are subatomic particles inside atoms, but the atom itself is the smallest unit of matter." }
+        ],
+        correctAnswer: "Atom"
+      },
+      {
+        id: 115,
+        question: "What is the study of living organisms called?",
+        answers: [
+          { answer: "Physics", explanation: "This is incorrect. Physics studies the laws of nature, not living organisms." },
+          { answer: "Chemistry", explanation: "This is incorrect. Chemistry studies the composition and properties of matter, not living organisms." },
+          { answer: "Biology", explanation: "Correct! Biology is the study of living organisms and their interactions with the environment." },
+          { answer: "Geology", explanation: "This is incorrect. Geology studies the Earth and its processes, not living organisms." }
+        ],
+        correctAnswer: "Biology"
+      },
+      {
+        id: 116,
+        question: "What is the process by which water changes from a liquid to a gas?",
+        answers: [
+          { answer: "Evaporation", explanation: "Correct! Evaporation is the process where liquid water turns into vapor (gas) due to heat." },
+          { answer: "Condensation", explanation: "This is incorrect. Condensation is the opposite process, where gas turns into liquid." },
+          { answer: "Precipitation", explanation: "This is incorrect. Precipitation refers to water falling to the Earth as rain, snow, etc." },
+          { answer: "Sublimation", explanation: "This is incorrect. Sublimation is when a solid turns directly into a gas, like ice turning into water vapor." }
+        ],
+        correctAnswer: "Evaporation"
+      },
+      {
+        id: 117,
+        question: "Which of the following is a type of galaxy?",
+        answers: [
+          { answer: "Spiral", explanation: "Correct! A spiral galaxy has a rotating disk of stars, gas, and dust with a central bulge." },
+          { answer: "Pyramid", explanation: "This is incorrect. There is no such type of galaxy as a pyramid galaxy." },
+          { answer: "Spherical", explanation: "This is incorrect. There are elliptical galaxies, but not spherical ones." },
+          { answer: "Triangular", explanation: "This is incorrect. Galaxies do not take a triangular shape." }
+        ],
+        correctAnswer: "Spiral"
+      },
+      {
+        id: 118,
+        question: "What is the function of the chloroplast in plant cells?",
+        answers: [
+          { answer: "To control the cell", explanation: "This is incorrect. The nucleus controls the cell's activities, not the chloroplast." },
+          { answer: "To produce energy", explanation: "This is partially correct. Chloroplasts produce energy, but specifically, they carry out photosynthesis." },
+          { answer: "To carry out photosynthesis", explanation: "Correct! Chloroplasts use sunlight to produce food for the plant through photosynthesis." },
+          { answer: "To transport proteins", explanation: "This is incorrect. The endoplasmic reticulum transports proteins, not the chloroplast." }
+        ],
+        correctAnswer: "To carry out photosynthesis"
+      },
+      {
+        id: 119,
+        question: "What type of energy is stored in an object due to its position above the ground?",
+        answers: [
+          { answer: "Kinetic Energy", explanation: "This is incorrect. Kinetic energy is energy due to motion, not position." },
+          { answer: "Chemical Energy", explanation: "This is incorrect. Chemical energy is stored in the bonds of molecules, not in an object's position." },
+          { answer: "Mechanical Energy", explanation: "This is incorrect. Mechanical energy is a sum of kinetic and potential energy, but not specifically due to position." },
+          { answer: "Gravitational Potential Energy", explanation: "Correct! Gravitational potential energy is the energy an object has due to its height above the ground." }
+        ],
+        correctAnswer: "Gravitational Potential Energy"
+      },
+      {
+        id: 120,
+        question: "Which of the following is a nonrenewable resource?",
+        answers: [
+          { answer: "Solar Power", explanation: "This is incorrect. Solar power is renewable, as it comes from the Sun." },
+          { answer: "Wind Power", explanation: "This is incorrect. Wind power is renewable, as it uses wind to generate energy." },
+          { answer: "Natural Gas", explanation: "Correct! Natural gas is nonrenewable because it is formed over millions of years and cannot be replenished in a human lifetime." },
+          { answer: "Geothermal Energy", explanation: "This is incorrect. Geothermal energy is renewable because it comes from the Earth's internal heat." }
+        ],
+        correctAnswer: "Natural Gas"
+      }
     ],
     normal: [
-      { id: 121, question: "What is the atomic number of carbon?", answers: ["4", "6", "8", "10"], correctAnswer: "6" },
-      { id: 122, question: "What type of rock is formed under intense heat and pressure?", answers: ["Igneous", "Sedimentary", "Metamorphic", "Fossilized"], correctAnswer: "Metamorphic" },
-      { id: 123, question: "Which part of the cell is responsible for producing energy?", answers: ["Nucleus", "Ribosome", "Mitochondria", "Cell Wall"], correctAnswer: "Mitochondria" },
-      { id: 124, question: "What is the pH value of pure water?", answers: ["5", "7", "9", "12"], correctAnswer: "7" },
-      { id: 125, question: "Which gas makes up the majority of Earth's atmosphere?", answers: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"], correctAnswer: "Nitrogen" },
-      { id: 126, question: "What is the primary function of white blood cells?", answers: ["To carry oxygen", "To fight infections", "To break down food", "To transport nutrients"], correctAnswer: "To fight infections" },
-      { id: 127, question: "What is the term for animals that only eat plants?", answers: ["Omnivores", "Herbivores", "Carnivores", "Decomposers"], correctAnswer: "Herbivores" },
-      { id: 128, question: "What type of energy is stored in the bonds between atoms?", answers: ["Thermal", "Kinetic", "Chemical", "Elastic"], correctAnswer: "Chemical" },
-      { id: 129, question: "What is the powerhouse of the cell?", answers: ["Nucleus", "Mitochondria", "Endoplasmic Reticulum", "Golgi Apparatus"], correctAnswer: "Mitochondria" },
-      { id: 130, question: "What gas do plants release during photosynthesis?", answers: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"], correctAnswer: "Oxygen" },
-      { id: 131, question: "Which planet has the largest number of moons?", answers: ["Jupiter", "Saturn", "Mars", "Neptune"], correctAnswer: "Saturn" },
-      { id: 132, question: "Which scientist is famous for the theory of evolution?", answers: ["Isaac Newton", "Charles Darwin", "Marie Curie", "Albert Einstein"], correctAnswer: "Charles Darwin" },
-      { id: 133, question: "What element is represented by the symbol 'Fe'?", answers: ["Fluorine", "Iron", "Phosphorus", "Francium"], correctAnswer: "Iron" },
-      { id: 134, question: "Which layer of Earth's atmosphere contains the ozone layer?", answers: ["Troposphere", "Stratosphere", "Mesosphere", "Thermosphere"], correctAnswer: "Stratosphere" },
-      { id: 135, question: "What is the formula for calculating speed?", answers: ["Distance ÷ Time", "Mass × Acceleration", "Force ÷ Area", "Energy × Time"], correctAnswer: "Distance ÷ Time" },
-      { id: 136, question: "Which planet is known for having the most visible ring system?", answers: ["Jupiter", "Uranus", "Saturn", "Neptune"], correctAnswer: "Saturn" },
-      { id: 137, question: "What is the chemical symbol for sodium?", answers: ["Na", "So", "Sn", "Sm"], correctAnswer: "Na" },
-      { id: 138, question: "Which part of the eye controls the amount of light that enters?", answers: ["Iris", "Pupil", "Cornea", "Lens"], correctAnswer: "Iris" },
-      { id: 139, question: "What type of simple machine is a seesaw?", answers: ["Inclined Plane", "Pulley", "Lever", "Wheel and Axle"], correctAnswer: "Lever" },
-      { id: 140, question: "What type of cloud is often associated with thunderstorms?", answers: ["Stratus", "Cumulus", "Cirrus", "Cumulonimbus"], correctAnswer: "Cumulonimbus" },
-      { id: 141, question: "What is the name for organisms that make their own food?", answers: ["Producers", "Consumers", "Decomposers", "Scavengers"], correctAnswer: "Producers" },
-      { id: 142, question: "Which vitamin is produced when the skin is exposed to sunlight?", answers: ["Vitamin A", "Vitamin B", "Vitamin C", "Vitamin D"], correctAnswer: "Vitamin D" },
-      { id: 143, question: "What is the term for the outer layer of skin?", answers: ["Dermis", "Epidermis", "Hypodermis", "Keratin"], correctAnswer: "Epidermis" },
-      { id: 144, question: "Which planet is known as Earth's twin due to its similar size?", answers: ["Venus", "Mars", "Neptune", "Mercury"], correctAnswer: "Venus" },
-      { id: 145, question: "Which gas is commonly used to fill balloons to make them float?", answers: ["Oxygen", "Hydrogen", "Nitrogen", "Helium"], correctAnswer: "Helium" },
-      { id: 146, question: "What type of wave is sound?", answers: ["Transverse", "Longitudinal", "Electromagnetic", "Radiation"], correctAnswer: "Longitudinal" },
-      { id: 147, question: "What type of scientist studies fossils?", answers: ["Geologist", "Archaeologist", "Paleontologist", "Biologist"], correctAnswer: "Paleontologist" },
-      { id: 148, question: "What is the process by which cells divide to create two identical cells?", answers: ["Meiosis", "Fission", "Mitosis", "Replication"], correctAnswer: "Mitosis" },
-      { id: 149, question: "Which subatomic particle has a negative charge?", answers: ["Proton", "Neutron", "Electron", "Quark"], correctAnswer: "Electron" },
-      { id: 150, question: "What is the speed of light in a vacuum?", answers: ["3 × 10^5 km/s", "3 × 10^6 m/s", "3 × 10^8 m/s", "3 × 10^10 m/s"], correctAnswer: "3 × 10^8 m/s" }
+      {
+        id: 121,
+        question: "What is the atomic number of carbon?",
+        answers: [
+          { answer: "4", explanation: "This is incorrect. The atomic number of beryllium is 4, not carbon." },
+          { answer: "6", explanation: "Correct! The atomic number of carbon is 6, as it has 6 protons in its nucleus." },
+          { answer: "8", explanation: "This is incorrect. The atomic number of oxygen is 8, not carbon." },
+          { answer: "10", explanation: "This is incorrect. The atomic number of neon is 10, not carbon." }
+        ],
+        correctAnswer: "6"
+      },
+      {
+        id: 122,
+        question: "What type of rock is formed under intense heat and pressure?",
+        answers: [
+          { answer: "Igneous", explanation: "This is incorrect. Igneous rocks are formed from the cooling of molten material, not from heat and pressure." },
+          { answer: "Sedimentary", explanation: "This is incorrect. Sedimentary rocks are formed from the accumulation of sediments, not from heat and pressure." },
+          { answer: "Metamorphic", explanation: "Correct! Metamorphic rocks are formed when existing rocks are subjected to intense heat and pressure." },
+          { answer: "Fossilized", explanation: "This is incorrect. Fossilization is a biological process, not related to rock formation under heat and pressure." }
+        ],
+        correctAnswer: "Metamorphic"
+      },
+      {
+        id: 123,
+        question: "Which part of the cell is responsible for producing energy?",
+        answers: [
+          { answer: "Nucleus", explanation: "This is incorrect. The nucleus controls the cell’s activities but does not produce energy." },
+          { answer: "Ribosome", explanation: "This is incorrect. Ribosomes are responsible for protein synthesis, not energy production." },
+          { answer: "Mitochondria", explanation: "Correct! Mitochondria are responsible for converting nutrients into usable energy for the cell." },
+          { answer: "Cell Wall", explanation: "This is incorrect. The cell wall provides structure and protection but does not produce energy." }
+        ],
+        correctAnswer: "Mitochondria"
+      },
+      {
+        id: 124,
+        question: "What is the pH value of pure water?",
+        answers: [
+          { answer: "5", explanation: "This is incorrect. A pH of 5 is acidic, but pure water is neutral." },
+          { answer: "7", explanation: "Correct! Pure water is neutral, which means it has a pH of 7." },
+          { answer: "9", explanation: "This is incorrect. A pH of 9 is alkaline, not neutral like pure water." },
+          { answer: "12", explanation: "This is incorrect. A pH of 12 is strongly alkaline, not neutral like pure water." }
+        ],
+        correctAnswer: "7"
+      },
+      {
+        id: 125,
+        question: "Which gas makes up the majority of Earth's atmosphere?",
+        answers: [
+          { answer: "Oxygen", explanation: "This is incorrect. While oxygen is essential for life, it makes up a smaller percentage of the atmosphere." },
+          { answer: "Carbon Dioxide", explanation: "This is incorrect. Carbon dioxide is present in small amounts in the atmosphere." },
+          { answer: "Nitrogen", explanation: "Correct! Nitrogen makes up approximately 78% of Earth's atmosphere." },
+          { answer: "Argon", explanation: "This is incorrect. Argon is present in trace amounts in the atmosphere." }
+        ],
+        correctAnswer: "Nitrogen"
+      },
+      {
+        id: 126,
+        question: "What is the primary function of white blood cells?",
+        answers: [
+          { answer: "To carry oxygen", explanation: "This is incorrect. Carrying oxygen is the role of red blood cells, not white blood cells." },
+          { answer: "To fight infections", explanation: "Correct! White blood cells are part of the immune system and help fight infections." },
+          { answer: "To break down food", explanation: "This is incorrect. The digestive system breaks down food, not white blood cells." },
+          { answer: "To transport nutrients", explanation: "This is incorrect. Nutrient transport is the role of blood plasma and red blood cells." }
+        ],
+        correctAnswer: "To fight infections"
+      },
+      {
+        id: 127,
+        question: "What is the term for animals that only eat plants?",
+        answers: [
+          { answer: "Omnivores", explanation: "This is incorrect. Omnivores eat both plants and animals, not just plants." },
+          { answer: "Herbivores", explanation: "Correct! Herbivores are animals that eat only plants." },
+          { answer: "Carnivores", explanation: "This is incorrect. Carnivores eat only meat, not plants." },
+          { answer: "Decomposers", explanation: "This is incorrect. Decomposers break down dead organisms, not eat plants." }
+        ],
+        correctAnswer: "Herbivores"
+      },
+      {
+        id: 128,
+        question: "What type of energy is stored in the bonds between atoms?",
+        answers: [
+          { answer: "Thermal", explanation: "This is incorrect. Thermal energy is related to heat, not energy stored in atomic bonds." },
+          { answer: "Kinetic", explanation: "This is incorrect. Kinetic energy is the energy of motion, not stored in atomic bonds." },
+          { answer: "Chemical", explanation: "Correct! Chemical energy is stored in the bonds between atoms and can be released in chemical reactions." },
+          { answer: "Elastic", explanation: "This is incorrect. Elastic energy is stored in objects that are stretched or compressed, not in atomic bonds." }
+        ],
+        correctAnswer: "Chemical"
+      },
+      {
+        id: 129,
+        question: "What is the powerhouse of the cell?",
+        answers: [
+          { answer: "Nucleus", explanation: "This is incorrect. The nucleus controls the cell’s activities but does not produce energy." },
+          { answer: "Mitochondria", explanation: "Correct! Mitochondria are responsible for converting nutrients into usable energy for the cell." },
+          { answer: "Endoplasmic Reticulum", explanation: "This is incorrect. The endoplasmic reticulum is involved in protein and lipid synthesis, not energy production." },
+          { answer: "Golgi Apparatus", explanation: "This is incorrect. The Golgi apparatus is responsible for packaging proteins but does not produce energy." }
+        ],
+        correctAnswer: "Mitochondria"
+      },
+      {
+        id: 130,
+        question: "What gas do plants release during photosynthesis?",
+        answers: [
+          { answer: "Oxygen", explanation: "Correct! During photosynthesis, plants release oxygen as a byproduct." },
+          { answer: "Carbon Dioxide", explanation: "This is incorrect. Plants take in carbon dioxide, but they release oxygen." },
+          { answer: "Nitrogen", explanation: "This is incorrect. Nitrogen is absorbed by plants but not released during photosynthesis." },
+          { answer: "Hydrogen", explanation: "This is incorrect. Hydrogen is involved in photosynthesis, but it is not released by plants." }
+        ],
+        correctAnswer: "Oxygen"
+      },
+      {
+        id: 131,
+        question: "Which planet has the largest number of moons?",
+        answers: [
+          { answer: "Jupiter", explanation: "This is incorrect. Jupiter has a large number of moons, but Saturn has more." },
+          { answer: "Saturn", explanation: "Correct! Saturn has the most moons, with more than 80 known moons." },
+          { answer: "Mars", explanation: "This is incorrect. Mars has only two moons, much fewer than Saturn." },
+          { answer: "Neptune", explanation: "This is incorrect. Neptune has 14 moons, significantly fewer than Saturn." }
+        ],
+        correctAnswer: "Saturn"
+      },
+      {
+        id: 132,
+        question: "Which scientist is famous for the theory of evolution?",
+        answers: [
+          { answer: "Isaac Newton", explanation: "This is incorrect. Isaac Newton is known for his laws of motion and gravity, not for the theory of evolution." },
+          { answer: "Charles Darwin", explanation: "Correct! Charles Darwin is best known for developing the theory of evolution by natural selection." },
+          { answer: "Marie Curie", explanation: "This is incorrect. Marie Curie is famous for her work with radioactivity, not for the theory of evolution." },
+          { answer: "Albert Einstein", explanation: "This is incorrect. Albert Einstein is known for his theories of relativity, not for the theory of evolution." }
+        ],
+        correctAnswer: "Charles Darwin"
+      },
+      {
+        id: 133,
+        question: "What element is represented by the symbol 'Fe'?",
+        answers: [
+          { answer: "Fluorine", explanation: "This is incorrect. Fluorine is represented by the symbol 'F', not 'Fe'." },
+          { answer: "Iron", explanation: "Correct! 'Fe' stands for iron, which comes from the Latin word 'ferrum'." },
+          { answer: "Phosphorus", explanation: "This is incorrect. Phosphorus is represented by the symbol 'P', not 'Fe'." },
+          { answer: "Francium", explanation: "This is incorrect. Francium is represented by the symbol 'Fr', not 'Fe'." }
+        ],
+        correctAnswer: "Iron"
+      },
+      {
+        id: 134,
+        question: "Which layer of Earth's atmosphere contains the ozone layer?",
+        answers: [
+          { answer: "Troposphere", explanation: "This is incorrect. The troposphere is where weather occurs, but the ozone layer is higher up." },
+          { answer: "Stratosphere", explanation: "Correct! The ozone layer is located in the stratosphere, protecting life on Earth from harmful ultraviolet radiation." },
+          { answer: "Mesosphere", explanation: "This is incorrect. The mesosphere is above the stratosphere, but it does not contain the ozone layer." },
+          { answer: "Thermosphere", explanation: "This is incorrect. The thermosphere is above the mesosphere and contains high-energy particles, but not the ozone layer." }
+        ],
+        correctAnswer: "Stratosphere"
+      },
+      {
+        id: 135,
+        question: "What is the formula for calculating speed?",
+        answers: [
+          { answer: "Distance ÷ Time", explanation: "Correct! Speed is calculated by dividing the distance traveled by the time taken." },
+          { answer: "Mass × Acceleration", explanation: "This is incorrect. Mass × Acceleration gives the force, not the speed." },
+          { answer: "Force ÷ Area", explanation: "This is incorrect. Force ÷ Area calculates pressure, not speed." },
+          { answer: "Energy × Time", explanation: "This is incorrect. Energy × Time is not a formula for calculating speed." }
+        ],
+        correctAnswer: "Distance ÷ Time"
+      },
+      {
+        id: 136,
+        question: "Which planet is known for having the most visible ring system?",
+        answers: [
+          { answer: "Jupiter", explanation: "This is incorrect. Jupiter has rings, but they are not as visible as Saturn's." },
+          { answer: "Uranus", explanation: "This is incorrect. Uranus has rings, but they are not as prominent as Saturn's." },
+          { answer: "Saturn", explanation: "Correct! Saturn is known for its stunning and prominent ring system." },
+          { answer: "Neptune", explanation: "This is incorrect. Neptune has rings, but they are not as noticeable as Saturn's." }
+        ],
+        correctAnswer: "Saturn"
+      },
+      {
+        id: 137,
+        question: "What is the chemical symbol for sodium?",
+        answers: [
+          { answer: "Na", explanation: "Correct! 'Na' is the chemical symbol for sodium, derived from the Latin word 'natron.'" },
+          { answer: "So", explanation: "This is incorrect. 'So' is not the symbol for any element." },
+          { answer: "Sn", explanation: "This is incorrect. 'Sn' is the chemical symbol for tin, not sodium." },
+          { answer: "Sm", explanation: "This is incorrect. 'Sm' is the chemical symbol for samarium, not sodium." }
+        ],
+        correctAnswer: "Na"
+      },
+      {
+        id: 138,
+        question: "Which part of the eye controls the amount of light that enters?",
+        answers: [
+          { answer: "Iris", explanation: "Correct! The iris controls the size of the pupil, which regulates how much light enters the eye." },
+          { answer: "Pupil", explanation: "This is incorrect. The pupil is the opening through which light enters, but the iris controls its size." },
+          { answer: "Cornea", explanation: "This is incorrect. The cornea helps focus light, but it does not control its entry." },
+          { answer: "Lens", explanation: "This is incorrect. The lens focuses light onto the retina but does not control its entry into the eye." }
+        ],
+        correctAnswer: "Iris"
+      },
+      {
+        id: 139,
+        question: "What type of simple machine is a seesaw?",
+        answers: [
+          { answer: "Inclined Plane", explanation: "This is incorrect. An inclined plane is a slanted surface, not a seesaw." },
+          { answer: "Pulley", explanation: "This is incorrect. A pulley is a wheel and rope system, not a seesaw." },
+          { answer: "Lever", explanation: "Correct! A seesaw is a type of lever, with a fulcrum in the middle and force applied at either end." },
+          { answer: "Wheel and Axle", explanation: "This is incorrect. A wheel and axle is a different type of simple machine used for rotating objects." }
+        ],
+        correctAnswer: "Lever"
+      },
+      {
+        id: 140,
+        question: "What type of cloud is often associated with thunderstorms?",
+        answers: [
+          { answer: "Stratus", explanation: "This is incorrect. Stratus clouds are low, gray clouds that bring overcast conditions, not thunderstorms." },
+          { answer: "Cumulus", explanation: "This is incorrect. While cumulus clouds can develop into larger storm clouds, they are not typically associated with thunderstorms." },
+          { answer: "Cirrus", explanation: "This is incorrect. Cirrus clouds are high-altitude clouds that do not bring thunderstorms." },
+          { answer: "Cumulonimbus", explanation: "Correct! Cumulonimbus clouds are towering clouds associated with thunderstorms, lightning, and heavy rain." }
+        ],
+        correctAnswer: "Cumulonimbus"
+      }
     ],
     hard: [
       {
@@ -868,8 +1867,8 @@ export const PROBLEMS = {
         answers: [
           { answer: "mgh", explanation: "Incorrect. The equation mgh represents potential energy, not kinetic energy." },
           { answer: "1/2 mv^2", explanation: "Correct! The formula for kinetic energy is 1/2 mv^2, where m is mass and v is velocity." },
-          { answer: "F × d", explanation: "Incorrect. F × d represents work done, not kinetic energy." },
-          { answer: "V × I", explanation: "Incorrect. V × I represents electrical power, not kinetic energy." }
+          { answer: "F x d", explanation: "Incorrect. F x d represents work done, not kinetic energy." },
+          { answer: "V x I", explanation: "Incorrect. V x I represents electrical power, not kinetic energy." }
         ],
         correctAnswer: "1/2 mv^2"
       }
@@ -877,8 +1876,116 @@ export const PROBLEMS = {
   },
   english: {
     easy: [
-      { id: 181, question: "What is a synonym for 'happy'?", answers: ["Sad", "Angry", "Joyful", "Bored"], correctAnswer: "Joyful" },
-      // Additional easy English questions up to id 210
+      {
+        id: 181,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "She can sings well.", explanation: "This is incorrect. 'Can' should be followed by the base form of the verb, not the third-person singular form." },
+          { answer: "She can sing well.", explanation: "This is the correct form. After 'can,' we use the base form of the verb, 'sing.'" },
+          { answer: "She can singing well.", explanation: "This is incorrect. 'Can' is followed by the base verb, not the '-ing' form." },
+          { answer: "She can sung well.", explanation: "This is incorrect. 'Can' is followed by the base form of the verb, not the past participle form." }
+        ],
+        correctAnswer: "She can sing well."
+      },
+      {
+        id: 182,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "I has a book.", explanation: "This is incorrect. The verb 'has' is used for 'he,' 'she,' and 'it.' For 'I,' you should use 'have.'" },
+          { answer: "I have a book.", explanation: "This is correct. 'I' is followed by 'have' in the present tense." },
+          { answer: "I haves a book.", explanation: "This is incorrect. 'Haves' is not used with 'I.' 'I' takes 'have' in the present tense." },
+          { answer: "I having a book.", explanation: "This is incorrect. 'Having' is the present participle, and we need 'have' to indicate possession." }
+        ],
+        correctAnswer: "I have a book."
+      },
+      {
+        id: 183,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "He goed to school.", explanation: "This is incorrect. The past tense of 'go' is 'went,' not 'goed.'" },
+          { answer: "He went to school.", explanation: "This is the correct sentence. The past tense of 'go' is 'went.'" },
+          { answer: "He going to school.", explanation: "This is incorrect. 'Going' needs a helping verb, like 'is' or 'was,' for the present continuous." },
+          { answer: "He gone to school.", explanation: "This is incorrect. 'Gone' is the past participle, and we need 'went' for the past simple." }
+        ],
+        correctAnswer: "He went to school."
+      },
+      {
+        id: 184,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "She don’t like pizza.", explanation: "This is incorrect. With 'she,' the correct form is 'doesn't,' not 'don't.'" },
+          { answer: "She doesn't like pizza.", explanation: "This is correct. 'Doesn't' is used with third-person singular subjects like 'she.'" },
+          { answer: "She not like pizza.", explanation: "This is incorrect. In negative sentences with 'she,' 'doesn't' is needed before the verb." },
+          { answer: "She doesn't likes pizza.", explanation: "This is incorrect. After 'doesn't,' we use the base form of the verb, which is 'like,' not 'likes.'" }
+        ],
+        correctAnswer: "She doesn't like pizza."
+      },
+      {
+        id: 185,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "I am go to the store.", explanation: "This is incorrect. 'Am' should be followed by the '-ing' form of the verb, 'going.'" },
+          { answer: "I am going to the store.", explanation: "This is correct. 'Am' is followed by 'going' to form the present continuous tense." },
+          { answer: "I going to the store.", explanation: "This is incorrect. You need 'am' before 'going' to form the present continuous." },
+          { answer: "I goes to the store.", explanation: "This is incorrect. 'Goes' is used with third-person singular subjects like 'he' or 'she,' but we use 'go' with 'I.'" }
+        ],
+        correctAnswer: "I am going to the store."
+      },
+      {
+        id: 186,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "They was at the party.", explanation: "This is incorrect. The correct form with 'they' is 'were,' not 'was.'" },
+          { answer: "They were at the party.", explanation: "This is correct. 'They' takes 'were' in the past tense." },
+          { answer: "They is at the party.", explanation: "This is incorrect. 'Is' is used for singular subjects, but 'they' needs 'were' in the past tense." },
+          { answer: "They are at the party.", explanation: "This is incorrect. While 'are' is correct for present tense, the question asks for the past tense." }
+        ],
+        correctAnswer: "They were at the party."
+      },
+      {
+        id: 187,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "I can playing soccer.", explanation: "This is incorrect. 'Can' is followed by the base form of the verb, not the '-ing' form." },
+          { answer: "I can play soccer.", explanation: "This is correct. After 'can,' we use the base form of the verb, 'play.'" },
+          { answer: "I can plays soccer.", explanation: "This is incorrect. After 'can,' we use the base form of the verb, not the third-person singular form 'plays.'" },
+          { answer: "I can played soccer.", explanation: "This is incorrect. 'Can' is used with the base verb, not the past tense form." }
+        ],
+        correctAnswer: "I can play soccer."
+      },
+      {
+        id: 188,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "She going to the park.", explanation: "This is incorrect. You need a form of 'be' (am, is, are) before 'going.'" },
+          { answer: "She is going to the park.", explanation: "This is correct. 'Is' is the correct form of 'be' for 'she,' and 'going' is the verb form needed." },
+          { answer: "She are going to the park.", explanation: "This is incorrect. 'Are' is used with 'they' and 'we,' but 'she' requires 'is.'" },
+          { answer: "She are go to the park.", explanation: "This is incorrect. 'Are' is not correct with 'she,' and 'go' should be 'going.'" }
+        ],
+        correctAnswer: "She is going to the park."
+      },
+      {
+        id: 189,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "I don’t likes apples.", explanation: "This is incorrect. After 'don't,' we use the base form of the verb, which is 'like.'" },
+          { answer: "I don't like apples.", explanation: "This is correct. After 'don't,' we use the base form of the verb, 'like.'" },
+          { answer: "I doesn't like apples.", explanation: "This is incorrect. 'Doesn't' is used with third-person singular subjects, but 'I' takes 'don't.'" },
+          { answer: "I don't liking apples.", explanation: "This is incorrect. After 'don't,' we use the base form of the verb, not the '-ing' form." }
+        ],
+        correctAnswer: "I don't like apples."
+      },
+      {
+        id: 190,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "She has went to the store.", explanation: "This is incorrect. 'Went' is the past tense of 'go.' 'Has' needs to be followed by the past participle form 'gone.'" },
+          { answer: "She has gone to the store.", explanation: "This is correct. 'Has' is followed by the past participle 'gone.'" },
+          { answer: "She has go to the store.", explanation: "This is incorrect. 'Go' is the base form of the verb. 'Has' needs the past participle 'gone.'" },
+          { answer: "She has going to the store.", explanation: "This is incorrect. 'Has' needs to be followed by the past participle, not the '-ing' form." }
+        ],
+        correctAnswer: "She has gone to the store."
+      }
     ],
     normal: [
       { id: 211, question: "What is the past tense of 'run'?", answers: ["Running", "Ran", "Runned", "Runs"], correctAnswer: "Ran" },
