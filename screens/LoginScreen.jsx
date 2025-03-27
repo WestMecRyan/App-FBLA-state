@@ -39,11 +39,21 @@ export default function LoginScreen() {
       return;
     }
   
+    // Debug: Starting login attempt
+    Alert.alert("Debug", "Starting login request");
     setIsLoading(true);
+  
+    // Construct the URL for debugging purpose
+    const url = `http://localhost:8787/login?username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+    Alert.alert("Debug", `Request URL: ${url}`);
+  
     try {
-      const response = await fetch(`http://127.0.0.1:8787/login?username=gabe&password=1234`, {
+      const response = await fetch(url, {
         method: "POST",
       });
+  
+      // Debug: Response received
+      Alert.alert("Debug", `Response status: ${response.status}`);
   
       if (response.ok) {
         const message = await response.text();
@@ -55,12 +65,15 @@ export default function LoginScreen() {
         Alert.alert("Login Failed", errorMessage);
       }
     } catch (error) {
-      Alert.alert("Error", "An error occurred during login");
-      console.error(error);
+      // Debug: Log error message and show alert
+      Alert.alert("Network Error", `Error message: ${error.message}`);
+      console.error("Login error:", error);
     } finally {
       setIsLoading(false);
     }
   };
+  
+  
   const handleRegister = () => {
     // Navigate to registration screen (to be implemented)
     Alert.alert("Register", "Registration functionality to be implemented")
