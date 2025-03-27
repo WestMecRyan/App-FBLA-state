@@ -46,6 +46,7 @@ export default function BattleScreen() {
   const [showCatchButton, setShowCatchButton] = useState(false)
   const [isCaptureAnimation, setIsCaptureAnimation] = useState(false)
   const [previousProblemId, setPreviousProblemId] = useState(null);
+  const [wasAnswerCorrect, setWasAnswerCorrect] = useState(false);
 
   const [currentMove, setCurrentMove] = useState(null)
 
@@ -255,12 +256,12 @@ export default function BattleScreen() {
     }
   }
 
-  const handleMoveSelect = (move) => {
+  const handleMoveSelect = async (move) => {
     if (isProcessingTurn) return;
     setCurrentMove(move);
 
     // Get all available problems from the trainer
-    const availableProblems = enemyTrainer?.problems || [];
+    const availableProblems = await enemyTrainer?.problems() || [];
 
     if (availableProblems.length === 0) {
       console.error("No problems available for this trainer");
@@ -344,61 +345,170 @@ export default function BattleScreen() {
     }
   };
 
-  const handleProblemAnswer = async (correct) => {
-    setCurrentProblem(null)
-    setIsProcessingTurn(true)
+  // const handleProblemAnswer = async (correct) => {
+  //   setCurrentProblem(null)
+  //   setIsProcessingTurn(true)
+
+  //   // Use the ref to ensure we have the latest active monster
+  //   const currentActiveMonster = activeMonsterRef.current
+
+  //   if (correct && currentActiveMonster && enemyMonster) {
+  //     playSound("correctAnswer")
+
+  //     // Player's turn - attack animation
+  //     setIsPlayerAttacking(true)
+
+  //     // Wait for attack animation to complete
+  //     await new Promise((resolve) => setTimeout(resolve, 300))
+  //     setIsPlayerAttacking(false)
+
+  //     // Enemy takes damage animation
+  //     setIsEnemyTakingDamage(true)
+
+  //     // Calculate and apply damage
+  //     const move = currentMove
+
+  //     const typeBonus = getTypeBonus(
+  //       move?.type?.toLowerCase() || currentActiveMonster.type.toLowerCase(),
+  //       enemyMonster.type.toLowerCase()
+  //     );
+
+  //     const damage = calculateDamage(currentActiveMonster, enemyMonster, move)
+  //     console.log("Player Damage: ", damage)
+
+  //     // Different HP handling for random encounters vs trainer battles
+  //     let newEnemyHealth
+  //     if (isRandomBattle) {
+  //       // For random encounters, stop at 1 HP to allow catching
+  //       newEnemyHealth = Math.max(1, enemyMonster.health - damage)
+  //     } else {
+  //       // For trainer battles, allow fainting (0 HP)
+  //       newEnemyHealth = Math.max(0, enemyMonster.health - damage)
+  //     }
+
+  //     Animated.timing(enemyHealthAnim, {
+  //       toValue: newEnemyHealth,
+  //       duration: 1000,
+  //       useNativeDriver: false,
+  //     }).start()
+
+  //     enemyMonster.health = newEnemyHealth
+
+
+  //     let effectivenessText = "";
+  //     if (typeBonus > 1) {
+  //       effectivenessText = " It's super effective!";
+  //       playSound("hit");
+  //       // Could play a special sound for super effective hits
+  //     } else if (typeBonus < 1) {
+  //       effectivenessText = " It's not very effective...";
+  //       playSound("hit");
+  //     } else {
+  //       playSound("hit");
+  //     }
+
+  //     // setBattleText(`${currentActiveMonster.name} dealt ${damage} damage!`)
+  //     setBattleText(`${currentActiveMonster.name} used ${move?.name || "attack"}!${effectivenessText}`);
+
+  //     // Wait for damage animation to complete
+  //     await new Promise((resolve) => setTimeout(resolve, 400))
+  //     setIsEnemyTakingDamage(false)
+
+  //     // Check if enemy is at 1 HP and this is a random encounter
+  //     if (newEnemyHealth <= 1 && isRandomBattle) {
+  //       setShowCatchButton(true)
+  //       setBattleText(`${enemyMonster.name} is weak, catch it!`)
+  //       setIsProcessingTurn(false)
+  //       return
+  //     }
+
+  //     // Check if enemy fainted
+  //     if (newEnemyHealth <= 0) {
+  //       setIsEnemyFainted(true)
+  //       handleEnemyMonsterFainted()
+  //       return
+  //     }
+  //   } else {
+  //     playSound("wrongAnswer")
+  //     setBattleText("The attack missed!")
+  //   }
+
+  //   // Enemy's turn after a delay
+  //   setTimeout(() => {
+  //     handleEnemyTurn()
+  //   }, 2000)
+  // }
+
+  const handleProblemAnswer = (correct) => {
+    setWasAnswerCorrect(correct);
+    setIsProcessingTurn(true);
+    setBattleText(correct ? "Correct!" : "Incorrect!");
+  };
+
+  const handleContinue = async () => {
+    setCurrentProblem(null); // Close the problem modal
+
+    // If the answer was incorrect, skip the player's attack and proceed to the enemy's turn
+    if (!wasAnswerCorrect) {
+      playSound("wrongAnswer");
+      setBattleText("The attack missed!");
+
+      // Proceed to the enemy's turn after a delay
+      setTimeout(() => {
+        handleEnemyTurn();
+      }, 2000);
+
+      setIsProcessingTurn(false);
+      return;
+    }
 
     // Use the ref to ensure we have the latest active monster
-    const currentActiveMonster = activeMonsterRef.current
+    const currentActiveMonster = activeMonsterRef.current;
 
-    if (correct && currentActiveMonster && enemyMonster) {
-      playSound("correctAnswer")
-
+    if (currentMove && currentActiveMonster && enemyMonster) {
       // Player's turn - attack animation
-      setIsPlayerAttacking(true)
+      setIsPlayerAttacking(true);
 
       // Wait for attack animation to complete
-      await new Promise((resolve) => setTimeout(resolve, 300))
-      setIsPlayerAttacking(false)
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      setIsPlayerAttacking(false);
 
       // Enemy takes damage animation
-      setIsEnemyTakingDamage(true)
+      setIsEnemyTakingDamage(true);
 
       // Calculate and apply damage
-      const move = currentMove
+      const move = currentMove;
 
       const typeBonus = getTypeBonus(
         move?.type?.toLowerCase() || currentActiveMonster.type.toLowerCase(),
         enemyMonster.type.toLowerCase()
       );
 
-      const damage = calculateDamage(currentActiveMonster, enemyMonster, move)
-      console.log("Player Damage: ", damage)
+      const damage = calculateDamage(currentActiveMonster, enemyMonster, move);
+      console.log("Player Damage: ", damage);
 
       // Different HP handling for random encounters vs trainer battles
-      let newEnemyHealth
+      let newEnemyHealth;
       if (isRandomBattle) {
         // For random encounters, stop at 1 HP to allow catching
-        newEnemyHealth = Math.max(1, enemyMonster.health - damage)
+        newEnemyHealth = Math.max(1, enemyMonster.health - damage);
       } else {
         // For trainer battles, allow fainting (0 HP)
-        newEnemyHealth = Math.max(0, enemyMonster.health - damage)
+        newEnemyHealth = Math.max(0, enemyMonster.health - damage);
       }
 
       Animated.timing(enemyHealthAnim, {
         toValue: newEnemyHealth,
         duration: 1000,
         useNativeDriver: false,
-      }).start()
+      }).start();
 
-      enemyMonster.health = newEnemyHealth
-
+      enemyMonster.health = newEnemyHealth;
 
       let effectivenessText = "";
       if (typeBonus > 1) {
         effectivenessText = " It's super effective!";
         playSound("hit");
-        // Could play a special sound for super effective hits
       } else if (typeBonus < 1) {
         effectivenessText = " It's not very effective...";
         playSound("hit");
@@ -406,37 +516,27 @@ export default function BattleScreen() {
         playSound("hit");
       }
 
-      // setBattleText(`${currentActiveMonster.name} dealt ${damage} damage!`)
       setBattleText(`${currentActiveMonster.name} used ${move?.name || "attack"}!${effectivenessText}`);
 
       // Wait for damage animation to complete
-      await new Promise((resolve) => setTimeout(resolve, 400))
-      setIsEnemyTakingDamage(false)
-
-      // Check if enemy is at 1 HP and this is a random encounter
-      if (newEnemyHealth <= 1 && isRandomBattle) {
-        setShowCatchButton(true)
-        setBattleText(`${enemyMonster.name} is weak, catch it!`)
-        setIsProcessingTurn(false)
-        return
-      }
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      setIsEnemyTakingDamage(false);
 
       // Check if enemy fainted
       if (newEnemyHealth <= 0) {
-        setIsEnemyFainted(true)
-        handleEnemyMonsterFainted()
-        return
+        setIsEnemyFainted(true);
+        handleEnemyMonsterFainted();
+        return;
       }
-    } else {
-      playSound("wrongAnswer")
-      setBattleText("The attack missed!")
     }
 
     // Enemy's turn after a delay
     setTimeout(() => {
-      handleEnemyTurn()
-    }, 2000)
-  }
+      handleEnemyTurn();
+    }, 2000);
+
+    setIsProcessingTurn(false); // Allow the fight to continue
+  };
 
   // Fix the player damage animation by implementing it directly in BattleScreen
   const handleEnemyTurn = async () => {
@@ -1064,7 +1164,14 @@ export default function BattleScreen() {
       )}
 
       {/* Problem Modal */}
-      {currentProblem && <ProblemModal visible={true} problem={currentProblem} onAnswer={handleProblemAnswer} />}
+      {currentProblem && (
+        <ProblemModal
+          visible={true}
+          problem={currentProblem}
+          onAnswer={handleProblemAnswer}
+          onContinue={handleContinue}
+        />
+      )}
 
       {/* Switch Monster Modal */}
       <Modal

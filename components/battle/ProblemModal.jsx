@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from "react-native"
+import { Ionicons } from "@expo/vector-icons"
 
 // Helper function to shuffle an array
 const shuffleArray = (array) => {
@@ -11,70 +12,127 @@ const shuffleArray = (array) => {
   return newArray
 }
 
-export default function ProblemModal({ visible, problem, onAnswer }) {
-  const [shuffledAnswers, setShuffledAnswers] = useState([])
+export default function ProblemModal({ visible, problem, onAnswer, onContinue }) {
+  const [shuffledAnswers, setShuffledAnswers] = useState([]);
+  const [selectedExplanation, setSelectedExplanation] = useState(null);
+  const [isCorrect, setIsCorrect] = useState(false);
 
-  // Fix the problem modal to use the answers array from problems.js
   useEffect(() => {
     if (problem) {
-      // Create an array of answer objects with correct/incorrect flags
-      // This handles the format in problems.js which has an answers array
       const answerObjects = problem.answers
-        ? problem.answers.map((answer) => ({
-            text: answer,
-            isCorrect: answer === problem.correctAnswer,
+        ? problem.answers.map((ans) => ({
+            text: ans.answer,
+            explanation: ans.explanation,
+            isCorrect: ans.answer === problem.correctAnswer,
           }))
-        : // Fallback to old format if needed
-          [
-            { text: problem.correctAnswer, isCorrect: true },
-            ...(problem.wrongAnswers || []).map((answer) => ({ text: answer, isCorrect: false })),
-          ]
+        : [
+            { text: problem.correctAnswer, explanation: "Correct answer", isCorrect: true },
+            ...(problem.wrongAnswers || []).map((ans) => ({
+              text: ans.answer,
+              explanation: "Incorrect answer",
+              isCorrect: false,
+            })),
+          ];
 
-      console.log("Problem:", problem)
-      console.log("Answer objects before shuffle:", answerObjects)
-
-      // Shuffle the answers
-      const shuffled = shuffleArray(answerObjects)
-      console.log("Shuffled answers:", shuffled)
-      setShuffledAnswers(shuffled)
+      const shuffled = shuffleArray(answerObjects);
+      setShuffledAnswers(shuffled);
+      setSelectedExplanation(null); // Reset explanation when a new problem is loaded
     }
-  }, [problem])
+  }, [problem]);
+
+  const handleAnswer = (answer) => {
+    setIsCorrect(answer.isCorrect);
+    setSelectedExplanation(answer.explanation);
+    onAnswer(answer.isCorrect); // Notify parent component
+  };
 
   if (!problem) return null
+
+  // return (
+  //   <Modal visible={visible} transparent={true} animationType="slide">
+  //     <View style={styles.modalContainer}>
+  //       <View style={styles.modalContent}>
+  //         <Text style={styles.questionTitle}>Answer this question:</Text>
+  //         <Text style={styles.questionText}>{problem.question}</Text>
+
+  //         <View style={styles.answersContainer}>
+  //           {shuffledAnswers && shuffledAnswers.length > 0 ? (
+  //             shuffledAnswers.map((answer, index) => (
+  //               <TouchableOpacity key={index} style={styles.answerButton} onPress={() => onAnswer(answer.isCorrect)}>
+  //                 <Text style={styles.answerText}>{answer.text}</Text>
+  //               </TouchableOpacity>
+  //             ))
+  //           ) : (
+  //             // Fallback if shuffling fails
+  //             <>
+  //               <TouchableOpacity style={styles.answerButton} onPress={() => onAnswer(true)}>
+  //                 <Text style={styles.answerText}>{problem.correctAnswer}</Text>
+  //               </TouchableOpacity>
+  //               {problem.wrongAnswers &&
+  //                 problem.wrongAnswers.map((answer, index) => (
+  //                   <TouchableOpacity key={index} style={styles.answerButton} onPress={() => onAnswer(false)}>
+  //                     <Text style={styles.answerText}>{answer}</Text>
+  //                   </TouchableOpacity>
+  //                 ))}
+  //             </>
+  //           )}
+  //         </View>
+  //       </View>
+  //     </View>
+  //   </Modal>
+  // )
+
 
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <Text style={styles.questionTitle}>Answer this question:</Text>
-          <Text style={styles.questionText}>{problem.question}</Text>
+          {selectedExplanation ? (
+            // Show explanation and "Continue" button after an answer is selected
+            <>
+              <Text
+                style={[
+                  styles.explanationText,
+                  { color: isCorrect ? "green" : "red" },
+                ]}
+              >
+                {selectedExplanation}
+              </Text>
+              <TouchableOpacity
+                style={[
+                  styles.continueButton,
+                  { backgroundColor: isCorrect ? "#4CAF50" : "#F44336" },
+                ]}
+                onPress={onContinue}
+              >
+                <Text style={styles.continueButtonText}>Continue</Text>
+                <Ionicons name="arrow-forward" size={24} color="#FFF" />
 
-          <View style={styles.answersContainer}>
-            {shuffledAnswers && shuffledAnswers.length > 0 ? (
-              shuffledAnswers.map((answer, index) => (
-                <TouchableOpacity key={index} style={styles.answerButton} onPress={() => onAnswer(answer.isCorrect)}>
-                  <Text style={styles.answerText}>{answer.text}</Text>
-                </TouchableOpacity>
-              ))
-            ) : (
-              // Fallback if shuffling fails
-              <>
-                <TouchableOpacity style={styles.answerButton} onPress={() => onAnswer(true)}>
-                  <Text style={styles.answerText}>{problem.correctAnswer}</Text>
-                </TouchableOpacity>
-                {problem.wrongAnswers &&
-                  problem.wrongAnswers.map((answer, index) => (
-                    <TouchableOpacity key={index} style={styles.answerButton} onPress={() => onAnswer(false)}>
-                      <Text style={styles.answerText}>{answer}</Text>
-                    </TouchableOpacity>
-                  ))}
-              </>
-            )}
-          </View>
+              </TouchableOpacity>
+            </>
+          ) : (
+            // Show question and answers initially
+            <>
+              <Text style={styles.questionTitle}>Answer this question:</Text>
+              <Text style={styles.questionText}>{problem.question}</Text>
+
+              <View style={styles.answersContainer}>
+                {shuffledAnswers.map((answer, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.answerButton}
+                    onPress={() => handleAnswer(answer)}
+                  >
+                    <Text style={styles.answerText}>{answer.text}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </>
+          )}
         </View>
       </View>
     </Modal>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -126,6 +184,28 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     fontFamily: "pixel-font",
+  },
+  explanationText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 20,
+    fontFamily: "pixel-font",
+  },
+  continueButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    alignSelf: "center",
+  },
+  continueButtonText: {
+    color: "#FFF",
+    fontSize: 16,
+    textAlign: "center",
+    fontFamily: "pixel-font",
+    marginRight: 8,
   },
 })
 

@@ -1881,7 +1881,7 @@ export const PROBLEMS = {
         question: "Which sentence is correct?",
         answers: [
           { answer: "She can sings well.", explanation: "This is incorrect. 'Can' should be followed by the base form of the verb, not the third-person singular form." },
-          { answer: "She can sing well.", explanation: "This is the correct form. After 'can,' we use the base form of the verb, 'sing.'" },
+          { answer: "She can sing well.", explanation: "Correct! After 'can,' we use the base form of the verb, 'sing.'" },
           { answer: "She can singing well.", explanation: "This is incorrect. 'Can' is followed by the base verb, not the '-ing' form." },
           { answer: "She can sung well.", explanation: "This is incorrect. 'Can' is followed by the base form of the verb, not the past participle form." }
         ],
@@ -1892,7 +1892,7 @@ export const PROBLEMS = {
         question: "Which sentence is correct?",
         answers: [
           { answer: "I has a book.", explanation: "This is incorrect. The verb 'has' is used for 'he,' 'she,' and 'it.' For 'I,' you should use 'have.'" },
-          { answer: "I have a book.", explanation: "This is correct. 'I' is followed by 'have' in the present tense." },
+          { answer: "I have a book.", explanation: "Correct! 'I' is followed by 'have' in the present tense." },
           { answer: "I haves a book.", explanation: "This is incorrect. 'Haves' is not used with 'I.' 'I' takes 'have' in the present tense." },
           { answer: "I having a book.", explanation: "This is incorrect. 'Having' is the present participle, and we need 'have' to indicate possession." }
         ],
@@ -1903,7 +1903,7 @@ export const PROBLEMS = {
         question: "Which sentence is correct?",
         answers: [
           { answer: "He goed to school.", explanation: "This is incorrect. The past tense of 'go' is 'went,' not 'goed.'" },
-          { answer: "He went to school.", explanation: "This is the correct sentence. The past tense of 'go' is 'went.'" },
+          { answer: "He went to school.", explanation: "Correct! The past tense of 'go' is 'went.'" },
           { answer: "He going to school.", explanation: "This is incorrect. 'Going' needs a helping verb, like 'is' or 'was,' for the present continuous." },
           { answer: "He gone to school.", explanation: "This is incorrect. 'Gone' is the past participle, and we need 'went' for the past simple." }
         ],
@@ -1911,89 +1911,965 @@ export const PROBLEMS = {
       },
       {
         id: 184,
-        question: "Which sentence is correct?",
+        question: "Which word correctly completes the sentence? 'She ___ at the store yesterday.'",
         answers: [
-          { answer: "She don’t like pizza.", explanation: "This is incorrect. With 'she,' the correct form is 'doesn't,' not 'don't.'" },
-          { answer: "She doesn't like pizza.", explanation: "This is correct. 'Doesn't' is used with third-person singular subjects like 'she.'" },
-          { answer: "She not like pizza.", explanation: "This is incorrect. In negative sentences with 'she,' 'doesn't' is needed before the verb." },
-          { answer: "She doesn't likes pizza.", explanation: "This is incorrect. After 'doesn't,' we use the base form of the verb, which is 'like,' not 'likes.'" }
+          { answer: "is", explanation: "This is incorrect. 'Is' is present tense, but the sentence refers to something that happened yesterday." },
+          { answer: "was", explanation: "Correct! 'Was' is the past tense form of 'is' and matches the timeframe 'yesterday.'" },
+          { answer: "are", explanation: "This is incorrect. 'Are' is present tense and used for plural subjects, not singular like 'she.'" },
+          { answer: "be", explanation: "This is incorrect. 'Be' is the base form and doesn't fit this sentence without additional context." }
         ],
-        correctAnswer: "She doesn't like pizza."
+        correctAnswer: "was"
       },
       {
         id: 185,
         question: "Which sentence is correct?",
         answers: [
-          { answer: "I am go to the store.", explanation: "This is incorrect. 'Am' should be followed by the '-ing' form of the verb, 'going.'" },
-          { answer: "I am going to the store.", explanation: "This is correct. 'Am' is followed by 'going' to form the present continuous tense." },
-          { answer: "I going to the store.", explanation: "This is incorrect. You need 'am' before 'going' to form the present continuous." },
-          { answer: "I goes to the store.", explanation: "This is incorrect. 'Goes' is used with third-person singular subjects like 'he' or 'she,' but we use 'go' with 'I.'" }
+          { answer: "They was happy.", explanation: "This is incorrect. 'They' is plural, so it requires 'were,' not 'was.'" },
+          { answer: "They were happy.", explanation: "Correct! 'Were' is the correct past tense verb for the plural subject 'they.'" },
+          { answer: "They is happy.", explanation: "This is incorrect. 'Is' is present tense and used for singular subjects, not plural ones like 'they.'" },
+          { answer: "They be happy.", explanation: "This is incorrect. 'Be' is the base form and requires a helping verb for correct usage." }
         ],
-        correctAnswer: "I am going to the store."
+        correctAnswer: "They were happy."
       },
       {
         id: 186,
         question: "Which sentence is correct?",
         answers: [
-          { answer: "They was at the party.", explanation: "This is incorrect. The correct form with 'they' is 'were,' not 'was.'" },
-          { answer: "They were at the party.", explanation: "This is correct. 'They' takes 'were' in the past tense." },
-          { answer: "They is at the party.", explanation: "This is incorrect. 'Is' is used for singular subjects, but 'they' needs 'were' in the past tense." },
-          { answer: "They are at the party.", explanation: "This is incorrect. While 'are' is correct for present tense, the question asks for the past tense." }
+          { answer: "I seen her yesterday.", explanation: "This is incorrect. 'Seen' requires a helping verb like 'have' or 'had' to be correct." },
+          { answer: "I saw her yesterday.", explanation: "Correct! 'Saw' is the simple past tense of 'see' and matches the timeframe 'yesterday.'" },
+          { answer: "I see her yesterday.", explanation: "This is incorrect. 'See' is present tense, but the sentence refers to a past event." },
+          { answer: "I seeing her yesterday.", explanation: "This is incorrect. 'Seeing' is a continuous form that doesn't match this sentence structure." }
         ],
-        correctAnswer: "They were at the party."
+        correctAnswer: "I saw her yesterday."
       },
       {
         id: 187,
         question: "Which sentence is correct?",
         answers: [
-          { answer: "I can playing soccer.", explanation: "This is incorrect. 'Can' is followed by the base form of the verb, not the '-ing' form." },
-          { answer: "I can play soccer.", explanation: "This is correct. After 'can,' we use the base form of the verb, 'play.'" },
-          { answer: "I can plays soccer.", explanation: "This is incorrect. After 'can,' we use the base form of the verb, not the third-person singular form 'plays.'" },
-          { answer: "I can played soccer.", explanation: "This is incorrect. 'Can' is used with the base verb, not the past tense form." }
+          { answer: "He don’t like apples.", explanation: "This is incorrect. 'Don’t' is used with 'I,' 'you,' 'we,' and 'they.' For 'he,' we use 'doesn’t.'" },
+          { answer: "He doesn’t like apples.", explanation: "Correct! 'Doesn’t' is the correct contraction for 'does not' when the subject is 'he.'" },
+          { answer: "He doesn’t likes apples.", explanation: "This is incorrect. 'Likes' is the wrong verb form after 'doesn’t.'" },
+          { answer: "He don’t likes apples.", explanation: "This is incorrect. 'Don’t' is incorrect for the subject 'he,' and 'likes' is the wrong verb form after 'doesn’t.'" }
         ],
-        correctAnswer: "I can play soccer."
+        correctAnswer: "He doesn’t like apples."
       },
       {
         id: 188,
-        question: "Which sentence is correct?",
+        question: "Which word correctly completes the sentence? 'She has ___ her homework already.'",
         answers: [
-          { answer: "She going to the park.", explanation: "This is incorrect. You need a form of 'be' (am, is, are) before 'going.'" },
-          { answer: "She is going to the park.", explanation: "This is correct. 'Is' is the correct form of 'be' for 'she,' and 'going' is the verb form needed." },
-          { answer: "She are going to the park.", explanation: "This is incorrect. 'Are' is used with 'they' and 'we,' but 'she' requires 'is.'" },
-          { answer: "She are go to the park.", explanation: "This is incorrect. 'Are' is not correct with 'she,' and 'go' should be 'going.'" }
+          { answer: "done", explanation: "Correct! 'Done' is the past participle used with 'has' in the present perfect tense." },
+          { answer: "did", explanation: "This is incorrect. 'Did' is the simple past tense, but this sentence requires the present perfect form." },
+          { answer: "do", explanation: "This is incorrect. 'Do' is the base form and doesn't fit this sentence structure." },
+          { answer: "doing", explanation: "This is incorrect. 'Doing' is a continuous form and doesn’t match this sentence." }
         ],
-        correctAnswer: "She is going to the park."
+        correctAnswer: "done"
       },
       {
         id: 189,
         question: "Which sentence is correct?",
         answers: [
-          { answer: "I don’t likes apples.", explanation: "This is incorrect. After 'don't,' we use the base form of the verb, which is 'like.'" },
-          { answer: "I don't like apples.", explanation: "This is correct. After 'don't,' we use the base form of the verb, 'like.'" },
-          { answer: "I doesn't like apples.", explanation: "This is incorrect. 'Doesn't' is used with third-person singular subjects, but 'I' takes 'don't.'" },
-          { answer: "I don't liking apples.", explanation: "This is incorrect. After 'don't,' we use the base form of the verb, not the '-ing' form." }
+          { answer: "They're going to the park.", explanation: "Correct! 'They're' is a contraction for 'they are,' which fits this sentence." },
+          { answer: "There going to the park.", explanation: "This is incorrect. 'There' refers to a place, not a subject like 'they are.'" },
+          { answer: "Their going to the park.", explanation: "This is incorrect. 'Their' shows possession, not an action like 'going.'" },
+          { answer: "Theyre going to the park.", explanation: "This is incorrect. 'Theyre' is a misspelling of the correct contraction 'they're.'" }
         ],
-        correctAnswer: "I don't like apples."
+        correctAnswer: "They're going to the park."
       },
       {
         id: 190,
         question: "Which sentence is correct?",
         answers: [
-          { answer: "She has went to the store.", explanation: "This is incorrect. 'Went' is the past tense of 'go.' 'Has' needs to be followed by the past participle form 'gone.'" },
-          { answer: "She has gone to the store.", explanation: "This is correct. 'Has' is followed by the past participle 'gone.'" },
-          { answer: "She has go to the store.", explanation: "This is incorrect. 'Go' is the base form of the verb. 'Has' needs the past participle 'gone.'" },
-          { answer: "She has going to the store.", explanation: "This is incorrect. 'Has' needs to be followed by the past participle, not the '-ing' form." }
+          { answer: "Its cold outside.", explanation: "This is incorrect. 'Its' shows possession, but this sentence needs 'it's' for 'it is.'" },
+          { answer: "It's cold outside.", explanation: "Correct! 'It's' is the correct contraction for 'it is' in this sentence." },
+          { answer: "It cold outside.", explanation: "This is incorrect. The sentence is missing a verb like 'is.'" },
+          { answer: "It’s cold outsides.", explanation: "This is incorrect. 'Outsides' is not standard English in this context." }
         ],
-        correctAnswer: "She has gone to the store."
+        correctAnswer: "It's cold outside."
+      },
+      {
+        id: 191,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "I’ve never ate sushi before.", explanation: "This is incorrect. 'Ate' is the past tense form, but this sentence needs the past participle 'eaten' with 'have.'" },
+          { answer: "I’ve never eaten sushi before.", explanation: "Correct! 'Eaten' is the correct past participle to use with 'have.'" },
+          { answer: "I never eaten sushi before.", explanation: "This is incorrect. 'I’ve' (I have) is needed for the present perfect tense." },
+          { answer: "I never eat sushi before.", explanation: "This is incorrect. 'Eat' is present tense, but the sentence refers to the past." }
+        ],
+        correctAnswer: "I’ve never eaten sushi before."
+      },
+      {
+        id: 192,
+        question: "Which word correctly completes the sentence? 'If I ___ you, I’d apologize.'",
+        answers: [
+          { answer: "am", explanation: "This is incorrect. The word 'am' is present tense, but this sentence needs a past tense verb." },
+          { answer: "was", explanation: "Correct! 'Was' is used in this type of conditional sentence to express a hypothetical situation." },
+          { answer: "be", explanation: "This is incorrect. 'Be' requires a helping verb like 'would' or 'should' in this type of sentence." },
+          { answer: "were", explanation: "This is incorrect. While 'were' can also be correct in some cases, 'was' is more common in casual speech for this structure." }
+        ],
+        correctAnswer: "was"
+      },
+      {
+        id: 193,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "I could of told you that.", explanation: "This is incorrect. 'Could of' is incorrect; it should be 'could have.'" },
+          { answer: "I could have told you that.", explanation: "Correct! 'Could have' is the correct phrasing for this sentence." },
+          { answer: "I could has told you that.", explanation: "This is incorrect. 'Has' does not pair with 'could' in this context." },
+          { answer: "I could have tell you that.", explanation: "This is incorrect. The verb should be in its past participle form 'told,' not the base form 'tell.'" }
+        ],
+        correctAnswer: "I could have told you that."
+      },
+      {
+        id: 194,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "We was at the movies.", explanation: "This is incorrect. 'We' is plural, so it requires 'were,' not 'was.'" },
+          { answer: "We were at the movies.", explanation: "Correct! 'Were' is the correct past tense verb for 'we.'" },
+          { answer: "We are at the movies.", explanation: "This is incorrect. 'Are' is present tense, but the sentence refers to the past." },
+          { answer: "We been at the movies.", explanation: "This is incorrect. 'Been' requires a helping verb like 'have' or 'had.'" }
+        ],
+        correctAnswer: "We were at the movies."
+      },
+      {
+        id: 195,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "Neither of the boys are coming.", explanation: "This is incorrect. 'Neither' is singular, so it should take 'is' instead of 'are.'" },
+          { answer: "Neither of the boys is coming.", explanation: "Correct! 'Neither' is singular, so 'is' is the correct verb choice." },
+          { answer: "Neither of the boys be coming.", explanation: "This is incorrect. 'Be' requires a helping verb like 'is' or 'are.'" },
+          { answer: "Neither of the boys were coming.", explanation: "This is incorrect. 'Neither' is singular, so 'was' should be used instead of 'were.'" }
+        ],
+        correctAnswer: "Neither of the boys is coming."
+      },
+      {
+        id: 196,
+        question: "Which word correctly completes the sentence? 'I have no idea where ___ went.'",
+        answers: [
+          { answer: "he", explanation: "Correct! 'He' is the correct subject pronoun in this sentence." },
+          { answer: "him", explanation: "This is incorrect. 'Him' is an object pronoun, but this sentence requires a subject pronoun." },
+          { answer: "his", explanation: "This is incorrect. 'His' is a possessive pronoun, which doesn't fit here." },
+          { answer: "he’s", explanation: "This is incorrect. 'He's' is a contraction for 'he is' or 'he has,' which doesn't fit the sentence structure." }
+        ],
+        correctAnswer: "he"
+      },
+      {
+        id: 197,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "Whose jacket is this?", explanation: "Correct! 'Whose' is the correct word to ask about ownership." },
+          { answer: "Who's jacket is this?", explanation: "This is incorrect. 'Who's' is a contraction for 'who is' or 'who has,' not for ownership." },
+          { answer: "Whos jacket is this?", explanation: "This is incorrect. 'Whos' is a misspelling of the correct word 'whose.'" },
+          { answer: "Who jacket is this?", explanation: "This is incorrect. The correct possessive form is 'whose.'" }
+        ],
+        correctAnswer: "Whose jacket is this?"
+      },
+      {
+        id: 198,
+        question: "Which word correctly completes the sentence? 'I’ll call you as soon as I ___ home.'",
+        answers: [
+          { answer: "get", explanation: "Correct! 'Get' is the base form used after 'as soon as' in this type of sentence." },
+          { answer: "will get", explanation: "This is incorrect. In English, future tense is not used after 'as soon as.'" },
+          { answer: "gets", explanation: "This is incorrect. 'Gets' is the third-person singular form, but the subject is 'I.'" },
+          { answer: "got", explanation: "This is incorrect. 'Got' is past tense, but the sentence refers to a future event." }
+        ],
+        correctAnswer: "get"
+      },
+      {
+        id: 199,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "The dog wagged it's tail.", explanation: "This is incorrect. 'It's' means 'it is' or 'it has,' but this sentence needs the possessive form 'its.'" },
+          { answer: "The dog wagged its tail.", explanation: "Correct! 'Its' is the correct possessive form for 'it.'" },
+          { answer: "The dog wagged its’ tail.", explanation: "This is incorrect. 'Its’' is not a valid English word." },
+          { answer: "The dog wagged is tail.", explanation: "This is incorrect. 'Is' is a verb, not a possessive pronoun." }
+        ],
+        correctAnswer: "The dog wagged its tail."
+      },
+      {
+        id: 200,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "Me and my friend went to the mall.", explanation: "This is incorrect. 'Me' is an object pronoun; 'I' should be used as the subject." },
+          { answer: "My friend and I went to the mall.", explanation: "Correct! 'I' is the correct subject pronoun for this sentence." },
+          { answer: "My friend and me went to the mall.", explanation: "This is incorrect. 'Me' is an object pronoun and doesn't fit as the subject here." },
+          { answer: "Me went to the mall with my friend.", explanation: "This is incorrect. 'Me' is an object pronoun; 'I' should be used as the subject." }
+        ],
+        correctAnswer: "My friend and I went to the mall."
+      },
+      {
+        id: 201,
+        question: "Which word correctly completes the sentence? 'He was tired, ___ he stayed awake.'",
+        answers: [
+          { answer: "so", explanation: "This is incorrect. 'So' suggests a result, but this sentence contrasts two ideas." },
+          { answer: "but", explanation: "Correct! 'But' is used to show contrast between being tired and staying awake." },
+          { answer: "and", explanation: "This is incorrect. 'And' connects similar ideas, not contrasting ones." },
+          { answer: "or", explanation: "This is incorrect. 'Or' presents a choice, which doesn’t fit the sentence." }
+        ],
+        correctAnswer: "but"
+      },
+      {
+        id: 202,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "The teacher gave us too much homeworks.", explanation: "This is incorrect. 'Homework' is uncountable and doesn’t need an 's.'" },
+          { answer: "The teacher gave us too many homeworks.", explanation: "This is incorrect. 'Homework' is uncountable, so 'many' doesn’t fit." },
+          { answer: "The teacher gave us too much homework.", explanation: "Correct! 'Homework' is uncountable, so 'much' is the right word to use." },
+          { answer: "The teacher gave us too many homework.", explanation: "This is incorrect. 'Much' should replace 'many' when talking about uncountable nouns like 'homework.'" }
+        ],
+        correctAnswer: "The teacher gave us too much homework."
+      },
+      {
+        id: 203,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "I’m looking forward to meet you.", explanation: "This is incorrect. 'To' in this phrase is part of the gerund structure, so 'meeting' should be used." },
+          { answer: "I’m looking forward to meeting you.", explanation: "Correct! 'Meeting' is the correct form after 'looking forward to.'" },
+          { answer: "I’m looking forward for meeting you.", explanation: "This is incorrect. 'For' should be replaced with 'to' in this phrase." },
+          { answer: "I’m looking forward meeting you.", explanation: "This is incorrect. The phrase requires 'to' before 'meeting.'" }
+        ],
+        correctAnswer: "I’m looking forward to meeting you."
+      },
+      {
+        id: 204,
+        question: "Which word correctly completes the sentence? 'The movie was ___ I fell asleep.'",
+        answers: [
+          { answer: "so boring that", explanation: "Correct! 'So...that' is used to describe an extreme result." },
+          { answer: "too boring to", explanation: "This is incorrect. 'Too...to' would be used if the sentence described something impossible, not just boring." },
+          { answer: "enough boring that", explanation: "This is incorrect. 'Enough' doesn't fit before an adjective like 'boring.'" },
+          { answer: "boring so", explanation: "This is incorrect. 'So boring that' is the correct phrase for this sentence." }
+        ],
+        correctAnswer: "so boring that"
+      },
+      {
+        id: 205,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "Could you borrow me your pen?", explanation: "This is incorrect. 'Borrow' means to take something, so 'lend' should be used here instead." },
+          { answer: "Could you lend me your pen?", explanation: "Correct! 'Lend' means to give something temporarily, which fits this sentence." },
+          { answer: "Could you borrow your pen to me?", explanation: "This is incorrect. 'Borrow' isn't used when giving something to someone." },
+          { answer: "Could you lend your pen for me?", explanation: "This is incorrect. 'For' should be replaced with 'to' when using 'lend.'" }
+        ],
+        correctAnswer: "Could you lend me your pen?"
+      },
+      {
+        id: 206,
+        question: "Which word correctly completes the sentence? 'I’ll meet you at the park ___ 3 PM.'",
+        answers: [
+          { answer: "at", explanation: "Correct! 'At' is used for specific times." },
+          { answer: "on", explanation: "This is incorrect. 'On' is used for dates, not specific times." },
+          { answer: "in", explanation: "This is incorrect. 'In' is used for general time periods, like 'in the morning.'" },
+          { answer: "by", explanation: "This is incorrect. 'By' means 'before or at a certain time,' which doesn’t fit this sentence." }
+        ],
+        correctAnswer: "at"
+      },
+      {
+        id: 207,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "He asked if I could borrow him some money.", explanation: "This is incorrect. 'Borrow' means to take something, so 'lend' should be used instead." },
+          { answer: "He asked if I could lend him some money.", explanation: "Correct! 'Lend' is the correct word when giving something temporarily." },
+          { answer: "He asked if I could borrow some money to him.", explanation: "This is incorrect. 'Borrow' is not used when giving something to someone." },
+          { answer: "He asked if I could lend some money for him.", explanation: "This is incorrect. 'For' should be replaced with 'to' when using 'lend.'" }
+        ],
+        correctAnswer: "He asked if I could lend him some money."
+      },
+      {
+        id: 208,
+        question: "Which word correctly completes the sentence? 'Please ___ sure you lock the door.'",
+        answers: [
+          { answer: "make", explanation: "Correct! 'Make sure' is the correct phrase for ensuring something happens." },
+          { answer: "do", explanation: "This is incorrect. 'Do sure' is not a valid phrase in English." },
+          { answer: "be", explanation: "This is incorrect. 'Be sure' is possible, but 'make sure' is the better choice here." },
+          { answer: "set", explanation: "This is incorrect. 'Set sure' is not a valid English phrase." }
+        ],
+        correctAnswer: "make"
+      },
+      {
+        id: 209,
+        question: "Which sentence is correct?",
+        answers: [
+          { answer: "The news are surprising.", explanation: "This is incorrect. 'News' is uncountable and takes 'is' instead of 'are.'" },
+          { answer: "The news is surprising.", explanation: "Correct! 'News' is treated as singular, so 'is' is correct." },
+          { answer: "The news were surprising.", explanation: "This is incorrect. 'Were' should be replaced with 'was' for singular subjects like 'news.'" },
+          { answer: "The news be surprising.", explanation: "This is incorrect. 'Be' should be replaced with 'is' for present tense." }
+        ],
+        correctAnswer: "The news is surprising."
+      },
+      {
+        id: 210,
+        question: "Which word correctly completes the sentence? 'I can't believe how ___ this cake is.'",
+        answers: [
+          { answer: "delicious", explanation: "Correct! 'Delicious' is the correct adjective to describe food." },
+          { answer: "deliciously", explanation: "This is incorrect. 'Deliciously' is an adverb, not an adjective." },
+          { answer: "delight", explanation: "This is incorrect. 'Delight' is a noun, not an adjective." },
+          { answer: "delighting", explanation: "This is incorrect. 'Delighting' is a verb form and doesn’t fit here." }
+        ],
+        correctAnswer: "delicious"
       }
     ],
     normal: [
-      { id: 211, question: "What is the past tense of 'run'?", answers: ["Running", "Ran", "Runned", "Runs"], correctAnswer: "Ran" },
-      // Additional normal English questions up to id 240
+      {
+        id: 211,
+        question: "Which sentence is correctly punctuated?",
+        answers: [
+          { answer: "I enjoy cooking, my family, and my pets.", explanation: "Correct! This sentence uses the Oxford comma, which is standard in many writing styles for clarity." },
+          { answer: "I enjoy cooking my family and my pets.", explanation: "This is incorrect. Without the Oxford comma, this sentence may sound like the speaker is cooking their family and pets." },
+          { answer: "I enjoy cooking; my family and my pets.", explanation: "This is incorrect. The semicolon is unnecessary and breaks the sentence awkwardly." },
+          { answer: "I enjoy cooking: my family, and my pets.", explanation: "This is incorrect. A colon is typically used to introduce a list or explanation, but this sentence doesn't need one." }
+        ],
+        correctAnswer: "I enjoy cooking, my family, and my pets."
+      },
+      {
+        id: 212,
+        question: "Which word is a homophone of 'pair'?",
+        answers: [
+          { answer: "Pare", explanation: "Correct! 'Pare' sounds like 'pair' but means to trim or cut down." },
+          { answer: "Pear", explanation: "This is incorrect. While 'pear' is also a homophone of 'pair,' it refers to the fruit." },
+          { answer: "Peer", explanation: "This is incorrect. 'Peer' means to look closely or refers to an equal, and is not a homophone of 'pair.'" },
+          { answer: "Pore", explanation: "This is incorrect. 'Pore' refers to tiny openings in the skin or the act of studying something carefully." }
+        ],
+        correctAnswer: "Pare"
+      },
+      {
+        id: 213,
+        question: "Which sentence is written in active voice?",
+        answers: [
+          { answer: "The cake was baked by my sister.", explanation: "This is incorrect. This sentence is in passive voice, as the subject is receiving the action." },
+          { answer: "My sister baked the cake.", explanation: "Correct! This is active voice because the subject (my sister) is performing the action." },
+          { answer: "The cake, baked by my sister, was delicious.", explanation: "This is incorrect. While descriptive, this sentence is passive because the cake is receiving the action." },
+          { answer: "Baking a cake, my sister was proud of her work.", explanation: "This is incorrect. This sentence starts with a participial phrase, but the main structure isn't active voice." }
+        ],
+        correctAnswer: "My sister baked the cake."
+      },
+      {
+        id: 214,
+        question: "Which sentence correctly uses a semicolon?",
+        answers: [
+          { answer: "I have a test tomorrow; I need to study.", explanation: "Correct! The semicolon properly connects two related independent clauses." },
+          { answer: "I have a test tomorrow; and I need to study.", explanation: "This is incorrect. A coordinating conjunction like 'and' doesn't follow a semicolon." },
+          { answer: "I have a test tomorrow; therefore I need to study.", explanation: "This is incorrect. A comma should follow 'therefore' for proper punctuation." },
+          { answer: "I have a test tomorrow; because I need to study.", explanation: "This is incorrect. 'Because' creates a dependent clause, which requires a comma instead." }
+        ],
+        correctAnswer: "I have a test tomorrow; I need to study."
+      },
+      {
+        id: 215,
+        question: "Which sentence has correct subject-verb agreement?",
+        answers: [
+          { answer: "The team are playing well this season.", explanation: "This is incorrect. 'Team' is singular, so it should use 'is' instead of 'are' unless emphasizing individuals." },
+          { answer: "Each of the students were present.", explanation: "This is incorrect. 'Each' is singular, so 'was' should replace 'were.'" },
+          { answer: "Neither the cat nor the dog likes loud noises.", explanation: "Correct! When using 'neither...nor,' the verb agrees with the closer subject." },
+          { answer: "The books on the shelf needs organizing.", explanation: "This is incorrect. 'Books' is plural, so 'need' should replace 'needs.'" }
+        ],
+        correctAnswer: "Neither the cat nor the dog likes loud noises."
+      },
+      {
+        id: 216,
+        question: "Which word is spelled correctly?",
+        answers: [
+          { answer: "Recieve", explanation: "This is incorrect. The correct spelling follows the 'i before e except after c' rule: 'receive.'" },
+          { answer: "Accomodate", explanation: "This is incorrect. The correct spelling is 'accommodate' with two 'm's." },
+          { answer: "Definately", explanation: "This is incorrect. The correct spelling is 'definitely.'" },
+          { answer: "Recommend", explanation: "Correct! 'Recommend' is spelled correctly." }
+        ],
+        correctAnswer: "Recommend"
+      },
+      {
+        id: 217,
+        question: "Which sentence correctly uses 'affect'?",
+        answers: [
+          { answer: "The weather will affect our travel plans.", explanation: "Correct! 'Affect' is a verb meaning to influence." },
+          { answer: "The new law will have a positive affect on schools.", explanation: "This is incorrect. 'Affect' should be 'effect' here since 'effect' is the noun form." },
+          { answer: "The affect of the storm was severe.", explanation: "This is incorrect. 'Affect' should be 'effect' since it's acting as a noun here." },
+          { answer: "The coach affect the team's performance.", explanation: "This is incorrect. The verb should be 'affected' to match the past tense." }
+        ],
+        correctAnswer: "The weather will affect our travel plans."
+      },
+      {
+        id: 218,
+        question: "Which sentence uses a correctly placed modifier?",
+        answers: [
+          { answer: "Walking to school, a dog barked at me.", explanation: "This is incorrect. This creates a dangling modifier, implying the dog was walking to school." },
+          { answer: "I saw a dog barking on my way to school.", explanation: "Correct! The modifier 'barking' correctly describes the dog." },
+          { answer: "On my way to school, barking loudly, I saw a dog.", explanation: "This is incorrect. The placement of 'barking loudly' is awkward and unclear." },
+          { answer: "A dog was barking, walking to school.", explanation: "This is incorrect. The placement makes it sound like the dog was walking to school." }
+        ],
+        correctAnswer: "I saw a dog barking on my way to school."
+      },
+      {
+        id: 219,
+        question: "Which word is an example of an irregular plural noun?",
+        answers: [
+          { answer: "Dogs", explanation: "This is incorrect. 'Dogs' is a regular plural formed by adding 's.'" },
+          { answer: "Children", explanation: "Correct! 'Children' is an irregular plural because it doesn't follow typical plural rules." },
+          { answer: "Cars", explanation: "This is incorrect. 'Cars' is a regular plural formed by adding 's.'" },
+          { answer: "Buses", explanation: "This is incorrect. 'Buses' follows standard plural rules by adding 'es.'" }
+        ],
+        correctAnswer: "Children"
+      },
+      {
+        id: 220,
+        question: "Which sentence contains a correctly used possessive pronoun?",
+        answers: [
+          { answer: "The dog wagged it's tail.", explanation: "This is incorrect. 'It's' is a contraction meaning 'it is,' not a possessive pronoun." },
+          { answer: "The dog wagged its tail.", explanation: "Correct! 'Its' is the correct possessive form of 'it.'" },
+          { answer: "The cat licked it's paw.", explanation: "This is incorrect. 'It's' is a contraction, not the possessive form." },
+          { answer: "The bird flapped its' wings.", explanation: "This is incorrect. 'Its' never has an apostrophe when showing possession." }
+        ],
+        correctAnswer: "The dog wagged its tail."
+      },
+      {
+        id: 221,
+        question: "Which sentence correctly uses a colon?",
+        answers: [
+          { answer: "I need to buy the following items: milk, bread, and eggs.", explanation: "Correct! The colon is used to introduce a list of items." },
+          { answer: "I need: milk, bread, and eggs.", explanation: "This is incorrect. A colon is used to introduce a complete sentence or list, not just after 'need.'" },
+          { answer: "I need to buy: milk, bread, and eggs.", explanation: "This is incorrect. The colon is unnecessary here and breaks the sentence unnaturally." },
+          { answer: "I need to buy milk: bread and eggs.", explanation: "This is incorrect. The colon should come after a complete idea or list." }
+        ],
+        correctAnswer: "I need to buy the following items: milk, bread, and eggs."
+      },
+      {
+        id: 222,
+        question: "Which of the following sentences contains a compound sentence?",
+        answers: [
+          { answer: "She likes coffee, and he likes tea.", explanation: "Correct! This is a compound sentence because it contains two independent clauses joined by a conjunction." },
+          { answer: "She likes coffee and tea.", explanation: "This is incorrect. This is a simple sentence with two objects, not a compound sentence." },
+          { answer: "While she likes coffee, he prefers tea.", explanation: "This is incorrect. This is a complex sentence, not a compound sentence, because it includes a dependent clause." },
+          { answer: "She likes coffee. He likes tea.", explanation: "This is incorrect. While it's made up of two independent clauses, it doesn't use a conjunction, so it's just two simple sentences." }
+        ],
+        correctAnswer: "She likes coffee, and he likes tea."
+      },
+      {
+        id: 223,
+        question: "Which sentence contains an example of an adverb?",
+        answers: [
+          { answer: "She runs quickly in the race.", explanation: "Correct! 'Quickly' is an adverb modifying the verb 'runs.'" },
+          { answer: "She runs the race.", explanation: "This is incorrect. 'Runs' is the verb, but there is no adverb modifying it." },
+          { answer: "She quickly runs the race.", explanation: "This is incorrect. 'Quickly' is an adverb, but the structure of the sentence makes it less clear that it modifies 'runs.'" },
+          { answer: "She is the fastest runner.", explanation: "This is incorrect. 'Fastest' is an adjective modifying 'runner,' not an adverb." }
+        ],
+        correctAnswer: "She runs quickly in the race."
+      },
+      {
+        id: 224,
+        question: "Which sentence correctly uses a comparative adjective?",
+        answers: [
+          { answer: "This exam is more harder than the last one.", explanation: "This is incorrect. The word 'harder' is already a comparative form, so 'more' should be omitted." },
+          { answer: "This exam is harder than the last one.", explanation: "Correct! 'Harder' is a comparative adjective used to compare two things." },
+          { answer: "This exam is most harder than the last one.", explanation: "This is incorrect. 'Most' is used with superlative adjectives, not comparative ones like 'harder.'" },
+          { answer: "This exam is the harder than the last one.", explanation: "This is incorrect. 'The' is used for superlatives, but this sentence is comparing two things, so it should use 'harder.'" }
+        ],
+        correctAnswer: "This exam is harder than the last one."
+      },
+      {
+        id: 225,
+        question: "Which word is an example of a conjunction?",
+        answers: [
+          { answer: "And", explanation: "Correct! 'And' is a coordinating conjunction used to connect words or phrases." },
+          { answer: "Quickly", explanation: "This is incorrect. 'Quickly' is an adverb, not a conjunction." },
+          { answer: "House", explanation: "This is incorrect. 'House' is a noun, not a conjunction." },
+          { answer: "Beautiful", explanation: "This is incorrect. 'Beautiful' is an adjective, not a conjunction." }
+        ],
+        correctAnswer: "And"
+      },
+      {
+        id: 226,
+        question: "Which of these sentences contains a dangling modifier?",
+        answers: [
+          { answer: "After studying the lesson, I took the test.", explanation: "This is incorrect. The sentence is clear and doesn't contain a dangling modifier." },
+          { answer: "Hiking in the mountains, the view was amazing.", explanation: "Correct! This sentence contains a dangling modifier, implying that 'the view' was hiking." },
+          { answer: "I took the test after studying the lesson.", explanation: "This is incorrect. The sentence is clear and doesn't contain a dangling modifier." },
+          { answer: "The view from the mountain was amazing after hiking.", explanation: "This is incorrect. The sentence is grammatically correct, and the modifier is properly placed." }
+        ],
+        correctAnswer: "Hiking in the mountains, the view was amazing."
+      },
+      {
+        id: 227,
+        question: "Which sentence uses the correct form of 'there'?",
+        answers: [
+          { answer: "Their going to the party later.", explanation: "This is incorrect. 'Their' is possessive, while the correct word should be 'they're' (contraction of 'they are')." },
+          { answer: "They're going to the party later.", explanation: "Correct! 'They're' is the correct contraction of 'they are.'" },
+          { answer: "There going to the party later.", explanation: "This is incorrect. 'There' refers to a place or location, but this sentence requires 'they're'." },
+          { answer: "There are going to the party later.", explanation: "This is incorrect. The correct word should be 'they're' for the contraction of 'they are.'" }
+        ],
+        correctAnswer: "They're going to the party later."
+      },
+      {
+        id: 228,
+        question: "Which of the following sentences contains a complex sentence?",
+        answers: [
+          { answer: "I love playing basketball, and I also enjoy soccer.", explanation: "This is incorrect. This is a compound sentence, not a complex one, because both clauses are independent." },
+          { answer: "Although I love playing basketball, I also enjoy soccer.", explanation: "Correct! This is a complex sentence, with a dependent clause ('Although I love playing basketball') and an independent clause." },
+          { answer: "I love playing basketball and soccer.", explanation: "This is incorrect. This is a simple sentence because it contains only one independent clause." },
+          { answer: "I love playing basketball, but I don't like soccer.", explanation: "This is incorrect. This is a compound sentence, not a complex one, because both clauses are independent." }
+        ],
+        correctAnswer: "Although I love playing basketball, I also enjoy soccer."
+      },
+      {
+        id: 229,
+        question: "Which of the following sentences correctly uses 'who' and 'whom'?",
+        answers: [
+          { answer: "I met a person who I admire.", explanation: "Correct! 'Who' is used here because it functions as the subject of the clause." },
+          { answer: "I met a person whom I admire.", explanation: "This is incorrect. 'Whom' is used for objects, not subjects, so 'who' is more appropriate here." },
+          { answer: "I admire who she is.", explanation: "This is incorrect. 'Who' is used as the subject, but here 'whom' would be more appropriate because it's the object of the verb 'admire.'" },
+          { answer: "I admire whom she is.", explanation: "This is incorrect. 'Whom' is the object, but the sentence should use 'who' as the subject of the clause." }
+        ],
+        correctAnswer: "I met a person who I admire."
+      },
+      {
+        id: 230,
+        question: "Which of these sentences uses a preposition correctly?",
+        answers: [
+          { answer: "I walked under the park.", explanation: "This is incorrect. The preposition 'under' doesn't correctly fit with 'the park.' A more appropriate phrase would be 'through the park.'" },
+          { answer: "I walked to the park.", explanation: "Correct! 'To' is the correct preposition showing direction toward a location." },
+          { answer: "I walked across the park.", explanation: "This is incorrect. While 'across' works, the sentence doesn't use a clear preposition of direction." },
+          { answer: "I walked in the park.", explanation: "This is incorrect. While it’s grammatically correct, 'in' is used more for locations than directions." }
+        ],
+        correctAnswer: "I walked to the park."
+      },
+      {
+        id: 231,
+        question: "Which of the following sentences is in the past perfect tense?",
+        answers: [
+          { answer: "I had finished my homework before the game started.", explanation: "Correct! 'Had finished' is the past perfect tense, indicating an action completed before another past action." },
+          { answer: "I finished my homework before the game started.", explanation: "This is incorrect. 'Finished' is in the simple past tense, not past perfect." },
+          { answer: "I have finished my homework before the game started.", explanation: "This is incorrect. 'Have finished' is present perfect, not past perfect." },
+          { answer: "I was finishing my homework before the game started.", explanation: "This is incorrect. 'Was finishing' is in the past continuous tense, not past perfect." }
+        ],
+        correctAnswer: "I had finished my homework before the game started."
+      },
+      {
+        id: 232,
+        question: "Which sentence contains a misplaced modifier?",
+        answers: [
+          { answer: "Running down the street, the bus was missed by Tom.", explanation: "Correct! The modifier 'running down the street' is placed incorrectly, making it sound like the bus was running." },
+          { answer: "Tom missed the bus while running down the street.", explanation: "This is incorrect. This sentence is correctly structured, with 'while running down the street' modifying Tom." },
+          { answer: "Tom, running down the street, missed the bus.", explanation: "This is incorrect. This sentence is correctly structured, and the modifier is correctly placed next to 'Tom.'" },
+          { answer: "While running down the street, Tom missed the bus.", explanation: "This is incorrect. This sentence is correctly structured and clear in its meaning." }
+        ],
+        correctAnswer: "Running down the street, the bus was missed by Tom."
+      },
+      {
+        id: 233,
+        question: "Which sentence correctly uses 'its' and 'it's'?",
+        answers: [
+          { answer: "The dog wagged its tail.", explanation: "Correct! 'Its' is the possessive form, showing that the tail belongs to the dog." },
+          { answer: "The dog wagged it's tail.", explanation: "This is incorrect. 'It's' is the contraction of 'it is' or 'it has,' not the possessive form." },
+          { answer: "The dog wagged its's tail.", explanation: "This is incorrect. The possessive form is 'its,' not 'its's.'" },
+          { answer: "It's dog wagged its tail.", explanation: "This is incorrect. The sentence uses 'it's' incorrectly, as it should refer to 'it is' or 'it has,' not the possessive form." }
+        ],
+        correctAnswer: "The dog wagged its tail."
+      },
+      {
+        id: 234,
+        question: "Which of these sentences contains a relative pronoun?",
+        answers: [
+          { answer: "The book that she gave me was fascinating.", explanation: "Correct! 'That' is a relative pronoun, introducing the clause 'that she gave me.'" },
+          { answer: "The book was fascinating.", explanation: "This is incorrect. There is no relative pronoun in this sentence." },
+          { answer: "She gave me the book.", explanation: "This is incorrect. The sentence does not contain a relative pronoun." },
+          { answer: "The book is fascinating which I read.", explanation: "This is incorrect. 'Which' is used as a relative pronoun, but the sentence structure is awkward." }
+        ],
+        correctAnswer: "The book that she gave me was fascinating."
+      },
+      {
+        id: 235,
+        question: "Which sentence correctly uses the semicolon?",
+        answers: [
+          { answer: "I have a test tomorrow; I need to study.", explanation: "Correct! The semicolon is used to join two closely related independent clauses." },
+          { answer: "I have a test tomorrow, I need to study.", explanation: "This is incorrect. A comma should not be used to join two independent clauses without a conjunction." },
+          { answer: "I have a test tomorrow: I need to study.", explanation: "This is incorrect. A colon is used to introduce a list or explanation, not to connect two independent clauses." },
+          { answer: "I have a test tomorrow. I need to study;", explanation: "This is incorrect. A semicolon should not be placed after 'study' in this structure." }
+        ],
+        correctAnswer: "I have a test tomorrow; I need to study."
+      },
+      {
+        id: 236,
+        question: "Which sentence correctly uses 'fewer' and 'less'?",
+        answers: [
+          { answer: "There are fewer cars on the road today.", explanation: "Correct! 'Fewer' is used with countable nouns, like 'cars.'" },
+          { answer: "There are less cars on the road today.", explanation: "This is incorrect. 'Less' is used for uncountable nouns, while 'fewer' is for countable nouns like 'cars.'" },
+          { answer: "There are less people here today.", explanation: "This is incorrect. 'Fewer' should be used with countable nouns like 'people.'" },
+          { answer: "There is fewer water in the bottle.", explanation: "This is incorrect. 'Water' is an uncountable noun, so 'less' should be used instead of 'fewer.'" }
+        ],
+        correctAnswer: "There are fewer cars on the road today."
+      },
+      {
+        id: 237,
+        question: "Which sentence contains a direct object?",
+        answers: [
+          { answer: "She read the book.", explanation: "Correct! 'The book' is the direct object, as it is what was read." },
+          { answer: "She reads every day.", explanation: "This is incorrect. 'Every day' is an adverbial phrase, not a direct object." },
+          { answer: "She is reading quietly.", explanation: "This is incorrect. There is no direct object in this sentence; 'quietly' is an adverb modifying the verb." },
+          { answer: "She is a student.", explanation: "This is incorrect. 'Student' is a predicate nominative, not a direct object." }
+        ],
+        correctAnswer: "She read the book."
+      },
+      {
+        id: 238,
+        question: "Which sentence correctly uses 'affect' and 'effect'?",
+        answers: [
+          { answer: "The weather will affect my plans for the weekend.", explanation: "Correct! 'Affect' is the verb, meaning to influence something." },
+          { answer: "The weather will effect my plans for the weekend.", explanation: "This is incorrect. 'Effect' is a noun, not a verb." },
+          { answer: "The effect of the weather will affect my plans.", explanation: "This is incorrect. The word 'effect' is correctly used as a noun, but the sentence could be clearer." },
+          { answer: "The affect of the weather will be felt tomorrow.", explanation: "This is incorrect. 'Affect' is a verb, and 'effect' should be used as the noun in this case." }
+        ],
+        correctAnswer: "The weather will affect my plans for the weekend."
+      },
+      {
+        id: 239,
+        question: "Which sentence contains a subordinating conjunction?",
+        answers: [
+          { answer: "I will go to the store after work.", explanation: "Correct! 'After' is a subordinating conjunction introducing the dependent clause 'after work.'" },
+          { answer: "I will go to the store, and I will buy groceries.", explanation: "This is incorrect. 'And' is a coordinating conjunction, not a subordinating one." },
+          { answer: "I will go to the store. I will buy groceries.", explanation: "This is incorrect. There is no conjunction in this sentence." },
+          { answer: "I will go to the store because I need groceries.", explanation: "This is incorrect. 'Because' is a subordinating conjunction, but the sentence structure is clearer in the first choice." }
+        ],
+        correctAnswer: "I will go to the store after work."
+      },
+      {
+        id: 240,
+        question: "Which sentence correctly uses a hyphen?",
+        answers: [
+          { answer: "This is a well-known fact.", explanation: "Correct! 'Well-known' is a compound adjective that correctly uses a hyphen to join the two words." },
+          { answer: "This is a well known fact.", explanation: "This is incorrect. A hyphen should be used to connect 'well' and 'known' when they function together as an adjective." },
+          { answer: "This is a well-known-fact.", explanation: "This is incorrect. A hyphen is not needed between 'well-known' and 'fact' in this case." },
+          { answer: "This is a well known-fact.", explanation: "This is incorrect. A hyphen is unnecessary between 'well' and 'known' here." }
+        ],
+        correctAnswer: "This is a well-known fact."
+      }
     ],
     hard: [
-      { id: 241, question: "What is an example of a metaphor?", answers: ["The wind whispered through the trees", "The cat meowed loudly", "The sky is blue", "The sun is shining brightly"], correctAnswer: "The wind whispered through the trees" },
-      // Additional hard English questions up to id 270
+      {
+        id: 241,
+        question: "Which sentence correctly uses the subjunctive mood?",
+        answers: [
+          { answer: "I wish I were taller.", explanation: "Correct! 'Were' is the correct form in the subjunctive mood, which expresses a wish or hypothetical situation." },
+          { answer: "I wish I was taller.", explanation: "This is incorrect. 'Was' is incorrect in the subjunctive mood, which requires 'were' for hypothetical or unreal situations." },
+          { answer: "I wish I am taller.", explanation: "This is incorrect. The subjunctive mood requires 'were,' not the present tense 'am.'" },
+          { answer: "I wish I will be taller.", explanation: "This is incorrect. The subjunctive mood does not use 'will be'; it should be 'were' for hypothetical situations." }
+        ],
+        correctAnswer: "I wish I were taller."
+      },
+      {
+        id: 242,
+        question: "Which of the following is an example of a conditional sentence in the third conditional?",
+        answers: [
+          { answer: "If I had known about the meeting, I would have attended.", explanation: "Correct! This is a third conditional sentence, which expresses a past hypothetical situation that didn't happen." },
+          { answer: "If I know about the meeting, I will attend.", explanation: "This is incorrect. This is a first conditional sentence, expressing a real future possibility." },
+          { answer: "If I knew about the meeting, I would attend.", explanation: "This is incorrect. This is a second conditional sentence, expressing a present hypothetical situation." },
+          { answer: "If I have known about the meeting, I would have attended.", explanation: "This is incorrect. The phrase 'have known' is not used in the third conditional. It should be 'had known.'" }
+        ],
+        correctAnswer: "If I had known about the meeting, I would have attended."
+      },
+      {
+        id: 243,
+        question: "Which sentence contains an example of an oxymoron?",
+        answers: [
+          { answer: "The silence was deafening.", explanation: "Correct! 'Silence' and 'deafening' are contradictory terms, which make up an oxymoron." },
+          { answer: "She was very quiet during the meeting.", explanation: "This is incorrect. There is no oxymoron here; the sentence is simply describing someone's quietness." },
+          { answer: "The noise was unbearable.", explanation: "This is incorrect. While it uses a strong adjective, 'unbearable' does not create a contradiction like an oxymoron does." },
+          { answer: "He was extremely loud for a shy person.", explanation: "This is incorrect. While this contrasts two ideas, it is not a direct contradiction of terms like an oxymoron." }
+        ],
+        correctAnswer: "The silence was deafening."
+      },
+      {
+        id: 244,
+        question: "Which of the following sentences is an example of an anacoluthon?",
+        answers: [
+          { answer: "I can’t believe she said that, and it completely ruined my day.", explanation: "Correct! An anacoluthon is a sentence that starts in one way but ends in another, creating a break in the structure." },
+          { answer: "I can’t believe she said that, and it ruined my day.", explanation: "This is incorrect. This sentence has a clear and logical structure, without a break or shift in thought." },
+          { answer: "I can't believe she said that because I told her not to.", explanation: "This is incorrect. This sentence is grammatically correct and does not exhibit an anacoluthon." },
+          { answer: "I can’t believe she said that; I didn’t even expect it.", explanation: "This is incorrect. Although there’s a shift in tone, the structure is still grammatically sound and not an example of an anacoluthon." }
+        ],
+        correctAnswer: "I can’t believe she said that, and it completely ruined my day."
+      },
+      {
+        id: 245,
+        question: "Which sentence uses the passive voice correctly?",
+        answers: [
+          { answer: "The book was read by the student.", explanation: "Correct! The sentence is in the passive voice because the subject ('the book') is acted upon by the agent ('the student')." },
+          { answer: "The student read the book.", explanation: "This is incorrect. This is an active voice sentence, where the subject ('the student') performs the action." },
+          { answer: "The book read the student.", explanation: "This is incorrect. This sentence is grammatically incorrect as the subject and object are incorrectly placed." },
+          { answer: "The book is reading by the student.", explanation: "This is incorrect. The verb 'is reading' does not work in the passive voice. It should be 'is read by the student.'" }
+        ],
+        correctAnswer: "The book was read by the student."
+      },
+      {
+        id: 246,
+        question: "Which sentence correctly uses a gerund as the subject?",
+        answers: [
+          { answer: "Swimming is my favorite hobby.", explanation: "Correct! 'Swimming' is a gerund and acts as the subject of the sentence." },
+          { answer: "I enjoy swimming in the lake.", explanation: "This is incorrect. 'Swimming' is a gerund here, but it functions as the object of the verb 'enjoy'." },
+          { answer: "She was swimming in the lake.", explanation: "This is incorrect. 'Swimming' is still a gerund, but it is part of the progressive verb 'was swimming.'" },
+          { answer: "We went swimming in the lake.", explanation: "This is incorrect. 'Swimming' is a gerund, but it is the object of the verb 'went.'" }
+        ],
+        correctAnswer: "Swimming is my favorite hobby."
+      },
+      {
+        id: 247,
+        question: "Which sentence correctly uses the past perfect progressive tense?",
+        answers: [
+          { answer: "She had been studying for hours before the test.", explanation: "Correct! The past perfect progressive tense is used to describe an action that was ongoing in the past before another action occurred." },
+          { answer: "She was studying for hours before the test.", explanation: "This is incorrect. This is past continuous tense, not past perfect progressive." },
+          { answer: "She studied for hours before the test.", explanation: "This is incorrect. This is simple past tense, not past perfect progressive." },
+          { answer: "She has been studying for hours before the test.", explanation: "This is incorrect. 'Has been' is used for present perfect progressive, not past perfect progressive." }
+        ],
+        correctAnswer: "She had been studying for hours before the test."
+      },
+      {
+        id: 248,
+        question: "Which sentence is an example of metonymy?",
+        answers: [
+          { answer: "The White House issued a statement on the issue.", explanation: "Correct! 'The White House' is used as a metonymy for the president or the government, standing in for the actual subject." },
+          { answer: "The government is responsible for the new policy.", explanation: "This is incorrect. This sentence uses 'government' directly, not as a metonymy." },
+          { answer: "The crown will find a new heir.", explanation: "This is incorrect. This is an example of synecdoche, where 'crown' represents a monarch, not metonymy." },
+          { answer: "The ball was passed to him.", explanation: "This is incorrect. This sentence does not use metonymy; it's simply a literal statement about a ball being passed." }
+        ],
+        correctAnswer: "The White House issued a statement on the issue."
+      },
+      {
+        id: 249,
+        question: "Which sentence correctly uses an appositive?",
+        answers: [
+          { answer: "My brother, the doctor, is coming over tonight.", explanation: "Correct! 'The doctor' is an appositive that provides additional information about 'my brother.'" },
+          { answer: "My brother is coming over, the doctor.", explanation: "This is incorrect. The appositive should come immediately after the noun it describes, not after a comma." },
+          { answer: "My brother, who is a doctor, is coming over tonight.", explanation: "This is incorrect. While this sentence includes a relative clause, it is not an appositive." },
+          { answer: "The doctor, my brother, is coming over tonight.", explanation: "This is incorrect. While this sentence is grammatically correct, the appositive should describe the subject of the sentence (my brother), not 'the doctor.'" }
+        ],
+        correctAnswer: "My brother, the doctor, is coming over tonight."
+      },
+      {
+        id: 250,
+        question: "Which sentence uses parallel structure correctly?",
+        answers: [
+          { answer: "She enjoys reading, swimming, and to run.", explanation: "This is incorrect. The sentence contains a mix of gerund ('reading', 'swimming') and infinitive ('to run') forms. Parallel structure requires consistency in form." },
+          { answer: "She enjoys reading, swimming, and running.", explanation: "Correct! This sentence uses parallel structure, with all the elements being gerunds." },
+          { answer: "She enjoys to read, swimming, and running.", explanation: "This is incorrect. 'To read' breaks the parallel structure, as the other items are gerunds." },
+          { answer: "She enjoys read, swimming, and to run.", explanation: "This is incorrect. 'Read' should be 'reading' to maintain parallel structure." }
+        ],
+        correctAnswer: "She enjoys reading, swimming, and running."
+      },
+      {
+        id: 251,
+        question: "Which of the following sentences contains a misplaced modifier?",
+        answers: [
+          { answer: "Running quickly, she passed the finish line.", explanation: "This is incorrect. The modifier 'running quickly' correctly describes 'she.'" },
+          { answer: "She passed the finish line running quickly.", explanation: "This is incorrect. The modifier 'running quickly' is placed correctly to describe 'she'." },
+          { answer: "Running quickly, the finish line was passed by her.", explanation: "Correct! The modifier 'running quickly' is misplaced, making it seem like the finish line was running quickly, not her." },
+          { answer: "She ran quickly, passing the finish line.", explanation: "This is incorrect. The modifier 'passing the finish line' is properly placed to describe her actions." }
+        ],
+        correctAnswer: "Running quickly, the finish line was passed by her."
+      },
+      {
+        id: 252,
+        question: "Which sentence is an example of an ellipsis?",
+        answers: [
+          { answer: "She was very tired after the long run...", explanation: "Correct! The ellipsis indicates that something is left unsaid or there is a trailing thought." },
+          { answer: "She was very tired after the long run.", explanation: "This is incorrect. There is no ellipsis here." },
+          { answer: "She was very tired, after the long run.", explanation: "This is incorrect. A comma is used, not an ellipsis, which would create a pause or trailing thought." },
+          { answer: "She was very tired, after running a marathon.", explanation: "This is incorrect. This sentence lacks an ellipsis and uses a comma instead." }
+        ],
+        correctAnswer: "She was very tired after the long run..."
+      },
+      {
+        id: 253,
+        question: "Which sentence demonstrates the correct use of a semi-colon?",
+        answers: [
+          { answer: "I have a meeting later; I’ll need to prepare.", explanation: "Correct! The semi-colon properly connects two independent clauses that are closely related." },
+          { answer: "I have a meeting later, I’ll need to prepare.", explanation: "This is incorrect. A comma should not be used to separate independent clauses. A semi-colon is needed." },
+          { answer: "I have a meeting later; and I’ll need to prepare.", explanation: "This is incorrect. A semi-colon is used to separate independent clauses, but the conjunction 'and' is unnecessary." },
+          { answer: "I have a meeting later. I’ll need to prepare.", explanation: "This is incorrect. While this sentence is grammatically correct, it lacks the semi-colon to connect closely related ideas." }
+        ],
+        correctAnswer: "I have a meeting later; I’ll need to prepare."
+      },
+      {
+        id: 254,
+        question: "Which sentence demonstrates correct use of an em dash?",
+        answers: [
+          { answer: "She was late—again—to the meeting.", explanation: "Correct! The em dash emphasizes the interruption or additional information." },
+          { answer: "She was late again—the meeting.", explanation: "This is incorrect. The em dash is not used properly here; it should not separate 'again' and 'the meeting.'" },
+          { answer: "She was late again—the meeting was starting.", explanation: "This is incorrect. The em dash is unnecessary here and makes the sentence awkward." },
+          { answer: "She was late again to—the meeting.", explanation: "This is incorrect. The placement of the em dash is incorrect and does not follow conventional usage." }
+        ],
+        correctAnswer: "She was late—again—to the meeting."
+      },
+      {
+        id: 255,
+        question: "Which sentence uses a restrictive relative clause?",
+        answers: [
+          { answer: "The book that I borrowed is on the table.", explanation: "Correct! 'That I borrowed' is a restrictive relative clause because it provides essential information about the noun 'book.'" },
+          { answer: "The book, which I borrowed, is on the table.", explanation: "This is incorrect. This is a non-restrictive relative clause, which provides additional, non-essential information." },
+          { answer: "The book, I borrowed, is on the table.", explanation: "This is incorrect. This is not a proper relative clause and makes the sentence grammatically incorrect." },
+          { answer: "The book which I borrowed is on the table.", explanation: "This is incorrect. Although 'which I borrowed' appears to be a relative clause, it lacks the defining role of a restrictive clause." }
+        ],
+        correctAnswer: "The book that I borrowed is on the table."
+      },
+      {
+        id: 256,
+        question: "Which of the following sentences uses a dangling modifier?",
+        answers: [
+          { answer: "Running late, I missed the bus.", explanation: "Correct! 'Running late' is a dangling modifier because it appears to describe the wrong noun, as it should describe the subject 'I'." },
+          { answer: "Running late, I caught the bus.", explanation: "This is incorrect. The sentence is clear, and 'Running late' describes the subject 'I'." },
+          { answer: "Running late, the bus was missed.", explanation: "This is incorrect. This sentence contains a misplaced modifier, but it is not a dangling modifier." },
+          { answer: "Running late, I was able to catch the bus.", explanation: "This is incorrect. The modifier 'Running late' properly describes the subject 'I'." }
+        ],
+        correctAnswer: "Running late, I missed the bus."
+      },
+      {
+        id: 257,
+        question: "Which sentence is an example of chiasmus?",
+        answers: [
+          { answer: "Ask not what your country can do for you, but what you can do for your country.", explanation: "Correct! Chiasmus is a rhetorical device where two phrases are balanced against each other in reverse order." },
+          { answer: "I came, I saw, I conquered.", explanation: "This is incorrect. While this is a famous phrase, it is not an example of chiasmus." },
+          { answer: "To be or not to be, that is the question.", explanation: "This is incorrect. This is a famous quote, but it is not a chiasmus." },
+          { answer: "The more you know, the better you do.", explanation: "This is incorrect. This is a simple comparison, not a chiasmus." }
+        ],
+        correctAnswer: "Ask not what your country can do for you, but what you can do for your country."
+      },
+      {
+        id: 258,
+        question: "Which sentence uses an indirect object correctly?",
+        answers: [
+          { answer: "I gave him a book.", explanation: "Correct! 'Him' is the indirect object, as it answers 'to whom' the book was given." },
+          { answer: "I gave a book him.", explanation: "This is incorrect. The indirect object 'him' should come after the verb and before the direct object 'a book.'" },
+          { answer: "I gave a book to him.", explanation: "This is incorrect. While this sentence is correct, the direct object and indirect object should be in the more typical order (i.e., 'I gave him a book')." },
+          { answer: "I gave a him book.", explanation: "This is incorrect. The sentence structure is wrong and doesn't properly use an indirect object." }
+        ],
+        correctAnswer: "I gave him a book."
+      },
+      {
+        id: 259,
+        question: "Which sentence uses an idiomatic expression correctly?",
+        answers: [
+          { answer: "It's time to face the music.", explanation: "Correct! 'Face the music' is an idiomatic expression meaning to confront the consequences of one's actions." },
+          { answer: "It's time to face the music loudly.", explanation: "This is incorrect. The expression 'face the music' should not be altered with adjectives like 'loudly.'" },
+          { answer: "It's time to sing along with the music.", explanation: "This is incorrect. This is not an idiomatic expression; it is a literal action." },
+          { answer: "It's time to play the music loud.", explanation: "This is incorrect. The phrase 'face the music' should not be changed in this way." }
+        ],
+        correctAnswer: "It's time to face the music."
+      },
+      {
+        id: 260,
+        question: "Which sentence demonstrates correct subject-verb agreement?",
+        answers: [
+          { answer: "Neither the teacher nor the students is ready for the test.", explanation: "This is incorrect. When two subjects are connected with 'nor,' the verb should agree with the second subject, in this case, 'students,' which is plural." },
+          { answer: "Neither the teacher nor the students are ready for the test.", explanation: "Correct! When 'nor' connects two subjects, the verb agrees with the subject closest to it, which is 'students,' a plural noun." },
+          { answer: "Neither the students nor the teacher is ready for the test.", explanation: "This is incorrect. The subject 'students' is plural, so the verb should be 'are'." },
+          { answer: "Neither the teacher or the students are ready for the test.", explanation: "This is incorrect. The conjunction 'or' is not typically used in this construction; 'nor' is the correct choice." }
+        ],
+        correctAnswer: "Neither the teacher nor the students are ready for the test."
+      },
+      {
+        id: 261,
+        question: "Which sentence contains a compound-complex sentence structure?",
+        answers: [
+          { answer: "I went to the store, and I bought some bread.", explanation: "This is incorrect. This is a compound sentence, but not complex, because it contains only two independent clauses." },
+          { answer: "Although I was tired, I went to the store, and I bought some bread.", explanation: "Correct! This is a compound-complex sentence, with a dependent clause ('Although I was tired') and two independent clauses ('I went to the store' and 'I bought some bread')." },
+          { answer: "I went to the store and bought some bread.", explanation: "This is incorrect. This is a simple sentence with two actions, not a compound-complex sentence." },
+          { answer: "Although I was tired, I went to the store.", explanation: "This is incorrect. This is a complex sentence, but it does not have two independent clauses." }
+        ],
+        correctAnswer: "Although I was tired, I went to the store, and I bought some bread."
+      },
+      {
+        id: 262,
+        question: "Which sentence uses a correlative conjunction correctly?",
+        answers: [
+          { answer: "Neither the rain nor the snow stopped us.", explanation: "Correct! 'Neither...nor' is a correct pair of correlative conjunctions, linking two subjects." },
+          { answer: "Neither the rain or the snow stopped us.", explanation: "This is incorrect. 'Neither...nor' is the correct correlative conjunction pair, not 'neither...or.'" },
+          { answer: "Either the rain nor the snow stopped us.", explanation: "This is incorrect. 'Either...or' is the correct pair, not 'either...nor.'" },
+          { answer: "Both the rain and snow stopped us.", explanation: "This is incorrect. Although this uses conjunctions, it's not correlative because it does not follow the 'both...and' structure." }
+        ],
+        correctAnswer: "Neither the rain nor the snow stopped us."
+      },
+      {
+        id: 263,
+        question: "Which sentence contains a restrictive relative clause?",
+        answers: [
+          { answer: "The man, who wore a red shirt, is my brother.", explanation: "This is incorrect. 'Who wore a red shirt' is a non-restrictive relative clause, providing additional information." },
+          { answer: "The man who wore a red shirt is my brother.", explanation: "Correct! 'Who wore a red shirt' is a restrictive relative clause, providing essential information to identify the man." },
+          { answer: "The man, whose shirt was red, is my brother.", explanation: "This is incorrect. 'Whose shirt was red' is a non-restrictive relative clause, providing additional information." },
+          { answer: "The man who is wearing a red shirt is my brother.", explanation: "This is incorrect. Although the clause 'who is wearing a red shirt' is restrictive, the sentence has a slight shift in meaning." }
+        ],
+        correctAnswer: "The man who wore a red shirt is my brother."
+      },
+      {
+        id: 264,
+        question: "Which sentence demonstrates correct use of a subjunctive mood?",
+        answers: [
+          { answer: "I wish I was taller.", explanation: "This is incorrect. In the subjunctive mood, the verb 'to be' should be 'were' instead of 'was' for hypothetical or contrary-to-fact situations." },
+          { answer: "I wish I were taller.", explanation: "Correct! 'Were' is used in the subjunctive mood to express hypothetical or contrary-to-fact situations." },
+          { answer: "I wish I am taller.", explanation: "This is incorrect. The subjunctive mood uses 'were' for hypothetical statements, not 'am'." },
+          { answer: "I wish I have been taller.", explanation: "This is incorrect. The subjunctive mood uses 'were' to express hypothetical situations, not 'have been.'" }
+        ],
+        correctAnswer: "I wish I were taller."
+      },
+      {
+        id: 265,
+        question: "Which sentence is an example of an absolute phrase?",
+        answers: [
+          { answer: "He ran quickly, his legs moving fast.", explanation: "This is incorrect. While the phrase is descriptive, it is not an absolute phrase." },
+          { answer: "His legs moving fast, he ran quickly.", explanation: "Correct! 'His legs moving fast' is an absolute phrase, which provides additional information about the subject 'he.'" },
+          { answer: "His legs fast, he ran quickly.", explanation: "This is incorrect. The phrase 'his legs fast' lacks the necessary structure to be an absolute phrase." },
+          { answer: "He ran quickly, his legs were fast.", explanation: "This is incorrect. The sentence uses a main clause and a relative clause, but not an absolute phrase." }
+        ],
+        correctAnswer: "His legs moving fast, he ran quickly."
+      },
+      {
+        id: 266,
+        question: "Which sentence contains an example of a dangling participle?",
+        answers: [
+          { answer: "Running quickly, I crossed the finish line.", explanation: "This is incorrect. The participle 'running quickly' is properly modifying 'I.'" },
+          { answer: "Running quickly, the finish line was crossed by me.", explanation: "Correct! The participle 'running quickly' is dangling, as it mistakenly modifies 'the finish line' instead of 'I.'" },
+          { answer: "Running quickly, I passed the finish line.", explanation: "This is incorrect. The participle 'running quickly' is correctly modifying 'I.'" },
+          { answer: "Running quickly, I passed by the finish line.", explanation: "This is incorrect. The participle 'running quickly' correctly modifies 'I.'" }
+        ],
+        correctAnswer: "Running quickly, the finish line was crossed by me."
+      },
+      {
+        id: 267,
+        question: "Which sentence demonstrates correct use of a colon?",
+        answers: [
+          { answer: "She had three goals: to run, to swim, and to bike.", explanation: "Correct! The colon introduces a list of items that clarify the preceding statement." },
+          { answer: "She had: three goals to run, to swim, and to bike.", explanation: "This is incorrect. The colon is incorrectly placed before the list, and it should come after 'three goals.'" },
+          { answer: "She had three goals to run: to swim, and to bike.", explanation: "This is incorrect. The colon is placed incorrectly and does not introduce the list properly." },
+          { answer: "She had three goals to run, to swim: and to bike.", explanation: "This is incorrect. The colon is improperly placed before 'and,' disrupting the flow." }
+        ],
+        correctAnswer: "She had three goals: to run, to swim, and to bike."
+      },
+      {
+        id: 268,
+        question: "Which sentence uses a gerund correctly?",
+        answers: [
+          { answer: "I enjoy swim in the pool.", explanation: "This is incorrect. The gerund should be 'swimming' to function correctly in this sentence." },
+          { answer: "I enjoy swimming in the pool.", explanation: "Correct! 'Swimming' is the correct gerund form of the verb 'to swim.'" },
+          { answer: "I enjoy to swim in the pool.", explanation: "This is incorrect. 'To swim' is an infinitive, not a gerund, so it does not fit the sentence structure." },
+          { answer: "I enjoy swam in the pool.", explanation: "This is incorrect. 'Swam' is the past tense, not the gerund form, so it does not fit grammatically." }
+        ],
+        correctAnswer: "I enjoy swimming in the pool."
+      },
+      {
+        id: 269,
+        question: "Which sentence correctly uses an ellipsis?",
+        answers: [
+          { answer: "She wanted to go to the park... but she was too tired.", explanation: "Correct! The ellipsis indicates a pause, as if the speaker is trailing off before finishing their thought." },
+          { answer: "She wanted to go to the park, but... she was too tired.", explanation: "This is incorrect. The ellipsis should not interrupt the conjunction 'but' in this sentence." },
+          { answer: "She wanted... to go to the park, but she was too tired.", explanation: "This is incorrect. The ellipsis is improperly placed, interrupting the flow of the sentence." },
+          { answer: "She wanted to go to the park, but she was... too tired.", explanation: "This is incorrect. The ellipsis is not needed in this context and disrupts the sentence's meaning." }
+        ],
+        correctAnswer: "She wanted to go to the park... but she was too tired."
+      },
+      {
+        id: 270,
+        question: "Which sentence contains a correct use of a past perfect verb tense?",
+        answers: [
+          { answer: "She had went to the store before the rain started.", explanation: "This is incorrect. The past perfect form of 'go' is 'gone,' not 'went.'" },
+          { answer: "She had gone to the store before the rain started.", explanation: "Correct! The past perfect verb 'had gone' indicates that the action was completed before another action in the past." },
+          { answer: "She went to the store before the rain started.", explanation: "This is incorrect. This is a simple past tense, not past perfect." },
+          { answer: "She will had gone to the store before the rain started.", explanation: "This is incorrect. The verb 'will had gone' is a mix of future tense and past perfect, which is incorrect." }
+        ],
+        correctAnswer: "She had gone to the store before the rain started."
+      }
     ]
   }
 };
