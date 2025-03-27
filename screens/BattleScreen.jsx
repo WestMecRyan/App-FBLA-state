@@ -9,6 +9,7 @@ import { loadGameState, saveGameState, completeTrainerEncounter } from "../utils
 import { SCHOOLS, getRandomEncounterForTrainer } from "../data/schools"
 import { playSound, playBgMusic, stopBgMusic } from "../utils/audio"
 import { calculateExpGain, getEvolution, calculateExpToNextLevel } from "../data/monsters"
+import { updateProgression } from "../utils/gameState";
 import { Ionicons } from "@expo/vector-icons"
 
 // Add this debugging function at the top of the component
@@ -439,10 +440,16 @@ export default function BattleScreen() {
   //   }, 2000)
   // }
 
-  const handleProblemAnswer = (correct) => {
+  const handleProblemAnswer = async (correct) => {
+    const gameState = await loadGameState();
+
     setWasAnswerCorrect(correct);
     setIsProcessingTurn(true);
     setBattleText(correct ? "Correct!" : "Incorrect!");
+
+    if (correct) {
+      updateProgression(gameState.settings.subject);
+    }
   };
 
   const handleContinue = async () => {
@@ -456,9 +463,10 @@ export default function BattleScreen() {
       // Proceed to the enemy's turn after a delay
       setTimeout(() => {
         handleEnemyTurn();
+        setIsProcessingTurn(false);
       }, 2000);
 
-      setIsProcessingTurn(false);
+      // setIsProcessingTurn(false);
       return;
     }
 

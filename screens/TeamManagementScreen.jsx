@@ -11,6 +11,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { loadGameState, healTeam } from '../utils/gameState';
+import { updateProgression } from "../utils/gameState";
 import { PROBLEMS } from '../data/problems';
 
 export default function TeamManagementScreen() {
@@ -36,7 +37,7 @@ export default function TeamManagementScreen() {
         const gameState = await loadGameState();
         const subject = gameState.settings?.subject || "math"; // Default to math if no subject is set
         const subjectProblems = PROBLEMS[subject] || PROBLEMS.math; // Default to math if subject doesn't exist
-        
+
         // Select a random problem from indices 0-29 (problems 1-30)
         const randomIndex = Math.floor(Math.random() * Math.min(30, subjectProblems.length));
         setCurrentProblem(subjectProblems[randomIndex]);
@@ -54,12 +55,16 @@ export default function TeamManagementScreen() {
 
   const handleHealAttempt = async (answer) => {
     if (answer === currentProblem.correctAnswer) {
+      const gameState = await loadGameState();
+
       setHealingInProgress(true);
       await healTeam();
       const updatedState = await loadGameState();
       setTeam(updatedState.playerTeam);
       setShowHealModal(false);
       setHealingInProgress(false);
+
+      updateProgression(gameState.settings.subject);
     } else {
       setHealingInProgress(false);
       setShowHealModal(false);
@@ -72,11 +77,11 @@ export default function TeamManagementScreen() {
 
     return (
       <View style={styles.healthBarContainer}>
-        <View 
+        <View
           style={[
             styles.healthBar,
             { width: `${percentage}%`, backgroundColor: barColor }
-          ]} 
+          ]}
         />
       </View>
     );
@@ -134,7 +139,7 @@ export default function TeamManagementScreen() {
             {currentProblem ? (
               <>
                 <Text style={styles.question}>{currentProblem.question}</Text>
-                
+
                 <View style={styles.answersContainer}>
                   {currentProblem.answers.map((answer, index) => (
                     <TouchableOpacity

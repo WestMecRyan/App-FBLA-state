@@ -78,9 +78,8 @@ export default function StarterSelectionScreen() {
                         <Text style={styles.starterType}>Type: {starter.type}</Text>
                         <Text style={styles.starterLevel}>Level: {starter.level}</Text>
 
-                        <View style={styles.movesContainer}>
+                        {/* <View style={styles.movesContainer}>
                             <Text style={styles.movesTitle}>Moves:</Text>
-                            {/* {starter.moves.slice(0, 2).map((move, index) => ( */}
                             <View style={styles.movesWrapper}>
                                 {starter.moves.map((move, index) => (
                                     <Text key={index} style={styles.moveText}>
@@ -88,7 +87,7 @@ export default function StarterSelectionScreen() {
                                     </Text>
                                 ))}
                             </View>
-                        </View>
+                        </View> */}
 
                         {selectedStarter?.id === starter.id && (
                             <View style={styles.selectedIndicator}>

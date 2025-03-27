@@ -131,7 +131,7 @@ export const MONSTERS = [
   {
     id: 32,
     name: "Gaialoth",
-    type: "science",
+    type: "Grass",
     baseHealth: 195,
     // image: require("../assets/monsters/einsteinium.png"),
     image: require('../assets/monsters/test-mon.png'),

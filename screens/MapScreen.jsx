@@ -14,6 +14,13 @@ export default function MapScreen() {
   const [completedEncounters, setCompletedEncounters] = useState([])
   const [showTrainers, setShowTrainers] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
+  const [progression, setProgression] = useState({
+    questionsAnswered: { math: 0, science: 0, english: 0 },
+    learningDays: [],
+  });
+
+  const totalTrainers = SCHOOLS.reduce((sum, school) => sum + school.trainers.length, 0); // Total number of trainers
+  const defeatedPercentage = Math.round((defeatedTrainers.length / totalTrainers) * 100); // Calculate percentage
 
   const handleBackPress = () => {
     return false
@@ -32,12 +39,23 @@ export default function MapScreen() {
 
   // Add a focus listener to reload progress when returning to this screen
   useEffect(() => {
+    const fetchProgression = async () => {
+      const gameState = await loadGameState();
+      setProgression(gameState.progression);
+      setDefeatedTrainers(gameState.defeatedTrainers || []);
+      setCompletedEncounters(gameState.completedEncounters || []);
+      console.log("Loaded progression:", gameState.progression);
+    };
+
+    fetchProgression();
+
     loadProgress()
 
     // Add a listener to reload progress when the screen comes into focus
     const unsubscribe = navigation.addListener("focus", () => {
       console.log("MapScreen focused, reloading progress")
-      loadProgress()
+      loadProgress();
+      fetchProgression();
     })
 
     return unsubscribe
@@ -197,6 +215,26 @@ export default function MapScreen() {
           </View>
         </View>
 
+
+        {/* Progression Bar */}
+        <View style={styles.progressionBar}>
+          <Text style={styles.progressionText}>
+            Math: {progression.questionsAnswered.math} | Science:{" "}
+            {progression.questionsAnswered.science} | English:{" "}
+            {progression.questionsAnswered.english}
+          </Text>
+          <Text style={styles.progressionText}>
+            Days Spent Learning: {progression.learningDays.length}
+          </Text>
+
+          {/* Health-style Progression Bar */}
+          <View style={styles.progressionBarContainer}>
+            <View style={[styles.progressionBarFill, { width: `${defeatedPercentage}%` }]} />
+          </View>
+          <Text style={styles.progressionPercentage}>{defeatedPercentage}% Complete</Text>
+        </View>
+
+
         {/* Map Background */}
         <View style={styles.mapBackground}>
           <Image source={require("../assets/world-map.png")} style={styles.mapImage} resizeMode="cover" />
@@ -295,44 +333,44 @@ export default function MapScreen() {
                   <Text style={styles.shareButtonText}>Instagram</Text>
                 </TouchableOpacity> */}
 
-              <TouchableOpacity
-                style={styles.shareButton}
-                onPress={() => handleShare("instagram")}
-              >
-                <LinearGradient
-                  colors={['#f09433', '#e6683c', '#dc2743', '#cc2366', '#bc1888']}
-                  start={{ x: 0.0, y: 0.0 }}
-                  end={{ x: 1.0, y: 1.0 }}
-                  style={styles.instagramGradient}
+                <TouchableOpacity
+                  style={styles.shareButton}
+                  onPress={() => handleShare("instagram")}
                 >
-                  <Ionicons name="logo-instagram" size={24} color="#FFF" />
-                  <Text style={styles.shareButtonText}>Share on Instagram</Text>
-                </LinearGradient>
-              </TouchableOpacity>
+                  <LinearGradient
+                    colors={['#f09433', '#e6683c', '#dc2743', '#cc2366', '#bc1888']}
+                    start={{ x: 0.0, y: 0.0 }}
+                    end={{ x: 1.0, y: 1.0 }}
+                    style={styles.instagramGradient}
+                  >
+                    <Ionicons name="logo-instagram" size={24} color="#FFF" />
+                    <Text style={styles.shareButtonText}>Share on Instagram</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[styles.shareButton, styles.twitterButton]}
-                onPress={() => handleShare("twitter")}
-              >
-                <Ionicons name="logo-twitter" size={24} color="#FFF" />
-                <Text style={styles.shareButtonText}>Share on X</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.shareButton, styles.twitterButton]}
+                  onPress={() => handleShare("twitter")}
+                >
+                  <Ionicons name="logo-twitter" size={24} color="#FFF" />
+                  <Text style={styles.shareButtonText}>Share on X</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[styles.shareButton, styles.facebookButton]}
-                onPress={() => handleShare("facebook")}
-              >
-                <Ionicons name="logo-facebook" size={24} color="#FFF" />
-                <Text style={styles.shareButtonText}>Share on Facebook</Text>
+                <TouchableOpacity
+                  style={[styles.shareButton, styles.facebookButton]}
+                  onPress={() => handleShare("facebook")}
+                >
+                  <Ionicons name="logo-facebook" size={24} color="#FFF" />
+                  <Text style={styles.shareButtonText}>Share on Facebook</Text>
+                </TouchableOpacity>
+              </View>
+
+              <TouchableOpacity style={styles.cancelShareButton} onPress={() => setShowShareModal(false)}>
+                <Text style={styles.cancelShareText}>Cancel</Text>
               </TouchableOpacity>
             </View>
-
-            <TouchableOpacity style={styles.cancelShareButton} onPress={() => setShowShareModal(false)}>
-              <Text style={styles.cancelShareText}>Cancel</Text>
-            </TouchableOpacity>
           </View>
-      </View>
-    </Modal>
+        </Modal>
       </View >
     </SafeAreaView >
   )
@@ -575,6 +613,34 @@ const styles = StyleSheet.create({
     color: "#666",
     textAlign: "center",
     // fontWeight: "bold",
+    fontFamily: "pixel-font",
+  },
+  progressionBar: {
+    backgroundColor: "#333",
+    padding: 10,
+    alignItems: "center",
+  },
+  progressionText: {
+    color: "#FFF",
+    fontSize: 14,
+    fontFamily: "pixel-font",
+  },
+  progressionBarContainer: {
+    width: "90%",
+    height: 20,
+    backgroundColor: "#555",
+    borderRadius: 10,
+    marginTop: 10,
+    overflow: "hidden",
+  },
+  progressionBarFill: {
+    height: "100%",
+    backgroundColor: "#4CAF50",
+  },
+  progressionPercentage: {
+    color: "#FFF",
+    fontSize: 12,
+    marginTop: 5,
     fontFamily: "pixel-font",
   },
 })

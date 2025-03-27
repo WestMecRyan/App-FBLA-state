@@ -223,8 +223,38 @@ export const getInitialGameState = () => {
       difficulty: "normal",
       subject: "math", 
     },
+    progression: {
+      questionsAnswered: {
+        math: 0,
+        science: 0,
+        english: 0,
+      },
+      learningDays: [],
+    },
   }
 }
+
+export const updateProgression = async (subject) => {
+  try {
+    const gameState = await loadGameState();
+    const currentDate = new Date().toISOString().split("T")[0]; // Get the current date in YYYY-MM-DD format
+
+    // Update the number of questions answered for the given subject
+    if (gameState.progression.questionsAnswered[subject] !== undefined) {
+      gameState.progression.questionsAnswered[subject] += 1;
+    }
+
+    // Add the current date to the learningDays array if it's not already there
+    if (!gameState.progression.learningDays.includes(currentDate)) {
+      gameState.progression.learningDays.push(currentDate);
+    }
+
+    // Save the updated game state
+    await saveGameState(gameState);
+  } catch (error) {
+    console.error("Error updating progression:", error);
+  }
+};
 
 // Default game state with a starter monster
 const DEFAULT_GAME_STATE = getInitialGameState()
