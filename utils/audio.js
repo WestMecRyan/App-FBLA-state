@@ -11,6 +11,9 @@ const sounds = {
   faint: require('../assets/sounds/faint.mp3'),
   question: require('../assets/sounds/question.mp3'),
   click: require('../assets/sounds/click.mp3'),
+  levelUp: require('../assets/sounds/level-up.mp3'),
+  evolution: require('../assets/sounds/evolution.mp3'),
+  capture: require('../assets/sounds/capture.mp3'),
 };
 
 const music = {
@@ -19,10 +22,12 @@ const music = {
   battle2: require('../assets/music/battle-2.mp3'),
   battle3: require('../assets/music/battle-3.mp3'),
   map: require('../assets/music/map.mp3'),
+  healCenter: require('../assets/music/heal-center.mp3'),
 };
 
 let bgMusic = null;
-let currentMusicName = null; 
+let currentMusicName = null;
+let activeSound = null; // Track the currently playing sound effect
 
 let settingsChangeListeners = [];
 
@@ -39,7 +44,7 @@ export const addSettingsChangeListener = (listener) => {
 export const notifySettingsChanged = async () => {
   const gameState = await loadGameState();
   const musicEnabled = gameState.settings?.musicEnabled !== false;
-  
+
   // If music setting changed and we have active music
   if (bgMusic && currentMusicName) {
     if (!musicEnabled) {
@@ -50,9 +55,22 @@ export const notifySettingsChanged = async () => {
       await resumeBgMusic();
     }
   }
-  
+
   // Notify all listeners about the change
   settingsChangeListeners.forEach(listener => listener(gameState.settings));
+};
+
+export const stopSound = async () => {
+  try {
+    if (activeSound) {
+      console.log("Stopping sound effect");
+      await activeSound.stopAsync();
+      await activeSound.unloadAsync();
+      activeSound = null; // Clear the reference to the sound
+    }
+  } catch (error) {
+    console.error("Failed to stop sound effect:", error);
+  }
 };
 
 export const playSound = async (soundName, volume = 1.0) => {
@@ -70,7 +88,11 @@ export const playSound = async (soundName, volume = 1.0) => {
       return;
     }
 
+    // Stop any currently playing sound effect
+    await stopSound();
+
     const { sound } = await Audio.Sound.createAsync(sounds[soundName]);
+    activeSound = sound; // Track the currently playing sound
     await sound.setVolumeAsync(volume); // Set the volume
     await sound.playAsync();
 
@@ -78,6 +100,7 @@ export const playSound = async (soundName, volume = 1.0) => {
     sound.setOnPlaybackStatusUpdate((status) => {
       if (status.didJustFinish) {
         sound.unloadAsync();
+        activeSound = null; // Clear the reference when the sound finishes
       }
     });
   } catch (error) {

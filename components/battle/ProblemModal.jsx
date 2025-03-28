@@ -48,41 +48,6 @@ export default function ProblemModal({ visible, problem, onAnswer, onContinue })
 
   if (!problem) return null
 
-  // return (
-  //   <Modal visible={visible} transparent={true} animationType="slide">
-  //     <View style={styles.modalContainer}>
-  //       <View style={styles.modalContent}>
-  //         <Text style={styles.questionTitle}>Answer this question:</Text>
-  //         <Text style={styles.questionText}>{problem.question}</Text>
-
-  //         <View style={styles.answersContainer}>
-  //           {shuffledAnswers && shuffledAnswers.length > 0 ? (
-  //             shuffledAnswers.map((answer, index) => (
-  //               <TouchableOpacity key={index} style={styles.answerButton} onPress={() => onAnswer(answer.isCorrect)}>
-  //                 <Text style={styles.answerText}>{answer.text}</Text>
-  //               </TouchableOpacity>
-  //             ))
-  //           ) : (
-  //             // Fallback if shuffling fails
-  //             <>
-  //               <TouchableOpacity style={styles.answerButton} onPress={() => onAnswer(true)}>
-  //                 <Text style={styles.answerText}>{problem.correctAnswer}</Text>
-  //               </TouchableOpacity>
-  //               {problem.wrongAnswers &&
-  //                 problem.wrongAnswers.map((answer, index) => (
-  //                   <TouchableOpacity key={index} style={styles.answerButton} onPress={() => onAnswer(false)}>
-  //                     <Text style={styles.answerText}>{answer}</Text>
-  //                   </TouchableOpacity>
-  //                 ))}
-  //             </>
-  //           )}
-  //         </View>
-  //       </View>
-  //     </View>
-  //   </Modal>
-  // )
-
-
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
       <View style={styles.modalContainer}>
@@ -111,7 +76,6 @@ export default function ProblemModal({ visible, problem, onAnswer, onContinue })
               </TouchableOpacity>
             </>
           ) : (
-            // Show question and answers initially
             <>
               <Text style={styles.questionTitle}>Answer this question:</Text>
               <Text style={styles.questionText}>{problem.question}</Text>

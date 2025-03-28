@@ -7,7 +7,7 @@ import ProblemModal from "../components/battle/ProblemModal"
 import BattleText from "../components/battle/BattleText"
 import { loadGameState, saveGameState, completeTrainerEncounter } from "../utils/gameState"
 import { SCHOOLS, getRandomEncounterForTrainer } from "../data/schools"
-import { playSound, playBgMusic, stopBgMusic } from "../utils/audio"
+import { playSound, playBgMusic, stopBgMusic, stopSound, pauseBgMusic, resumeBgMusic } from "../utils/audio"
 import { calculateExpGain, getEvolution, calculateExpToNextLevel } from "../data/monsters"
 import { updateProgression } from "../utils/gameState"
 import { Ionicons } from "@expo/vector-icons"
@@ -103,7 +103,7 @@ export default function BattleScreen() {
 
   const handleBackPress = () => {
     if (isBattleOver) {
-      navigation.goBack()
+      // navigation.goBack()
       return true
     }
     return false
@@ -123,7 +123,7 @@ export default function BattleScreen() {
           setBackgroundImage(require("../assets/battle-bg-water.jpg"));
           break;
         default:
-          setBackgroundImage(require("../assets/battle-bg-grass.jpg")); 
+          setBackgroundImage(require("../assets/battle-bg-grass.jpg"));
       }
     } else {
       setBackgroundImage(require("../assets/battle-bg-grass.jpg"));
@@ -135,13 +135,13 @@ export default function BattleScreen() {
     if (school) {
       const trainerIndex = school.trainers.findIndex((t) => t.id === trainerId);
       if (trainerIndex === 0) {
-        playSound("battle1");
+        playBgMusic("battle1", 0.1);
       } else if (trainerIndex === 1) {
-        playSound("battle2");
+        playBgMusic("battle2", 0.1);
       } else if (trainerIndex === 2) {
-        playSound("battle3");
+        playBgMusic("battle3", 0.1);
       } else {
-        playSound("battle1");
+        playBgMusic("battle1", 0.1);
       }
     }
   }, [schoolId, trainerId]);
@@ -311,7 +311,7 @@ export default function BattleScreen() {
     if (availableProblems.length === 1) {
       setCurrentProblem(availableProblems[0]);
       setPreviousProblemId(availableProblems[0].id);
-      playSound("question");
+      playSound("question", 0.2);
       return;
     }
 
@@ -329,7 +329,7 @@ export default function BattleScreen() {
 
     // Set the current problem and play sound
     setCurrentProblem(selectedProblem);
-    playSound("question");
+    playSound("question", 0.2);
   };
 
   const checkTeamHealth = async () => {
@@ -392,25 +392,26 @@ export default function BattleScreen() {
     setBattleText(correct ? "Correct!" : "Incorrect!");
 
     if (correct) {
+      playSound("correctAnswer", 0.3);
       updateProgression(gameState.settings.subject);
+    } else {
+      playSound("wrongAnswer", 0.3);
     }
   };
 
   const handleContinue = async () => {
+    playSound("click", 0.3);
     setCurrentProblem(null); // Close the problem modal
 
     // If the answer was incorrect, skip the player's attack and proceed to the enemy's turn
     if (!wasAnswerCorrect) {
-      playSound("wrongAnswer");
       setBattleText("The attack missed!");
 
       // Proceed to the enemy's turn after a delay
       setTimeout(() => {
         handleEnemyTurn();
-        setIsProcessingTurn(false);
       }, 2000);
 
-      // setIsProcessingTurn(false);
       return;
     }
 
@@ -439,7 +440,6 @@ export default function BattleScreen() {
       const damage = calculateDamage(currentActiveMonster, enemyMonster, move);
       console.log("Player Damage: ", damage);
 
-      // Different HP handling for random encounters vs trainer battles
       let newEnemyHealth;
       if (isRandomBattle) {
         // For random encounters, stop at 1 HP to allow catching
@@ -456,6 +456,10 @@ export default function BattleScreen() {
       }).start();
 
       enemyMonster.health = newEnemyHealth;
+
+      if (isRandomBattle && newEnemyHealth === 1) {
+        setShowCatchButton(true);
+      }
 
       let effectivenessText = "";
       if (typeBonus > 1) {
@@ -487,7 +491,7 @@ export default function BattleScreen() {
       handleEnemyTurn();
     }, 2000);
 
-    setIsProcessingTurn(false); // Allow the fight to continue
+    // setIsProcessingTurn(false); // Allow the fight to continue
   };
 
   // Fix the player damage animation by implementing it directly in BattleScreen
@@ -601,7 +605,7 @@ export default function BattleScreen() {
       playerHealthAnim.setValue(monsterFromTeam.health)
       playerExpAnim.setValue(monsterFromTeam.exp || 0)
       setBattleText(`Go, ${monsterFromTeam.name}!`)
-      playSound("switch")
+      playSound("switch", 0.2)
 
       // End swap animation after a delay
       setTimeout(() => {
@@ -623,14 +627,13 @@ export default function BattleScreen() {
     // Start capture animation
     setIsCaptureAnimation(true)
     setBattleText(`Throwing a capture ball at ${enemyMonster.name}...`)
-    playSound("capture")
 
     // Wait for the capture animation to complete
     await new Promise((resolve) => setTimeout(resolve, 3000))
 
     // Monster is caught!
     setBattleText(`${enemyMonster.name} has been caught!`)
-    playSound("captureSuccess")
+    playSound("capture", 0.5)
 
     // Add the caught monster to the player's team
     try {
@@ -725,9 +728,9 @@ export default function BattleScreen() {
       leveledUp = true
 
       // Check for evolution
-      const evolution = getEvolution(updatedMonster.uniqueId, updatedMonster.level)
+      const evolution = getEvolution(updatedMonster.id, updatedMonster.level); // Use `id` instead of `uniqueId`
       if (evolution) {
-        const newMaxHealth = Math.floor(evolution.baseHealth * (1 + (updatedMonster.level - 1) * 0.1))
+        const newMaxHealth = Math.floor(evolution.baseHealth * (1 + (updatedMonster.level - 1) * 0.1));
         evolvedMonster = {
           ...evolution,
           level: updatedMonster.level,
@@ -735,13 +738,13 @@ export default function BattleScreen() {
           expToNextLevel: updatedMonster.expToNextLevel,
           health: newMaxHealth, // Set health to full with new max health
           maxHealth: newMaxHealth,
-        }
+        };
 
         // Update the evolved monster in the team
-        updatedTeam[activeMonsterIndex] = evolvedMonster
+        updatedTeam[activeMonsterIndex] = evolvedMonster;
       } else {
-        // If no evolution, update the leveled up monster in the team
-        updatedTeam[activeMonsterIndex] = updatedMonster
+        // If no evolution, update the leveled-up monster in the team
+        updatedTeam[activeMonsterIndex] = updatedMonster;
       }
     }
 
@@ -766,20 +769,23 @@ export default function BattleScreen() {
 
     // Show appropriate messages
     setTimeout(() => {
+      // playSound("expGain", 0.5);
       setBattleText(`${currentActiveMonster.name} gained ${expGained} EXP!`)
-      playSound("expGain")
 
       setTimeout(() => {
         if (evolvedMonster) {
           setBattleText(`${currentActiveMonster.name} is evolving into ${evolvedMonster.name}!`)
-          playSound("evolution")
+          pauseBgMusic()
+          playSound("evolution", 0.5)
 
           // Start evolution animation
           setIsEvolving(true)
 
           // After animation completes, update the active monster
           setTimeout(() => {
+            stopSound("evolution")
             setIsEvolving(false)
+            resumeBgMusic();
             setActiveMonster(evolvedMonster)
             activeMonsterRef.current = evolvedMonster // Update the ref
             playerHealthAnim.setValue(evolvedMonster.health)
@@ -791,7 +797,7 @@ export default function BattleScreen() {
           }, 5000) // Evolution animation duration
         } else if (leveledUp) {
           setBattleText(`${currentActiveMonster.name} leveled up to level ${updatedMonster.level}!`)
-          playSound("levelUp")
+          playSound("levelUp", 0.3)
 
           // Update active monster
           setActiveMonster(updatedMonster)
@@ -853,7 +859,7 @@ export default function BattleScreen() {
       setTimeout(() => {
         setEnemyMonster(freshNextMonster)
         setBattleText(`${enemyTrainer?.name} sent out ${freshNextMonster.name}!`)
-        playSound("switch")
+        playSound("switch", 0.2)
         setIsProcessingTurn(false)
       }, 100)
     } else {
@@ -897,7 +903,7 @@ export default function BattleScreen() {
         playerHealthAnim.setValue(nextMonster.health)
         playerExpAnim.setValue(nextMonster.exp || 0)
         setBattleText(`Go, ${nextMonster.name}!`)
-        playSound("switch")
+        playSound("switch", 0.2)
         setIsProcessingTurn(false)
       }, 2000)
     } else {
@@ -910,8 +916,9 @@ export default function BattleScreen() {
   }
 
   const handleBattleWin = async () => {
+    stopBgMusic()
     setBattleText(`You defeated ${enemyTrainer?.name}!`)
-    playSound("victory")
+    playSound("victory", 0.2)
 
     try {
       // Get the most up-to-date game state
@@ -974,12 +981,6 @@ export default function BattleScreen() {
       setIsBattleOver(true)
       setIsProcessingTurn(false)
 
-      // Add a message to indicate the player can battle this trainer again
-      if (!isRandomBattle) {
-        setTimeout(() => {
-          setBattleText(`You can battle ${enemyTrainer?.name} again for more experience!`)
-        }, 3000)
-      }
     } catch (error) {
       console.error("Error saving battle win:", error)
     }
@@ -989,7 +990,7 @@ export default function BattleScreen() {
   const handleBattleLoss = async () => {
     console.log("Battle lost - ending battle")
     setBattleText("You lost the battle...")
-    playSound("defeat")
+    playSound("defeat", 0.2)
 
     try {
       // Save the team state with fainted monsters
@@ -1020,9 +1021,9 @@ export default function BattleScreen() {
     setIsProcessingTurn(false)
 
     // Ensure we navigate back after a delay
-    setTimeout(() => {
-      navigation.goBack()
-    }, 3000)
+    // setTimeout(() => {
+    //   navigation.navigate("Map")
+    // }, 3000)
   }
 
   const calculateDamage = (attacker, defender, move) => {
@@ -1038,12 +1039,12 @@ export default function BattleScreen() {
 
   const getTypeBonus = (attackerType, defenderType) => {
     const typeChart = {
-      fire: { grass: 1.5, water: 0.75 },
-      water: { fire: 1.5, grass: 0.75 },
-      grass: { water: 1.5, fire: 0.75 },
-      math: { science: 1.5, language: 0.75 },
-      science: { language: 1.5, math: 0.75 },
-      language: { math: 1.5, science: 0.75 },
+      fire: { grass: 2, water: 0.5 },
+      water: { fire: 2, grass: 0.5 },
+      grass: { water: 2, fire: 0.5 },
+      math: { science: 2, language: 0.5 },
+      science: { language: 2, math: 0.5 },
+      language: { math: 2, science: 0.5 },
     }
     return typeChart[attackerType]?.[defenderType] || 1
   }
@@ -1101,7 +1102,9 @@ export default function BattleScreen() {
         message={battleText}
         onComplete={() => {
           if (isBattleOver) {
-            navigation.goBack()
+            setTimeout(() => {
+              navigation.goBack()
+            }, 2000);
           }
         }}
       />
@@ -1112,7 +1115,10 @@ export default function BattleScreen() {
         <MovesPanel
           monster={activeMonster}
           onMoveSelect={handleMoveSelect}
-          onSwitchPress={() => setShowSwitchModal(true)}
+          onSwitchPress={() => {
+            playSound("click", 0.3);
+            setShowSwitchModal(true)
+          }}
           onCatchPress={handleCatchMonster}
           showCatchButton={showCatchButton}
           disabled={!!currentProblem || isBattleOver || isProcessingTurn}
@@ -1159,6 +1165,7 @@ export default function BattleScreen() {
                       ]}
                       onPress={() => {
                         if (!isFainted && !isActive && !isProcessingTurn) {
+                          playSound("click", 0.3);
                           handleSwitchMonster(monster)
                         }
                       }}
@@ -1187,7 +1194,10 @@ export default function BattleScreen() {
             <View style={styles.stickyButtonContainer}>
               <TouchableOpacity
                 style={styles.cancelButton}
-                onPress={() => setShowSwitchModal(false)}
+                onPress={() => {
+                  playSound("click", 0.3);
+                  setShowSwitchModal(false)
+                }}
                 disabled={isProcessingTurn}
               >
                 <Text style={styles.cancelButtonText}>Back</Text>

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Modal
 } from 'react-native';
+import { playSound } from "../../utils/audio"
 
 export default function MovesPanel({
   monster,
@@ -62,7 +63,10 @@ export default function MovesPanel({
           <View style={styles.actionButtons}>
             <TouchableOpacity
               style={[styles.actionButton, disabled && styles.disabledButton]}
-              onPress={() => setShowMoves(true)}
+              onPress={() => {
+                playSound("click", 0.3);
+                setShowMoves(true)
+              }}
               disabled={disabled}
             >
               <Text style={styles.actionButtonText}>Fight</Text>
@@ -103,7 +107,10 @@ export default function MovesPanel({
             </View>
             <TouchableOpacity
               style={styles.cancelButton}
-              onPress={() => setShowMoves(false)}
+              onPress={() => {
+                playSound("click", 0.3);
+                setShowMoves(false)
+              }}
             >
               <Text style={styles.cancelButtonText}>Back</Text>
             </TouchableOpacity>

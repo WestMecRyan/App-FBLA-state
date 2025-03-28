@@ -13,17 +13,20 @@ import { Ionicons } from '@expo/vector-icons';
 import { loadGameState, healTeam } from '../utils/gameState';
 import { updateProgression } from "../utils/gameState";
 import { PROBLEMS } from '../data/problems';
+import { playSound, playBgMusic, stopBgMusic } from "../utils/audio"
 
 export default function TeamManagementScreen() {
   const navigation = useNavigation();
   const [team, setTeam] = useState([]);
   const [showHealModal, setShowHealModal] = useState(false);
-  // const [currentProblem, setCurrentProblem] = useState(PROBLEMS.math[0]);
   const [currentProblem, setCurrentProblem] = useState(null);
   const [healingInProgress, setHealingInProgress] = useState(false);
+  const [selectedExplanation, setSelectedExplanation] = useState(null);
+  const [isCorrect, setIsCorrect] = useState(false);
 
   useEffect(() => {
     loadTeam();
+    playBgMusic("healCenter", 0.1);
   }, []);
 
   const loadTeam = async () => {
@@ -35,8 +38,10 @@ export default function TeamManagementScreen() {
     const getSubjectProblems = async () => {
       try {
         const gameState = await loadGameState();
+        console.log("gameState:", gameState);
         const subject = gameState.settings?.subject || "math"; // Default to math if no subject is set
-        const subjectProblems = PROBLEMS[subject] || PROBLEMS.math; // Default to math if subject doesn't exist
+        const difficulty = gameState.settings?.difficulty || "normal"; // Default to math if no subject is set
+        const subjectProblems = PROBLEMS[subject][difficulty];
 
         // Select a random problem from indices 0-29 (problems 1-30)
         const randomIndex = Math.floor(Math.random() * Math.min(30, subjectProblems.length));
@@ -54,20 +59,27 @@ export default function TeamManagementScreen() {
   };
 
   const handleHealAttempt = async (answer) => {
-    if (answer === currentProblem.correctAnswer) {
+    const selectedAnswer = currentProblem.answers.find(
+      (ans) => ans.answer === answer.answer
+    );
+
+    setIsCorrect(selectedAnswer.answer === currentProblem.correctAnswer);
+    setSelectedExplanation(selectedAnswer.explanation);
+
+    if (selectedAnswer.answer === currentProblem.correctAnswer) {
+      playSound("correctAnswer", 0.3);
       const gameState = await loadGameState();
 
       setHealingInProgress(true);
       await healTeam();
       const updatedState = await loadGameState();
       setTeam(updatedState.playerTeam);
-      setShowHealModal(false);
       setHealingInProgress(false);
 
       updateProgression(gameState.settings.subject);
     } else {
+      playSound("wrongAnswer", 0.3);
       setHealingInProgress(false);
-      setShowHealModal(false);
     }
   };
 
@@ -91,7 +103,10 @@ export default function TeamManagementScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("Map")}
+          onPress={() => {
+            playSound("click", 0.3);
+            navigation.navigate("Map")
+          }}
           style={styles.backButton}
         >
           <Ionicons name="arrow-back" size={24} color="white" />
@@ -99,6 +114,7 @@ export default function TeamManagementScreen() {
         <Text style={styles.title}>Team Management</Text>
         <TouchableOpacity
           onPress={() => {
+            playSound("click", 0.3);
             getRandomProblem(); // Get a random problem when heal button is pressed
             setShowHealModal(true);
           }}
@@ -138,31 +154,54 @@ export default function TeamManagementScreen() {
             <Text style={styles.modalTitle}>Answer to Heal Your Team</Text>
             {currentProblem ? (
               <>
-                <Text style={styles.question}>{currentProblem.question}</Text>
-
-                <View style={styles.answersContainer}>
-                  {currentProblem.answers.map((answer, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      style={styles.answerButton}
-                      onPress={() => handleHealAttempt(answer)}
-                      disabled={healingInProgress}
+                {selectedExplanation ? (
+                  // Show explanation and "Continue" button after an answer is selected
+                  <>
+                    <Text
+                      style={[
+                        styles.explanationText,
+                        { color: isCorrect ? "green" : "red" },
+                      ]}
                     >
-                      <Text style={styles.answerText}>{answer}</Text>
+                      {selectedExplanation}
+                    </Text>
+                    <TouchableOpacity
+                      style={[
+                        styles.continueButton,
+                        { backgroundColor: isCorrect ? "#4CAF50" : "#F44336" },
+                      ]}
+                      onPress={() => {
+                        setSelectedExplanation(null); // Reset explanation
+                        if (isCorrect) {
+                          setShowHealModal(false); // Close modal if correct
+                        }
+                      }}
+                    >
+                      <Text style={styles.continueButtonText}>Continue</Text>
                     </TouchableOpacity>
-                  ))}
-                </View>
+                  </>
+                ) : (
+                  // Show question and answers initially
+                  <>
+                    <Text style={styles.question}>{currentProblem.question}</Text>
+                    <View style={styles.answersContainer}>
+                      {currentProblem.answers.map((answer, index) => (
+                        <TouchableOpacity
+                          key={index}
+                          style={styles.answerButton}
+                          onPress={() => handleHealAttempt(answer)}
+                          disabled={healingInProgress}
+                        >
+                          <Text style={styles.answerText}>{answer.answer}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                )}
               </>
             ) : (
               <Text style={styles.question}>Loading problem...</Text>
             )}
-
-            {/* <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowHealModal(false)}
-            >
-              <Text style={styles.closeButtonText}>Cancel</Text>
-            </TouchableOpacity> */}
           </View>
         </View>
       </Modal>
@@ -266,14 +305,14 @@ const styles = StyleSheet.create({
     maxHeight: '80%'
   },
   modalTitle: {
-    fontSize: 22,
+    fontSize: 18,
     // fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
     fontFamily: "pixel-font",
   },
   question: {
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
     marginBottom: 20,
     fontFamily: "pixel-font",
@@ -292,7 +331,7 @@ const styles = StyleSheet.create({
     // marginBottom: 10
     backgroundColor: "#4CAF50",
     padding: 15,
-    paddingVertical: 25,
+    paddingVertical: 20,
     borderRadius: 10,
     marginBottom: 10,
     width: "48%",
@@ -304,16 +343,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: "pixel-font",
   },
-  // closeButton: {
-  //   backgroundColor: '#666',
-  //   padding: 15,
-  //   borderRadius: 10
-  // },
-  // closeButtonText: {
-  //   color: '#FFF',
-  //   textAlign: 'center',
-  //   fontSize: 14,
-  //   // fontWeight: 'bold'
-  //   fontFamily: "pixel-font",
-  // }
+  explanationText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 20,
+    fontFamily: "pixel-font",
+  },
+  continueButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    alignSelf: "center",
+  },
+  continueButtonText: {
+    color: "#FFF",
+    fontSize: 16,
+    textAlign: "center",
+    fontFamily: "pixel-font",
+    marginRight: 8,
+  },
 });

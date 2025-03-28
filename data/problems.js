@@ -148,12 +148,12 @@ export const PROBLEMS = {
         id: 14,
         question: "What is 2.5 x 4?",
         answers: [
-          { answer: "8", explanation: "Correct! 2.5 x 4 equals 8." },
+          { answer: "8", explanation: "This is too high. Check your multiplication carefully." },
           { answer: "9", explanation: "This is too high. Try multiplying 2.5 and 4 again." },
-          { answer: "10", explanation: "This is too high. Check your multiplication carefully." },
+          { answer: "10", explanation: "Correct! 2.5 x 4 equals 10." },
           { answer: "10.5", explanation: "This is too high. Recalculate 2.5 times 4." }
         ],
-        correctAnswer: "8"
+        correctAnswer: "10"
       },
       {
         id: 15,

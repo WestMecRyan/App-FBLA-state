@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal, SafeAreaView, Linking, BackHandler } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useFocusEffect } from "@react-navigation/native"
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from "@expo/vector-icons"
 import { SCHOOLS } from "../data/schools"
@@ -26,6 +26,18 @@ export default function MapScreen() {
   const handleBackPress = () => {
     return false
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Play the map background music when the screen is focused
+      playBgMusic("map", 0.1);
+
+      return () => {
+        // Optionally stop the music when the screen is unfocused
+        stopBgMusic();
+      };
+    }, [])
+  );
 
   useEffect(() => {
     playBgMusic("map", 0.1);
@@ -63,6 +75,7 @@ export default function MapScreen() {
   }, [navigation])
 
   const toggleTooltip = () => {
+    playSound("click", 0.3);
     setTooltipVisible(!tooltipVisible);
   };
 
@@ -128,6 +141,7 @@ export default function MapScreen() {
 
   const handleTrainerSelect = async (trainer) => {
     if (!isTrainerLocked(trainer)) {
+      playSound("click", 0.3);
       setShowTrainers(false) // Close the modal before navigation
 
       // Check if this trainer has a random encounter before it and if it hasn't been completed yet
@@ -194,6 +208,7 @@ export default function MapScreen() {
                 ]}
                 onPress={() => {
                   if (!isSchoolLocked(school.id)) {
+                    playSound("click", 0.3);
                     setSelectedSchool(school)
                     setShowTrainers(true)
                   }
@@ -208,13 +223,22 @@ export default function MapScreen() {
 
           {/* Navigation Icons */}
           <View style={styles.navIcons}>
-            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate("TeamManagement")}>
+            <TouchableOpacity style={styles.iconButton} onPress={() => {
+              playSound("click", 0.3);
+              navigation.navigate("TeamManagement")
+            }}>
               <Ionicons name="medical" size={24} color="#4CAF50" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton} onPress={() => setShowShareModal(true)}>
+            <TouchableOpacity style={styles.iconButton} onPress={() => {
+              playSound("click", 0.3);
+              setShowShareModal(true);
+            }}>
               <Ionicons name="share-social" size={24} color="#FFF" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate("Settings")}>
+            <TouchableOpacity style={styles.iconButton} onPress={() => {
+              playSound("click", 0.3);
+              navigation.navigate("Settings")
+            }}>
               <Ionicons name="settings" size={24} color="#FFF" />
             </TouchableOpacity>
           </View>
@@ -254,6 +278,7 @@ export default function MapScreen() {
                 style={[styles.schoolArea, isSchoolLocked(school.id) && styles.lockedSchoolArea]}
                 onPress={() => {
                   if (!isSchoolLocked(school.id)) {
+                    playSound("click", 0.3);
                     setSelectedSchool(school)
                     setShowTrainers(true)
                   }
@@ -276,7 +301,10 @@ export default function MapScreen() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <TouchableOpacity style={styles.closeButton} onPress={() => setShowTrainers(false)}>
+              <TouchableOpacity style={styles.closeButton} onPress={() => {
+                playSound("click", 0.3);
+                setShowTrainers(false)
+              }}>
                 <Ionicons name="close" size={24} color="#000" />
               </TouchableOpacity>
 
@@ -374,7 +402,10 @@ export default function MapScreen() {
                 </TouchableOpacity>
               </View>
 
-              <TouchableOpacity style={styles.cancelShareButton} onPress={() => setShowShareModal(false)}>
+              <TouchableOpacity style={styles.cancelShareButton} onPress={() => {
+                playSound("click", 0.3);
+                setShowShareModal(false)
+              }}>
                 <Text style={styles.cancelShareText}>Cancel</Text>
               </TouchableOpacity>
             </View>
