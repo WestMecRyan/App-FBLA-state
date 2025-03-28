@@ -1,4 +1,3 @@
-import { MONSTERS } from "./monsters"
 import { createMonster } from "../data/monsters"
 import { PROBLEMS } from "./problems"
 import { loadGameState } from "../utils/gameState"
@@ -39,15 +38,14 @@ const getTrainerProblems = async (start, count) => {
 export const SCHOOLS = [
   {
     id: 1,
-    name: "Fire School",
-    type: "fire",
+    name: "Grass School",
+    type: "grass",
     trainers: [
       {
         id: 1,
-        name: "Novice Flynn",
-        type: "fire",
-        monsters: [createMonster(1, 3)],
-        // problems: PROBLEMS.math.slice(0, 3),
+        name: "Novice Leaf",
+        type: "grass",
+        monsters: [createMonster(3, 4)],
         problems: async () => await getTrainerProblems(0, 3),
         isLeader: false,
         schoolId: 1,
@@ -56,12 +54,78 @@ export const SCHOOLS = [
       },
       {
         id: 2,
-        name: "Apprentice Ember",
-        type: "fire",
-        monsters: [createMonster(1, 5), createMonster(1, 6)],
+        name: "Apprentice Vine",
+        type: "grass",
+        monsters: [createMonster(3, 6), createMonster(3, 8)],
         problems: async () => await getTrainerProblems(3, 6),
         isLeader: false,
         schoolId: 1,
+        image: require("../assets/trainers/test-trainer.png"),
+        hasRandomEncounterBefore: true,
+        randomEncounterPool: [
+          {
+            monsterId: 3, 
+            levelRange: { min: 4, max: 5 },
+            chance: 0.9,
+          },
+          {
+            monsterId: 31, 
+            levelRange: { min: 6, max: 8 },
+            chance: 0.1,
+          },
+        ],
+      },
+      {
+        id: 3,
+        name: "Master Flora",
+        type: "grass",
+        monsters: [createMonster(2, 9), createMonster(31, 10), createMonster(3, 19)],
+        problems: async () => await getTrainerProblems(6, 9),
+        isLeader: true,
+        schoolId: 1,
+        image: require("../assets/trainers/test-trainer.png"),
+        // hasRandomEncounterBefore: true,
+        hasRandomEncounterBefore: false,
+        // randomEncounterPool: [
+        //   {
+        //     monsterId: 3, 
+        //     levelRange: { min: 15, max: 20 },
+        //     chance: 0.5, // 50% chance
+        //   },
+        //   {
+        //     monsterId: 31, 
+        //     levelRange: { min: 20, max: 25 },
+        //     chance: 0.5, // 50% chance
+        //   },
+        // ],
+      },
+    ],
+    isLocked: true,
+  },
+  {
+    id: 2,
+    name: "Fire School",
+    type: "fire",
+    trainers: [
+      {
+        id: 4,
+        name: "Novice Flynn",
+        type: "fire",
+        monsters: [createMonster(1, 3)],
+        problems: async () => await getTrainerProblems(9, 12),
+        isLeader: false,
+        schoolId: 2,
+        image: require("../assets/trainers/test-trainer.png"),
+        hasRandomEncounterBefore: false,
+      },
+      {
+        id: 5,
+        name: "Apprentice Ember",
+        type: "fire",
+        monsters: [createMonster(1, 5), createMonster(1, 6)],
+        problems: async () => await getTrainerProblems(12, 15),
+        isLeader: false,
+        schoolId: 2,
         image: require("../assets/trainers/test-trainer.png"),
         // Random encounter before this trainer
         hasRandomEncounterBefore: true,
@@ -74,13 +138,13 @@ export const SCHOOLS = [
         ],
       },
       {
-        id: 3,
+        id: 6,
         name: "Master Blaze",
         type: "fire",
         monsters: [createMonster(11, 10), createMonster(11, 12)],
-        problems: async () => await getTrainerProblems(6, 9),
+        problems: async () => await getTrainerProblems(15, 18),
         isLeader: true,
-        schoolId: 1,
+        schoolId: 2,
         image: require("../assets/trainers/test-trainer.png"),
         // Random encounter before the leader
         hasRandomEncounterBefore: true,
@@ -101,30 +165,30 @@ export const SCHOOLS = [
     isLocked: false,
   },
   {
-    id: 2,
+    id: 3,
     name: "Water School",
     type: "water",
     trainers: [
       {
-        id: 4,
+        id: 7,
         name: "Novice Brook",
         type: "water",
         monsters: [createMonster(2, 8)],
-        problems: async () => await getTrainerProblems(9, 12),
+        problems: async () => await getTrainerProblems(18, 21),
         isLeader: false,
-        schoolId: 2,
+        schoolId: 3,
         image: require("../assets/trainers/test-trainer.png"),
         hasRandomEncounterBefore: false,
       },
       {
-        id: 5,
+        id: 8,
         name: "Apprentice River",
         type: "water",
         monsters: [createMonster(2, 10), createMonster(2, 11)],
         // problems: PROBLEMS.math.slice(12, 15),
-        problems: async () => await getTrainerProblems(12, 15),
+        problems: async () => await getTrainerProblems(21, 24),
         isLeader: false,
-        schoolId: 2,
+        schoolId: 3,
         image: require("../assets/trainers/test-trainer.png"),
         hasRandomEncounterBefore: true,
         randomEncounterPool: [
@@ -141,14 +205,14 @@ export const SCHOOLS = [
         ],
       },
       {
-        id: 6,
+        id: 9,
         name: "Master Tidal",
         type: "water",
         monsters: [createMonster(2, 12), createMonster(21, 14), createMonster(2, 13)],
         // problems: PROBLEMS.math.slice(15, 18),
-        problems: async () => await getTrainerProblems(15, 18),
+        problems: async () => await getTrainerProblems(24, 27),
         isLeader: true,
-        schoolId: 2,
+        schoolId: 3,
         image: require("../assets/trainers/test-trainer.png"),
         hasRandomEncounterBefore: true,
         randomEncounterPool: [
@@ -168,74 +232,6 @@ export const SCHOOLS = [
     isLocked: true,
   },
   {
-    id: 3,
-    name: "Grass School",
-    type: "grass",
-    trainers: [
-      {
-        id: 7,
-        name: "Novice Leaf",
-        type: "grass",
-        monsters: [createMonster(3, 14)],
-        // problems: PROBLEMS.math.slice(18, 21),
-        problems: async () => await getTrainerProblems(18, 21),
-        isLeader: false,
-        schoolId: 3,
-        image: require("../assets/trainers/test-trainer.png"),
-        hasRandomEncounterBefore: false,
-      },
-      {
-        id: 8,
-        name: "Apprentice Vine",
-        type: "grass",
-        monsters: [createMonster(3, 16), createMonster(3, 17)],
-        // problems: PROBLEMS.math.slice(21, 24),
-        problems: async () => await getTrainerProblems(21, 24),
-        isLeader: false,
-        schoolId: 3,
-        image: require("../assets/trainers/test-trainer.png"),
-        hasRandomEncounterBefore: true,
-        randomEncounterPool: [
-          {
-            monsterId: 3, // Scienspark (grass type)
-            levelRange: { min: 13, max: 18 },
-            chance: 0.7, // 70% chance
-          },
-          {
-            monsterId: 31, // Beakerton (grass type)
-            levelRange: { min: 18, max: 22 },
-            chance: 0.3, // 30% chance
-          },
-        ],
-      },
-      {
-        id: 9,
-        name: "Master Flora",
-        type: "grass",
-        monsters: [createMonster(3, 18), createMonster(31, 20), createMonster(3, 19)],
-        // problems: PROBLEMS.math.slice(24, 27),
-        problems: async () => await getTrainerProblems(24, 27),
-        isLeader: true,
-        schoolId: 3,
-        image: require("../assets/trainers/test-trainer.png"),
-        hasRandomEncounterBefore: true,
-        randomEncounterPool: [
-          {
-            monsterId: 3, // Scienspark (grass type)
-            levelRange: { min: 15, max: 20 },
-            chance: 0.5, // 50% chance
-          },
-          {
-            monsterId: 31, // Beakerton (grass type)
-            levelRange: { min: 20, max: 25 },
-            chance: 0.5, // 50% chance
-          },
-        ],
-      },
-    ],
-    isLocked: true,
-  },
-  {
     id: 4,
     name: "Headmaster's Office",
     type: "fire",
@@ -245,7 +241,6 @@ export const SCHOOLS = [
         name: "Headmaster Mathias",
         type: "fire",
         monsters: [createMonster(3, 14)],
-        // problems: PROBLEMS.math.slice(18, 21),
         problems: async () => await getTrainerProblems(27, 30),
         isLeader: true,
         schoolId: 4,

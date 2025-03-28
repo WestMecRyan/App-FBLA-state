@@ -18,6 +18,7 @@ export default function MapScreen() {
     questionsAnswered: { math: 0, science: 0, english: 0 },
     learningDays: [],
   });
+  const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const totalTrainers = SCHOOLS.reduce((sum, school) => sum + school.trainers.length, 0); // Total number of trainers
   const defeatedPercentage = Math.round((defeatedTrainers.length / totalTrainers) * 100); // Calculate percentage
@@ -60,6 +61,10 @@ export default function MapScreen() {
 
     return unsubscribe
   }, [navigation])
+
+  const toggleTooltip = () => {
+    setTooltipVisible(!tooltipVisible);
+  };
 
   const loadProgress = async () => {
     try {
@@ -218,14 +223,16 @@ export default function MapScreen() {
 
         {/* Progression Bar */}
         <View style={styles.progressionBar}>
-          <Text style={styles.progressionText}>
-            Math: {progression.questionsAnswered.math} | Science:{" "}
-            {progression.questionsAnswered.science} | English:{" "}
-            {progression.questionsAnswered.english}
-          </Text>
-          <Text style={styles.progressionText}>
-            Days Spent Learning: {progression.learningDays.length}
-          </Text>
+          <View style={styles.textProgressionContainer}>
+            <Text style={styles.progressionText}>
+              Math: {progression.questionsAnswered.math} | Science:{" "}
+              {progression.questionsAnswered.science} | English:{" "}
+              {progression.questionsAnswered.english}
+            </Text>
+            <Text style={styles.progressionText}>
+              Days Spent Learning: {progression.learningDays.length}
+            </Text>
+          </View>
 
           {/* Health-style Progression Bar */}
           <View style={styles.progressionBarContainer}>
@@ -290,22 +297,24 @@ export default function MapScreen() {
                     onPress={() => handleTrainerSelect(trainer)}
                     disabled={isTrainerLocked(trainer)}
                   >
-                    <Image source={trainer.image} style={styles.trainerImage} />
-                    <View style={styles.trainerInfo}>
-                      <Text style={styles.trainerName}>{trainer.name}</Text>
-                      <Text style={styles.trainerType}>{trainer.isLeader ? "School Leader" : "Trainer"}</Text>
-                      {trainer.hasRandomEncounterBefore && !completedEncounters.includes(trainer.id) && (
-                        <Text style={styles.encounterWarning}>
-                          <Ionicons name="warning" size={14} color="#FF9800" /> Wild monster area
-                        </Text>
+                    <View style={styles.trainerCardContent}>
+                      <Image source={trainer.image} style={styles.trainerImage} />
+                      <View style={styles.trainerInfo}>
+                        <Text style={styles.trainerName}>{trainer.name}</Text>
+                        <Text style={styles.trainerType}>{trainer.isLeader ? "School Leader" : "Trainer"}</Text>
+                        {trainer.hasRandomEncounterBefore && !completedEncounters.includes(trainer.id) && (
+                          <Text style={styles.encounterWarning}>
+                            <Ionicons name="warning" size={14} color="#FF9800" /> Wild monster area
+                          </Text>
+                        )}
+                      </View>
+                      {isTrainerLocked(trainer) && (
+                        <Ionicons name="lock-closed" size={24} color="#666" style={styles.trainerIcon} />
+                      )}
+                      {defeatedTrainers.includes(trainer.id) && (
+                        <Ionicons name="checkmark-circle" size={24} color="#4CAF50" style={styles.trainerIcon} />
                       )}
                     </View>
-                    {isTrainerLocked(trainer) && (
-                      <Ionicons name="lock-closed" size={24} color="#666" style={styles.trainerIcon} />
-                    )}
-                    {defeatedTrainers.includes(trainer.id) && (
-                      <Ionicons name="checkmark-circle" size={24} color="#4CAF50" style={styles.trainerIcon} />
-                    )}
                   </TouchableOpacity>
                 ))}
               </View>
@@ -371,6 +380,39 @@ export default function MapScreen() {
             </View>
           </View>
         </Modal>
+
+        {/* Tooltip Button */}
+        <TouchableOpacity style={styles.tooltipButton} onPress={toggleTooltip}>
+          <Text style={styles.tooltipButtonText}>?</Text>
+        </TouchableOpacity>
+
+        {/* Tooltip Modal */}
+        <Modal
+          visible={tooltipVisible}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={toggleTooltip}
+        >
+          <View style={styles.tooltipOverlay}>
+            <View style={styles.tooltipContainer}>
+              <Text style={styles.tooltipTitle}>Help</Text>
+              <Text style={styles.tooltipText}>
+                - You can re-fight old trainers to level up your monsters. Simply revisit their location on the map and challenge them again.
+              </Text>
+              <Text style={styles.tooltipText}>
+                - Heal your monsters at the healing center. Click the green cross button in the top right in the navigation bar!
+              </Text>
+              <Text style={styles.tooltipText}>
+                - Type advantages: Fire beats Grass, Grass beats Water, Water beats Fire. Use this to your advantage in battles!
+              </Text>
+              <TouchableOpacity style={styles.closeToolButton} onPress={toggleTooltip}>
+                <Text style={styles.closeToolButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+
       </View >
     </SafeAreaView >
   )
@@ -497,11 +539,15 @@ const styles = StyleSheet.create({
   },
   trainerCard: {
     width: "30%",
+    // height: "100%",
     backgroundColor: "#F5F5F5",
     borderRadius: 10,
     padding: 10,
-    marginBottom: 15,
+    // marginBottom: 15,
     alignItems: "center",
+  },
+  trainerCardContent: {
+    // marginVertical: "auto",
   },
   trainerWithEncounter: {
     borderLeftWidth: 5,
@@ -515,9 +561,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   trainerImage: {
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
     // borderRadius: 30,
+    margin: "auto",
     marginBottom: 10,
   },
   trainerInfo: {
@@ -622,7 +669,7 @@ const styles = StyleSheet.create({
   },
   progressionText: {
     color: "#FFF",
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: "pixel-font",
   },
   progressionBarContainer: {
@@ -641,6 +688,67 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 12,
     marginTop: 5,
+    fontFamily: "pixel-font",
+  },
+  textProgressionContainer: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around"
+  },
+  tooltipButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#555",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  tooltipButtonText: {
+    color: "#FFF",
+    fontSize: 20,
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
+  },
+  tooltipOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  tooltipContainer: {
+    backgroundColor: "#FFF",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+    elevation: 5,
+  },
+  tooltipTitle: {
+    fontSize: 16,
+    // fontWeight: "bold",
+    marginBottom: 10,
+    fontFamily: "pixel-font",
+  },
+  tooltipText: {
+    fontSize: 12,
+    marginBottom: 10,
+    color: "#333",
+    fontFamily: "pixel-font",
+  },
+  closeToolButton: {
+    marginTop: 10,
+    backgroundColor: "#555",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  closeToolButtonText: {
+    color: "#FFF",
+    fontSize: 13,
     fontFamily: "pixel-font",
   },
 })

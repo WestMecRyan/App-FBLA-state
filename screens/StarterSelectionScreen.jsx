@@ -76,9 +76,9 @@ export default function StarterSelectionScreen() {
                         <Image source={starter.image} style={styles.starterImage} resizeMode="contain" />
                         <Text style={styles.starterName}>{starter.name}</Text>
                         <Text style={styles.starterType}>Type: {starter.type}</Text>
-                        <Text style={styles.starterLevel}>Level: {starter.level}</Text>
+                        {/* <Text style={styles.starterLevel}>Level: {starter.level}</Text> 
 
-                        {/* <View style={styles.movesContainer}>
+                         <View style={styles.movesContainer}>
                             <Text style={styles.movesTitle}>Moves:</Text>
                             <View style={styles.movesWrapper}>
                                 {starter.moves.map((move, index) => (
@@ -115,18 +115,19 @@ const styles = StyleSheet.create({
         backgroundColor: "#F5F5F5",
         padding: 20,
         paddingTop: 20,
+        paddingBottom: 15,
     },
     title: {
-        fontSize: 26,
+        fontSize: 22,
         // fontWeight: "bold",
         textAlign: "center",
         marginBottom: 10,
         fontFamily: "pixel-font",
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: 12,
         textAlign: "center",
-        marginBottom: 30,
+        marginBottom: 20,
         color: "#666",
         fontFamily: "pixel-font",
     },
@@ -139,9 +140,9 @@ const styles = StyleSheet.create({
     starterCard: {
         backgroundColor: "#FFF",
         borderRadius: 15,
-        padding: 15,
+        padding: 12,
         width: "30%",
-        marginBottom: 20,
+        // marginBottom: 20,
         elevation: 3,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
@@ -154,9 +155,11 @@ const styles = StyleSheet.create({
         borderColor: "#4CAF50",
     },
     starterImage: {
-        width: 100,
-        height: 100,
-        marginBottom: 10,
+        // width: 100,
+        // height: 100,
+        width: 90,
+        height: 90,
+        // marginBottom: 10,
     },
     starterName: {
         fontSize: 16,
@@ -208,7 +211,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         alignItems: "center",
-        marginTop: 20,
+        marginTop: 15,
     },
     disabledButton: {
         backgroundColor: "#A5D6A7",
