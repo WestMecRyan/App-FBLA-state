@@ -49,7 +49,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(0, 3),
         isLeader: false,
         schoolId: 1,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/grass-trainer-1.png"),
         hasRandomEncounterBefore: false,
       },
       {
@@ -60,7 +60,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(3, 6),
         isLeader: false,
         schoolId: 1,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/grass-trainer-2.png"),
         hasRandomEncounterBefore: true,
         randomEncounterPool: [
           {
@@ -83,7 +83,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(6, 9),
         isLeader: true,
         schoolId: 1,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/grass-leader.png"),
         // hasRandomEncounterBefore: true,
         hasRandomEncounterBefore: false,
         // randomEncounterPool: [
@@ -100,7 +100,7 @@ export const SCHOOLS = [
         // ],
       },
     ],
-    isLocked: true,
+    isLocked: false,
   },
   {
     id: 2,
@@ -115,7 +115,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(9, 12),
         isLeader: false,
         schoolId: 2,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/fire-trainer-1.png"),
         hasRandomEncounterBefore: false,
       },
       {
@@ -126,7 +126,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(12, 15),
         isLeader: false,
         schoolId: 2,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/fire-trainer-2.png"),
         // Random encounter before this trainer
         hasRandomEncounterBefore: true,
         randomEncounterPool: [
@@ -145,7 +145,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(15, 18),
         isLeader: true,
         schoolId: 2,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/fire-leader.png"),
         // Random encounter before the leader
         hasRandomEncounterBefore: true,
         randomEncounterPool: [
@@ -162,7 +162,7 @@ export const SCHOOLS = [
         ],
       },
     ],
-    isLocked: false,
+    isLocked: true,
   },
   {
     id: 3,
@@ -177,7 +177,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(18, 21),
         isLeader: false,
         schoolId: 3,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/water-trainer-1.png"),
         hasRandomEncounterBefore: false,
       },
       {
@@ -189,7 +189,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(21, 24),
         isLeader: false,
         schoolId: 3,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/water-trainer-2.png"),
         hasRandomEncounterBefore: true,
         randomEncounterPool: [
           {
@@ -213,7 +213,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(24, 27),
         isLeader: true,
         schoolId: 3,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/water-leader.png"),
         hasRandomEncounterBefore: true,
         randomEncounterPool: [
           {
@@ -244,7 +244,7 @@ export const SCHOOLS = [
         problems: async () => await getTrainerProblems(27, 30),
         isLeader: true,
         schoolId: 4,
-        image: require("../assets/trainers/test-trainer.png"),
+        image: require("../assets/trainers/headmaster.png"),
         hasRandomEncounterBefore: false,
       },
     ],

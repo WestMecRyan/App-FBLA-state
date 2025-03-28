@@ -9,7 +9,7 @@ import { loadGameState, saveGameState, completeTrainerEncounter } from "../utils
 import { SCHOOLS, getRandomEncounterForTrainer } from "../data/schools"
 import { playSound, playBgMusic, stopBgMusic } from "../utils/audio"
 import { calculateExpGain, getEvolution, calculateExpToNextLevel } from "../data/monsters"
-import { updateProgression } from "../utils/gameState";
+import { updateProgression } from "../utils/gameState"
 import { Ionicons } from "@expo/vector-icons"
 
 // Add this debugging function at the top of the component
@@ -69,6 +69,8 @@ export default function BattleScreen() {
   const [isEnemyFainted, setIsEnemyFainted] = useState(false)
   const [isPlayerFainted, setIsPlayerFainted] = useState(false)
 
+  const [backgroundImage, setBackgroundImage] = useState(null); // Store the background image
+
   // Create a ref to store the latest team data that persists between function calls
   const latestTeamRef = useRef([])
   // Create a ref to store the current active monster to prevent switching issues
@@ -107,7 +109,43 @@ export default function BattleScreen() {
     return false
   }
 
-  // Fix the issue with trainer monsters not being properly initialized
+  useEffect(() => {
+    const school = SCHOOLS.find((s) => s.id === schoolId);
+    if (school) {
+      switch (school.type) {
+        case "grass":
+          setBackgroundImage(require("../assets/battle-bg-grass.jpg"));
+          break;
+        case "fire":
+          setBackgroundImage(require("../assets/battle-bg-fire.png"));
+          break;
+        case "water":
+          setBackgroundImage(require("../assets/battle-bg-water.jpg"));
+          break;
+        default:
+          setBackgroundImage(require("../assets/battle-bg-grass.jpg")); 
+      }
+    } else {
+      setBackgroundImage(require("../assets/battle-bg-grass.jpg"));
+    }
+  }, [schoolId]);
+
+  useEffect(() => {
+    const school = SCHOOLS.find((s) => s.id === schoolId);
+    if (school) {
+      const trainerIndex = school.trainers.findIndex((t) => t.id === trainerId);
+      if (trainerIndex === 0) {
+        playSound("battle1");
+      } else if (trainerIndex === 1) {
+        playSound("battle2");
+      } else if (trainerIndex === 2) {
+        playSound("battle3");
+      } else {
+        playSound("battle1");
+      }
+    }
+  }, [schoolId, trainerId]);
+
   const initializeBattle = async () => {
     try {
       const validTeam = await checkTeamHealth();
@@ -345,100 +383,6 @@ export default function BattleScreen() {
       return false;
     }
   };
-
-  // const handleProblemAnswer = async (correct) => {
-  //   setCurrentProblem(null)
-  //   setIsProcessingTurn(true)
-
-  //   // Use the ref to ensure we have the latest active monster
-  //   const currentActiveMonster = activeMonsterRef.current
-
-  //   if (correct && currentActiveMonster && enemyMonster) {
-  //     playSound("correctAnswer")
-
-  //     // Player's turn - attack animation
-  //     setIsPlayerAttacking(true)
-
-  //     // Wait for attack animation to complete
-  //     await new Promise((resolve) => setTimeout(resolve, 300))
-  //     setIsPlayerAttacking(false)
-
-  //     // Enemy takes damage animation
-  //     setIsEnemyTakingDamage(true)
-
-  //     // Calculate and apply damage
-  //     const move = currentMove
-
-  //     const typeBonus = getTypeBonus(
-  //       move?.type?.toLowerCase() || currentActiveMonster.type.toLowerCase(),
-  //       enemyMonster.type.toLowerCase()
-  //     );
-
-  //     const damage = calculateDamage(currentActiveMonster, enemyMonster, move)
-  //     console.log("Player Damage: ", damage)
-
-  //     // Different HP handling for random encounters vs trainer battles
-  //     let newEnemyHealth
-  //     if (isRandomBattle) {
-  //       // For random encounters, stop at 1 HP to allow catching
-  //       newEnemyHealth = Math.max(1, enemyMonster.health - damage)
-  //     } else {
-  //       // For trainer battles, allow fainting (0 HP)
-  //       newEnemyHealth = Math.max(0, enemyMonster.health - damage)
-  //     }
-
-  //     Animated.timing(enemyHealthAnim, {
-  //       toValue: newEnemyHealth,
-  //       duration: 1000,
-  //       useNativeDriver: false,
-  //     }).start()
-
-  //     enemyMonster.health = newEnemyHealth
-
-
-  //     let effectivenessText = "";
-  //     if (typeBonus > 1) {
-  //       effectivenessText = " It's super effective!";
-  //       playSound("hit");
-  //       // Could play a special sound for super effective hits
-  //     } else if (typeBonus < 1) {
-  //       effectivenessText = " It's not very effective...";
-  //       playSound("hit");
-  //     } else {
-  //       playSound("hit");
-  //     }
-
-  //     // setBattleText(`${currentActiveMonster.name} dealt ${damage} damage!`)
-  //     setBattleText(`${currentActiveMonster.name} used ${move?.name || "attack"}!${effectivenessText}`);
-
-  //     // Wait for damage animation to complete
-  //     await new Promise((resolve) => setTimeout(resolve, 400))
-  //     setIsEnemyTakingDamage(false)
-
-  //     // Check if enemy is at 1 HP and this is a random encounter
-  //     if (newEnemyHealth <= 1 && isRandomBattle) {
-  //       setShowCatchButton(true)
-  //       setBattleText(`${enemyMonster.name} is weak, catch it!`)
-  //       setIsProcessingTurn(false)
-  //       return
-  //     }
-
-  //     // Check if enemy fainted
-  //     if (newEnemyHealth <= 0) {
-  //       setIsEnemyFainted(true)
-  //       handleEnemyMonsterFainted()
-  //       return
-  //     }
-  //   } else {
-  //     playSound("wrongAnswer")
-  //     setBattleText("The attack missed!")
-  //   }
-
-  //   // Enemy's turn after a delay
-  //   setTimeout(() => {
-  //     handleEnemyTurn()
-  //   }, 2000)
-  // }
 
   const handleProblemAnswer = async (correct) => {
     const gameState = await loadGameState();
@@ -1114,39 +1058,42 @@ export default function BattleScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Battle Scene */}
-      <View style={styles.battleScene}>
-        {activeMonster && (
-          <MonsterDisplay
-            monster={activeMonster}
-            isEnemy={false}
-            animatedHealth={playerHealthAnim}
-            animatedExp={playerExpAnim}
-            isAttacking={isPlayerAttacking}
-            isTakingDamage={isPlayerTakingDamage}
-            isFainted={isPlayerFainted}
-            isSwapping={isSwapping}
-            isEvolving={isEvolving}
-          />
-        )}
-        {/* {swappingOutMonster && isSwapping && (
-          <MonsterDisplay
-            monster={swappingOutMonster}
-            animatedHealth={new Animated.Value(swappingOutMonster.health)}
-            isSwappingOut={true}
-          />
-        )} */}
-        {enemyMonster && (
-          <MonsterDisplay
-            monster={enemyMonster}
-            isEnemy={true}
-            animatedHealth={enemyHealthAnim}
-            isAttacking={isEnemyAttacking}
-            isTakingDamage={isEnemyTakingDamage}
-            isFainted={isEnemyFainted}
-            isCaptured={isCaptureAnimation}
-          />
-        )}
+
+      {/* Background Image */}
+      <View style={styles.battleBackgroundContainer}>
+        <Image
+          source={backgroundImage}
+          style={styles.backgroundImage}
+          resizeMode="cover"
+        />
+
+        {/* Battle Scene */}
+        <View style={styles.battleScene}>
+          {activeMonster && (
+            <MonsterDisplay
+              monster={activeMonster}
+              isEnemy={false}
+              animatedHealth={playerHealthAnim}
+              animatedExp={playerExpAnim}
+              isAttacking={isPlayerAttacking}
+              isTakingDamage={isPlayerTakingDamage}
+              isFainted={isPlayerFainted}
+              isSwapping={isSwapping}
+              isEvolving={isEvolving}
+            />
+          )}
+          {enemyMonster && (
+            <MonsterDisplay
+              monster={enemyMonster}
+              isEnemy={true}
+              animatedHealth={enemyHealthAnim}
+              isAttacking={isEnemyAttacking}
+              isTakingDamage={isEnemyTakingDamage}
+              isFainted={isEnemyFainted}
+              isCaptured={isCaptureAnimation}
+            />
+          )}
+        </View>
       </View>
 
       {/* Battle Text */}
@@ -1158,6 +1105,7 @@ export default function BattleScreen() {
           }
         }}
       />
+      {/* </View> */}
 
       {/* Controls */}
       {activeMonster && (
@@ -1296,10 +1244,19 @@ export default function BattleScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#87CEEB", // blue background
+    position: "relative",
+  },
+  battleBackgroundContainer: {
+    flex: 1,
+    backgroundColor: "#87CEEB",
+  },
+  backgroundImage: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
   },
   battleScene: {
-    display: "flex",
+    // display: "flex",
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",

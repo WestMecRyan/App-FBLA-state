@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native"
 import { createMonster } from "../data/monsters"
 import { loadGameState, saveGameState } from "../utils/gameState"
 import { Ionicons } from "@expo/vector-icons"
+import { playSound, stopBgMusic } from "../utils/audio"
 
 export default function StarterSelectionScreen() {
     const navigation = useNavigation()
@@ -32,6 +33,7 @@ export default function StarterSelectionScreen() {
     ]
 
     const handleStarterSelect = async (starter) => {
+        playSound("click", 0.3);
         setSelectedStarter(starter)
     }
 
@@ -49,7 +51,8 @@ export default function StarterSelectionScreen() {
                 hasSelectedStarter: true,
             })
 
-            // Navigate to the map screen
+            stopBgMusic();
+            playSound("click", 0.3);
             navigation.replace("Map")
         } catch (error) {
             console.error("Error saving starter selection:", error)

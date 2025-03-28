@@ -18,9 +18,11 @@ export default function HomeScreen() {
     }
 
     checkStarterSelection()
+    playBgMusic("home", 0.1);
   }, [])
 
   const handlePlay = () => {
+    playSound("click", 0.3);
     if (starterSelected) {
       navigation.navigate("Map")
     } else {
@@ -44,7 +46,7 @@ export default function HomeScreen() {
     } catch (error) {
       console.error(`Error opening ${platform} share URL:`, error)
       Alert.alert(
-        "Sharing Failed", 
+        "Sharing Failed",
         `Could not open ${platform}. Make sure you have the app installed or try another method.`
       )
     }
@@ -55,24 +57,36 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ImageBackground source={require("../assets/home-background.png")} style={styles.background} resizeMode="cover">
+      <ImageBackground source={require("../assets/home-bg-2.jpg")} style={styles.background} resizeMode="cover">
         <View style={styles.container}>
           {/* Split container into two halves */}
           <View style={styles.leftHalf}>
             <Image source={require("../assets/logo.png")} style={styles.logo} resizeMode="contain" />
           </View>
-          
+
           <View style={styles.rightHalf}>
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.playButton} onPress={handlePlay}>
                 <Text style={styles.playButtonText}>Play</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.settingsButton} onPress={() => navigation.navigate("Settings")}>
+              <TouchableOpacity
+                style={styles.settingsButton}
+                onPress={() => {
+                  playSound("click", 0.3);
+                  navigation.navigate("Settings");
+                }}
+              >
                 <Text style={styles.settingsButtonText}>Settings</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.shareButtonHome} onPress={() => setShowShareModal(true)}>
+              <TouchableOpacity
+                style={styles.shareButtonHome}
+                onPress={() => {
+                  playSound("click", 0.3);
+                  setShowShareModal(true);
+                }}
+              >
                 <Ionicons name="share-social" size={20} color="#FFF" />
                 <Text style={styles.shareButtonText}>Share</Text>
               </TouchableOpacity>
@@ -131,7 +145,10 @@ export default function HomeScreen() {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity style={styles.cancelShareButton} onPress={() => setShowShareModal(false)}>
+            <TouchableOpacity style={styles.cancelShareButton} onPress={() => {
+              setShowShareModal(false)
+              playSound("click", 0.3);
+            }}>
               <Text style={styles.cancelShareText}>Cancel</Text>
             </TouchableOpacity>
           </View>
@@ -166,7 +183,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: "100%", 
+    width: "100%",
     height: "60%",
     maxWidth: 300,
   },
@@ -233,7 +250,7 @@ const styles = StyleSheet.create({
   // Share modal styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.3)",
     justifyContent: "center",
     alignItems: "center",
   },

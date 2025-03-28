@@ -28,7 +28,7 @@ export default function MapScreen() {
   }
 
   useEffect(() => {
-    playBgMusic("map")
+    playBgMusic("map", 0.1);
 
     const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress)
 
@@ -244,7 +244,7 @@ export default function MapScreen() {
 
         {/* Map Background */}
         <View style={styles.mapBackground}>
-          <Image source={require("../assets/world-map.png")} style={styles.mapImage} resizeMode="cover" />
+          <Image source={require("../assets/edumon-map.png")} style={styles.mapImage} resizeMode="cover" />
 
           {/* School areas on the map - now in a row */}
           <View style={styles.schoolsRow}>
@@ -473,13 +473,13 @@ const styles = StyleSheet.create({
   // New row layout for schools
   schoolsRow: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignItems: "center",
     position: "absolute",
     top: 50,
     left: 0,
     right: 0,
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
   },
   schoolArea: {
     width: 90,

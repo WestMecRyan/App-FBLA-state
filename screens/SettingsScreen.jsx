@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native"
 import { loadGameState, saveGameState, resetGameState } from "../utils/gameState"
 import { notifySettingsChanged } from '../utils/audio';
 import { Ionicons } from "@expo/vector-icons"
+import { playSound } from "../utils/audio"
 
 export default function SettingsScreen() {
   const navigation = useNavigation()
@@ -51,10 +52,12 @@ export default function SettingsScreen() {
   }
 
   const handleDifficultyChange = (difficulty) => {
+    playSound("click", 0.3);
     updateSetting("difficulty", difficulty)
   }
 
   const handleSubjectChange = (subject) => {
+    playSound("click", 0.3);
     updateSetting("subject", subject)
   };
 
@@ -76,7 +79,11 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <TouchableOpacity onPress={() => {
+            playSound("click", 0.3);
+            navigation.goBack()
+          }}
+            style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color="#FFF" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Settings</Text>
@@ -164,7 +171,10 @@ export default function SettingsScreen() {
           <View style={styles.settingSection}>
             <Text style={styles.sectionTitle}>Game Data</Text>
 
-            <TouchableOpacity style={styles.resetButton} onPress={() => setShowResetModal(true)}>
+            <TouchableOpacity style={styles.resetButton} onPress={() => {
+              playSound("click", 0.3);
+              setShowResetModal(true)
+            }}>
               <Text style={styles.resetButtonText}>Reset Game Progress</Text>
             </TouchableOpacity>
             <Text style={styles.resetWarning}>Warning: This will delete all your monsters and progress!</Text>
@@ -191,7 +201,10 @@ export default function SettingsScreen() {
               <View style={styles.modalButtons}>
                 <TouchableOpacity
                   style={[styles.modalButton, styles.cancelButton]}
-                  onPress={() => setShowResetModal(false)}
+                  onPress={() => {
+                    playSound("click", 0.3);
+                    setShowResetModal(false)
+                  }}
                 >
                   <Text style={styles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
@@ -342,7 +355,7 @@ const styles = StyleSheet.create({
   // Modal styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.3)",
     justifyContent: "center",
     alignItems: "center",
   },

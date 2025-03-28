@@ -23,7 +23,7 @@ export const MONSTERS = [
     name: "Smeltail",
     type: "Fire",
     baseHealth: 150,
-    image: require('../assets/monsters/test-mon.png'),
+    image: require('../assets/monsters/smeltail.png'),
     moves: [
       { id: 1, name: "Tail Whip", power: 25, type: "normal" },
       { id: 3, name: "Fast Attack", power: 40, type: "normal" },

@@ -2,36 +2,23 @@ import { Audio } from 'expo-av';
 import { loadGameState } from './gameState'; // Import loadGameState
 
 const sounds = {
-  // battleStart: require('../assets/sounds/battle-start.mp3'),
-  // hit: require('../assets/sounds/hit.mp3'),
-  // correctAnswer: require('../assets/sounds/correct.mp3'),
-  // wrongAnswer: require('../assets/sounds/wrong.mp3'),
-  // victory: require('../assets/sounds/victory.mp3'),
-  // defeat: require('../assets/sounds/defeat.mp3'),
-  // switch: require('../assets/sounds/switch.mp3'),
-  // faint: require('../assets/sounds/faint.mp3'),
-  // question: require('../assets/sounds/question.mp3')
-
-  battleStart: require('../assets/sounds/test.mp3'),
-  hit: require('../assets/sounds/test.mp3'),
-  correctAnswer: require('../assets/sounds/test.mp3'),
-  wrongAnswer: require('../assets/sounds/test.mp3'),
-  victory: require('../assets/sounds/test.mp3'),
-  defeat: require('../assets/sounds/test.mp3'),
-  switch: require('../assets/sounds/test.mp3'),
-  faint: require('../assets/sounds/test.mp3'),
-  question: require('../assets/sounds/test.mp3')
+  hit: require('../assets/sounds/hit.mp3'),
+  correctAnswer: require('../assets/sounds/correct.mp3'),
+  wrongAnswer: require('../assets/sounds/incorrect.mp3'),
+  victory: require('../assets/sounds/victory.mp3'),
+  defeat: require('../assets/sounds/defeat.mp3'),
+  switch: require('../assets/sounds/switch.mp3'),
+  faint: require('../assets/sounds/faint.mp3'),
+  question: require('../assets/sounds/question.mp3'),
+  click: require('../assets/sounds/click.mp3'),
 };
 
 const music = {
-  // battle: require('../assets/music/battle.mp3'),
-  // map: require('../assets/music/map.mp3'),
-  // victory: require('../assets/music/victory.mp3')
-
-  home: require('../assets/music/test.mp3'),
-  battle: require('../assets/music/test.mp3'),
-  map: require('../assets/music/test.mp3'),
-  victory: require('../assets/music/test.mp3')
+  home: require('../assets/music/home.mp3'),
+  battle1: require('../assets/music/battle-1.mp3'),
+  battle2: require('../assets/music/battle-2.mp3'),
+  battle3: require('../assets/music/battle-3.mp3'),
+  map: require('../assets/music/map.mp3'),
 };
 
 let bgMusic = null;
@@ -68,7 +55,7 @@ export const notifySettingsChanged = async () => {
   settingsChangeListeners.forEach(listener => listener(gameState.settings));
 };
 
-export const playSound = async (soundName) => {
+export const playSound = async (soundName, volume = 1.0) => {
   try {
     // Check if settings allow sound
     const gameState = await loadGameState();
@@ -84,6 +71,7 @@ export const playSound = async (soundName) => {
     }
 
     const { sound } = await Audio.Sound.createAsync(sounds[soundName]);
+    await sound.setVolumeAsync(volume); // Set the volume
     await sound.playAsync();
 
     // Clean up the sound object when finished
@@ -97,8 +85,7 @@ export const playSound = async (soundName) => {
   }
 };
 
-// For background music
-export const playBgMusic = async (musicName) => {
+export const playBgMusic = async (musicName, volume = 0.5) => {
   try {
     console.log("Starting background music:", musicName);
     currentMusicName = musicName; // Remember what's playing
@@ -122,10 +109,11 @@ export const playBgMusic = async (musicName) => {
     // Create and play the new background music
     const { sound } = await Audio.Sound.createAsync(
       music[musicName],
-      { isLooping: true, volume: 0.5 }
+      { isLooping: true }
     );
 
     bgMusic = sound;
+    await bgMusic.setVolumeAsync(volume); // Set the volume
     await bgMusic.playAsync();
     console.log("Background music playing:", musicName);
   } catch (error) {
@@ -175,8 +163,9 @@ export const updateMusicVolume = async (volume) => {
   if (bgMusic) {
     try {
       await bgMusic.setVolumeAsync(volume);
+      console.log(`Background music volume updated to: ${volume}`);
     } catch (error) {
-      console.error('Error updating music volume:', error);
+      console.error("Error updating music volume:", error);
     }
   }
 };
