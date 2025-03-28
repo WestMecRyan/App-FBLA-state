@@ -36,6 +36,38 @@ app.get('/getUser', async (c) => {
 	}
 });
 
+app.post('/register', async (c) => {
+	const { DB } = c.env;
+	const { username, email, password } = await c.req.json();
+
+	if (!DB) {
+		return c.text('Database not configured', 500);
+	}
+
+	if (!username || !email || !password) {
+		return c.text('All fields (username, email, password) are required', 400);
+	}
+
+	try {
+		// Check if username or email already exists
+		const checkQuery = 'SELECT * FROM users WHERE username = ? OR email = ?';
+		const existingUser = await DB.prepare(checkQuery).bind(username, email).first();
+
+		if (existingUser) {
+			return c.text('Username or email already taken', 400);
+		}
+
+		// Insert new user
+		const insertQuery = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
+		await DB.prepare(insertQuery).bind(username, email, password).run();
+
+		return c.text('Account created successfully', 201);
+	} catch (error) {
+		return c.text(error.message, 500);
+	}
+});
+
+
 
 app.post('/login', async (c) => {
 	const { DB } = c.env;

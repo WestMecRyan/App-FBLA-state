@@ -44,7 +44,7 @@ export default function LoginScreen() {
     setIsLoading(true);
   
     // Construct the URL for debugging purpose
-    const url = `http://localhost:8787/login?username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+    const url = `https://api.santiagohe75.workers.dev/login?username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
     Alert.alert("Debug", `Request URL: ${url}`);
   
     try {
@@ -75,8 +75,8 @@ export default function LoginScreen() {
   
   
   const handleRegister = () => {
-    // Navigate to registration screen (to be implemented)
-    Alert.alert("Register", "Registration functionality to be implemented")
+    // Navigate to the registration screen
+    navigation.navigate("Register")
   }
 
   const handleForgotPassword = () => {

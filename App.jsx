@@ -10,6 +10,7 @@ import TeamManagementScreen from "./screens/TeamManagementScreen"
 import BattleScreen from "./screens/BattleScreen"
 import LoginScreen from "./screens/LoginScreen"
 import { debugGameState } from "./utils/gameState"
+import RegisterScreen from "./screens/RegisterScreen"
 
 const Stack = createNativeStackNavigator()
 
@@ -48,6 +49,7 @@ export default function App() {
         }}
       >
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Map" component={MapScreen} />
