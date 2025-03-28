@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   View,
   Text,
@@ -10,18 +10,16 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
+  Dimensions,
+  ScrollView,
   Keyboard,
   Alert,
 } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
-// Mock authentication function - replace with your actual auth logic
 const authenticateUser = (email, password) => {
   return new Promise((resolve) => {
-    // Simulate API call
     setTimeout(() => {
-      // For demo purposes, any non-empty email/password combination works
       resolve(email.length > 0 && password.length > 0)
     }, 1000)
   })
@@ -31,7 +29,30 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [orientation, setOrientation] = useState("portrait")
   const navigation = useNavigation()
+
+  // Detect orientation changes
+  useEffect(() => {
+    const updateOrientation = () => {
+      const { width, height } = Dimensions.get('window');
+      setOrientation(width > height ? "landscape" : "portrait");
+    };
+
+    // Set initial orientation
+    updateOrientation();
+
+    // Add event listener for orientation changes
+    Dimensions.addEventListener('change', updateOrientation);
+
+    // Clean up
+    return () => {
+      // Remove event listener (for older React Native versions)
+      if (Dimensions.removeEventListener) {
+        Dimensions.removeEventListener('change', updateOrientation);
+      }
+    };
+  }, []);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -39,11 +60,9 @@ export default function LoginScreen() {
       return;
     }
   
-    // Debug: Starting login attempt
     Alert.alert("Debug", "Starting login request");
     setIsLoading(true);
   
-    // Construct the URL for debugging purpose
     const url = `https://api.santiagohe75.workers.dev/login?username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
     Alert.alert("Debug", `Request URL: ${url}`);
   
@@ -52,20 +71,17 @@ export default function LoginScreen() {
         method: "POST",
       });
   
-      // Debug: Response received
       Alert.alert("Debug", `Response status: ${response.status}`);
   
       if (response.ok) {
         const message = await response.text();
         Alert.alert("Success", message);
-        // Navigate to the main app
         navigation.replace("Home");
       } else {
         const errorMessage = await response.text();
         Alert.alert("Login Failed", errorMessage);
       }
     } catch (error) {
-      // Debug: Log error message and show alert
       Alert.alert("Network Error", `Error message: ${error.message}`);
       console.error("Login error:", error);
     } finally {
@@ -73,27 +89,32 @@ export default function LoginScreen() {
     }
   };
   
-  
   const handleRegister = () => {
-    // Navigate to the registration screen
     navigation.navigate("Register")
   }
 
   const handleForgotPassword = () => {
-    // Navigate to forgot password screen (to be implemented)
     Alert.alert("Forgot Password", "Password reset functionality to be implemented")
   }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.inner}>
-          <View style={styles.logoContainer}>
-            <Image source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }} style={styles.logo} />
-            <Text style={styles.appTitle}>Game App</Text>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"} 
+      style={styles.container}
+    >
+      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+      <ScrollView contentContainerStyle={orientation === "landscape" ? styles.landscapeScroll : styles.portraitScroll}>
+        <View style={orientation === "landscape" ? styles.landscapeInner : styles.portraitInner}>
+          {/* Logo Section */}
+          <View style={orientation === "landscape" ? styles.landscapeLogoContainer : styles.portraitLogoContainer}>
+            <Image 
+              source={require("../assets/edumon-logo-education.png")} 
+              style={orientation === "landscape" ? styles.landscapeLogo : styles.portraitLogo} 
+            />
           </View>
 
-          <View style={styles.formContainer}>
+          {/* Form Section */}
+          <View style={orientation === "landscape" ? styles.landscapeFormContainer : styles.portraitFormContainer}>
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -103,9 +124,6 @@ export default function LoginScreen() {
               autoCapitalize="none"
               autoCorrect={false}
               autoFocus={true}
-              onFocus={() => {
-                /* Keyboard will automatically appear */
-              }}
             />
 
             <TextInput
@@ -114,9 +132,6 @@ export default function LoginScreen() {
               value={password}
               onChangeText={setPassword}
               secureTextEntry
-              onFocus={() => {
-                /* Keyboard will automatically appear */
-              }}
             />
 
             <TouchableOpacity
@@ -138,7 +153,8 @@ export default function LoginScreen() {
             </View>
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      </ScrollView>
+      {/* </TouchableWithoutFeedback> */}
     </KeyboardAvoidingView>
   )
 }
@@ -148,31 +164,59 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
   },
-  inner: {
+  // Portrait mode styles
+  portraitScroll: {
+    flexGrow: 1,
+  },
+  portraitInner: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
   },
-  logoContainer: {
+  portraitLogoContainer: {
     alignItems: "center",
     marginBottom: 40,
+    width: '100%',
   },
-  logo: {
+  portraitLogo: {
     width: 100,
     height: 100,
     resizeMode: "contain",
   },
-  appTitle: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 10,
-    color: "#333",
-  },
-  formContainer: {
+  portraitFormContainer: {
     width: "100%",
     maxWidth: 400,
   },
+  
+  // Landscape mode styles
+  landscapeScroll: {
+    flexGrow: 1,
+  },
+  landscapeInner: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: 20,
+  },
+  landscapeLogoContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 30,
+  },
+  landscapeLogo: {
+    width: 250,
+    height: 250,
+    resizeMode: "contain",
+  },
+  landscapeFormContainer: {
+    flex: 1,
+    maxWidth: 500,
+  },
+  
+  // Common styles
   input: {
     backgroundColor: "white",
     borderRadius: 8,
@@ -207,4 +251,3 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 })
-

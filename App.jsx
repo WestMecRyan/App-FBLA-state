@@ -1,4 +1,4 @@
-"use client"
+import 'react-native-get-random-values'; // Add this as the first import
 import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -13,6 +13,8 @@ import StarterSelectionScreen from "./screens/StarterSelectionScreen";
 import { hasSelectedStarter } from "./utils/gameState";
 import { loadFonts } from "./utils/fonts";
 import { Audio } from "expo-av";
+import LoginScreen from "./screens/LoginScreen"
+import RegisterScreen from "./screens/RegisterScreen"
 
 // Enable layout animations for Android
 if (Platform.OS === "android") {
@@ -21,9 +23,6 @@ if (Platform.OS === "android") {
   }
 }
 
-import LoginScreen from "./screens/LoginScreen"
-import RegisterScreen from "./screens/RegisterScreen"
-
 const Stack = createNativeStackNavigator()
 
 export default function App() {
@@ -31,6 +30,19 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [showStartScreen, setShowStartScreen] = useState(true); // Track if the "Press screen to start" screen is shown
+
+  // Setup audio configuration
+  const setupAudio = async () => {
+    try {
+      await Audio.setAudioModeAsync({
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: true,
+        shouldDuckAndroid: true,
+      });
+    } catch (error) {
+      console.error("Error setting up audio:", error);
+    }
+  };
 
   useEffect(() => {
     const loadAppFonts = async () => {
@@ -48,96 +60,60 @@ export default function App() {
     checkStarterSelection();
 
     // Check if user is logged in
-    // This is where you would check AsyncStorage, SecureStore, or your auth state
-    // For demo purposes, we'll just set isLoggedIn to false
     setTimeout(() => {
       setIsLoggedIn(false)
       setIsLoading(false)
     }, 1000)
-  }, [])
+  }, []);
 
-  const setupAudio = async () => {
-    await Audio.setAudioModeAsync({
-      playsInSilentModeIOS: true,
-      staysActiveInBackground: true,
-      shouldDuckAndroid: true,
-    });
-
-    if (!fontsLoaded || isLoading) {
-      return (
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading...</Text>
-        </View>
-      );
-    }
-
-    if (showStartScreen) {
-      return (
-        <TouchableOpacity
-          style={styles.startScreenContainer}
-          onPress={() => setShowStartScreen(false)} // Hide the start screen on press
-        >
-          <Text style={styles.startScreenText}>Press screen to start</Text>
-        </TouchableOpacity>
-      );
-    }
-
+  // Show loading screen while fonts and other resources are loading
+  if (!fontsLoaded || isLoading) {
     return (
-      <SafeAreaProvider>
-        <StatusBar barStyle="light-content" backgroundColor="#000" />
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName={isLoggedIn ? "Home" : "Login"}
-            screenOptions={{
-              headerShown: false,
-              animation: "slide_from_right",
-              orientation: "portrait", // Force portrait orientation
-            }}
-          >
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="StarterSelection" component={StarterSelectionScreen} />
-            <Stack.Screen name="Map" component={MapScreen} />
-            <Stack.Screen name="Battle" component={BattleScreen} />
-            <Stack.Screen name="Settings" component={SettingsScreen} />
-            <Stack.Screen name="TeamManagement" component={TeamManagementScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
   }
 
-  // ***************************
+  // Show start screen when ready
+  if (showStartScreen) {
+    return (
+      <TouchableOpacity
+        style={styles.startScreenContainer}
+        onPress={() => setShowStartScreen(false)} // Hide the start screen on press
+      >
+        <Text style={styles.startScreenText}>Press screen to start</Text>
+      </TouchableOpacity>
+    );
+  }
 
-
-};
-
-
-
-// return (
-//   <SafeAreaProvider>
-//     <StatusBar barStyle="light-content" backgroundColor="#000" />
-//     <NavigationContainer>
-//       <Stack.Navigator
-//         initialRouteName="Home"
-//         screenOptions={{
-//           headerShown: false,
-//           animation: "slide_from_right",
-//           orientation: "portrait", // Force portrait orientation
-//         }}
-//       >
-//         <Stack.Screen name="Home" component={HomeScreen} />
-//         <Stack.Screen name="StarterSelection" component={StarterSelectionScreen} />
-//         <Stack.Screen name="Map" component={MapScreen} />
-//         <Stack.Screen name="Battle" component={BattleScreen} />
-//         <Stack.Screen name="Settings" component={SettingsScreen} />
-//         <Stack.Screen name="TeamManagement" component={TeamManagementScreen} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   </SafeAreaProvider>
-// );
-// }
+  // Main app
+  return (
+    <SafeAreaProvider>
+      <StatusBar barStyle="light-content" backgroundColor="#000" />
+      <NavigationContainer>
+        <Stack.Navigator
+          // initialRouteName={isLoggedIn ? "Home" : "Login"}
+          initialRouteName="Home"
+          screenOptions={{
+            headerShown: false,
+            animation: "slide_from_right",
+            orientation: "landscape",
+          }}
+        >
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="StarterSelection" component={StarterSelectionScreen} />
+          <Stack.Screen name="Map" component={MapScreen} />
+          <Stack.Screen name="Battle" component={BattleScreen} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="TeamManagement" component={TeamManagementScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
+}
 
 const styles = StyleSheet.create({
   loadingContainer: {
@@ -160,7 +136,6 @@ const styles = StyleSheet.create({
   startScreenText: {
     color: "#FFF",
     fontSize: 24,
-    // fontWeight: "bold",
     textAlign: "center",
     fontFamily: "pixel-font",
   },

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FBLA-app",
-    "slug": "FBLA-app",
+    "name": "Edumon",
+    "slug": "Edumon",
     "fonts": [
       {
         "name": "Pixel Font",
@@ -10,12 +10,12 @@
       }
     ],
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "orientation": "landscape",
+    "icon": "./assets/ignekko.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/ignekko.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -25,7 +25,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/ignekko.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": ["AUDIO_RECORDING"]

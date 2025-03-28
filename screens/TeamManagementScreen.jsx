@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   Image,
   Modal
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { loadGameState, healTeam } from '../utils/gameState';
 import { updateProgression } from "../utils/gameState";
@@ -16,6 +16,24 @@ import { PROBLEMS } from '../data/problems';
 import { playSound, playBgMusic, stopBgMusic } from "../utils/audio"
 
 export default function TeamManagementScreen() {
+  useFocusEffect(
+    useCallback(() => {
+      // When team management screen comes into focus, stop any existing music
+      // and play appropriate music
+      const setupTeamAudio = async () => {
+        await stopBgMusic(); // Ensure all music is stopped first
+        await playBgMusic("healCenter", 0.1); // Play heal center music
+      };
+      
+      setupTeamAudio();
+      
+      // Cleanup function when screen loses focus
+      return () => {
+        stopBgMusic(); // Stop team management music when leaving
+      };
+    }, [])
+  );
+  
   const navigation = useNavigation();
   const [team, setTeam] = useState([]);
   const [showHealModal, setShowHealModal] = useState(false);

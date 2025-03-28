@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Modal, SafeAreaView, Linking, BackHandler } from "react-native"
 import { useNavigation, useFocusEffect } from "@react-navigation/native"
 import { LinearGradient } from 'expo-linear-gradient';
@@ -28,19 +28,26 @@ export default function MapScreen() {
   }
 
   useFocusEffect(
-    React.useCallback(() => {
-      // Play the map background music when the screen is focused
-      playBgMusic("map", 0.1);
-
+    useCallback(() => {
+      // When map screen comes into focus, stop any existing music and play map music
+      const setupMapAudio = async () => {
+        await stopBgMusic(); // Ensure all music is stopped first
+        await playBgMusic("map", 0.1); // Play map music
+      };
+      
+      setupMapAudio();
+      
+      // Cleanup function when screen loses focus
       return () => {
-        // Optionally stop the music when the screen is unfocused
+        // Let the next screen handle its own music
+        // We'll stop this music in the cleanup
         stopBgMusic();
       };
     }, [])
   );
 
   useEffect(() => {
-    playBgMusic("map", 0.1);
+    // playBgMusic("map", 0.1);
 
     const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress)
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   View,
   Text,
@@ -10,15 +10,14 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
+  Dimensions,
   Keyboard,
   Alert,
   ScrollView,
 } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
-// Replace with your actual API URL
-const API_URL = "https://api.santiagohe75.workers.dev/register" // Use your local network IP
+const API_URL = "https://api.santiagohe75.workers.dev/register"
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("")
@@ -26,7 +25,30 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [orientation, setOrientation] = useState("portrait")
   const navigation = useNavigation()
+
+  // Detect orientation changes
+  useEffect(() => {
+    const updateOrientation = () => {
+      const { width, height } = Dimensions.get('window');
+      setOrientation(width > height ? "landscape" : "portrait");
+    };
+
+    // Set initial orientation
+    updateOrientation();
+
+    // Add event listener for orientation changes
+    Dimensions.addEventListener('change', updateOrientation);
+
+    // Clean up
+    return () => {
+      // Remove event listener (for older React Native versions)
+      if (Dimensions.removeEventListener) {
+        Dimensions.removeEventListener('change', updateOrientation);
+      }
+    };
+  }, []);
 
   // Function to validate user input
   const validateForm = () => {
@@ -85,81 +107,148 @@ export default function RegisterScreen() {
   }
 
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.inner}>
-            <View style={styles.logoContainer}>
-              <Image source={{ uri: "https://reactnative.dev/img/tiny_logo.png" }} style={styles.logo} />
-              <Text style={styles.appTitle}>Create Account</Text>
-            </View>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"} 
+      style={styles.container}
+    >
+      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+      <ScrollView 
+        contentContainerStyle={orientation === "landscape" ? styles.landscapeScroll : styles.portraitScroll}
+      >
+        <View style={orientation === "landscape" ? styles.landscapeInner : styles.portraitInner}>
+          {/* Logo Section */}
+          <View style={orientation === "landscape" ? styles.landscapeLogoContainer : styles.portraitLogoContainer}>
+            <Image 
+              source={require("../assets/edumon-logo-education.png")} 
+              style={orientation === "landscape" ? styles.landscapeLogo : styles.portraitLogo} 
+            />
+            <Text style={styles.appTitle}>Create Account</Text>
+          </View>
 
-            <View style={styles.formContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
+          {/* Form Section */}
+          <View style={orientation === "landscape" ? styles.landscapeFormContainer : styles.portraitFormContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
 
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
 
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
 
-              <TextInput
-                style={styles.input}
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-                secureTextEntry
-              />
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+            />
 
-              <TouchableOpacity
-                style={[styles.button, isLoading && styles.buttonDisabled]}
-                onPress={handleRegister}
-                disabled={isLoading}
-              >
-                <Text style={styles.buttonText}>{isLoading ? "Creating Account..." : "Sign Up"}</Text>
+            <TouchableOpacity
+              style={[styles.button, isLoading && styles.buttonDisabled]}
+              onPress={handleRegister}
+              disabled={isLoading}
+            >
+              <Text style={styles.buttonText}>{isLoading ? "Creating Account..." : "Sign Up"}</Text>
+            </TouchableOpacity>
+
+            <View style={styles.loginLinkContainer}>
+              <Text style={styles.loginText}>Already have an account? </Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                <Text style={styles.loginLink}>Log In</Text>
               </TouchableOpacity>
-
-              <View style={styles.loginLinkContainer}>
-                <Text style={styles.loginText}>Already have an account? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                  <Text style={styles.loginLink}>Log In</Text>
-                </TouchableOpacity>
-              </View>
             </View>
           </View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
+        </View>
+      </ScrollView>
+      {/* </TouchableWithoutFeedback> */}
     </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f5f5" },
-  scrollContainer: { flexGrow: 1 },
-  inner: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20 },
-  logoContainer: { alignItems: "center", marginBottom: 30, marginTop: 40 },
-  logo: { width: 80, height: 80, resizeMode: "contain" },
-  appTitle: { fontSize: 24, fontWeight: "bold", marginTop: 10, color: "#333" },
-  formContainer: { width: "100%", maxWidth: 400 },
+  container: { 
+    flex: 1, 
+    backgroundColor: "#f5f5f5" 
+  },
+  
+  // Portrait styles
+  portraitScroll: { 
+    flexGrow: 1 
+  },
+  portraitInner: { 
+    flex: 1, 
+    justifyContent: "center", 
+    alignItems: "center", 
+    padding: 20 
+  },
+  portraitLogoContainer: { 
+    alignItems: "center", 
+    marginBottom: 30, 
+    marginTop: 40 
+  },
+  portraitLogo: { 
+    width: 80, 
+    height: 80, 
+    resizeMode: "contain" 
+  },
+  portraitFormContainer: { 
+    width: "100%", 
+    maxWidth: 400 
+  },
+  
+  // Landscape styles
+  landscapeScroll: { 
+    flexGrow: 1 
+  },
+  landscapeInner: { 
+    flex: 1, 
+    flexDirection: 'row',
+    justifyContent: "space-around", 
+    alignItems: "center", 
+    padding: 20 
+  },
+  landscapeLogoContainer: { 
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 20
+  },
+  landscapeLogo: { 
+    width: 160, 
+    height: 160, 
+    resizeMode: "contain" 
+  },
+  landscapeFormContainer: { 
+    flex: 2,
+    maxWidth: 500
+  },
+  
+  // Common styles
+  appTitle: { 
+    fontSize: 24, 
+    fontWeight: "bold", 
+    // marginTop: 10, 
+    color: "#333" 
+  },
   input: {
     backgroundColor: "white",
     borderRadius: 8,
@@ -169,10 +258,34 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     fontSize: 16,
   },
-  button: { backgroundColor: "#4a90e2", borderRadius: 8, padding: 15, alignItems: "center", marginTop: 10 },
-  buttonDisabled: { backgroundColor: "#a0c4e7" },
-  buttonText: { color: "white", fontSize: 16, fontWeight: "bold" },
-  loginLinkContainer: { flexDirection: "row", justifyContent: "center", marginTop: 20, marginBottom: 40 },
-  loginText: { color: "#333", fontSize: 14 },
-  loginLink: { color: "#4a90e2", fontSize: 14, fontWeight: "bold" },
+  button: { 
+    backgroundColor: "#4a90e2", 
+    borderRadius: 8, 
+    padding: 15, 
+    alignItems: "center", 
+    marginTop: 10 
+  },
+  buttonDisabled: { 
+    backgroundColor: "#a0c4e7" 
+  },
+  buttonText: { 
+    color: "white", 
+    fontSize: 16, 
+    fontWeight: "bold" 
+  },
+  loginLinkContainer: { 
+    flexDirection: "row", 
+    justifyContent: "center", 
+    marginTop: 20, 
+    marginBottom: 20 
+  },
+  loginText: { 
+    color: "#333", 
+    fontSize: 14 
+  },
+  loginLink: { 
+    color: "#4a90e2", 
+    fontSize: 14, 
+    fontWeight: "bold" 
+  },
 })

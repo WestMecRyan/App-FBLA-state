@@ -119,22 +119,22 @@ export default function MonsterDisplay({
         Animated.timing(damageFlashAnim, {
           toValue: 1,
           duration: 100,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(damageFlashAnim, {
           toValue: 0,
           duration: 100,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(damageFlashAnim, {
           toValue: 1,
           duration: 100,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(damageFlashAnim, {
           toValue: 0,
           duration: 100,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
       ]).start()
 
@@ -143,32 +143,32 @@ export default function MonsterDisplay({
         Animated.timing(shakeAnim, {
           toValue: 10,
           duration: 50,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(shakeAnim, {
           toValue: -10,
           duration: 50,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(shakeAnim, {
           toValue: 10,
           duration: 50,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(shakeAnim, {
           toValue: -10,
           duration: 50,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(shakeAnim, {
           toValue: 5,
           duration: 50,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(shakeAnim, {
           toValue: 0,
           duration: 50,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
       ]).start()
     setAnimationTriggers({
@@ -186,12 +186,12 @@ export default function MonsterDisplay({
         Animated.timing(fadeAnim, {
           toValue: 0,
           duration: 1000,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(scaleAnim, {
           toValue: 0,
           duration: 1000,
-          useNativeDriver: true,
+          useNativeDriver: false,
         }),
         Animated.timing(damageAnim, {
           toValue: 1,
@@ -210,32 +210,32 @@ export default function MonsterDisplay({
           Animated.timing(captureRotateAnim, {
             toValue: 1,
             duration: 300,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(captureRotateAnim, {
             toValue: -1,
             duration: 300,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(captureRotateAnim, {
             toValue: 0.5,
             duration: 300,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(captureRotateAnim, {
             toValue: -0.5,
             duration: 300,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(captureRotateAnim, {
             toValue: 0.25,
             duration: 300,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(captureRotateAnim, {
             toValue: 0,
             duration: 300,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
         ]),
         { iterations: 2 },
@@ -297,12 +297,12 @@ export default function MonsterDisplay({
           Animated.timing(evolveAnim, {
             toValue: 1.2,
             duration: 400,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
           Animated.timing(evolveAnim, {
             toValue: 0.8,
             duration: 400,
-            useNativeDriver: true,
+            useNativeDriver: false,
           }),
         ]),
         { iterations: 4 },

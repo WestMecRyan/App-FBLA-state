@@ -23,6 +23,7 @@ const music = {
   battle3: require('../assets/music/battle-3.mp3'),
   map: require('../assets/music/map.mp3'),
   healCenter: require('../assets/music/heal-center.mp3'),
+  battle: require('../assets/music/battle-1.mp3'), // Use battle1 as a fallback
 };
 
 let bgMusic = null;
@@ -100,47 +101,144 @@ export const playSound = async (soundName, volume = 1.0) => {
     sound.setOnPlaybackStatusUpdate((status) => {
       if (status.didJustFinish) {
         sound.unloadAsync();
-        activeSound = null; // Clear the reference when the sound finishes
+        if (activeSound === sound) {
+          activeSound = null; // Clear the reference when the sound finishes
+        }
       }
     });
   } catch (error) {
-    console.error("Failed to play sound:", error);
+    console.error(`Failed to play sound ${soundName}:`, error);
   }
 };
 
-export const playBgMusic = async (musicName, volume = 0.5) => {
-  try {
-    console.log("Starting background music:", musicName);
-    currentMusicName = musicName; // Remember what's playing
+// Add a mutex to prevent race conditions
+let audioMutex = false;
+let pendingAudioOperation = null;
 
+export const playBgMusic = async (musicName, volume = 0.3) => {
+  try {
+    // If there's already an audio operation in progress, queue this one
+    if (audioMutex) {
+      pendingAudioOperation = { type: 'play', musicName, volume };
+      console.log(`Queuing playBgMusic request for ${musicName}`);
+      return;
+    }
+    
+    audioMutex = true;
+    
     // Check if settings allow music
     const gameState = await loadGameState();
     if (gameState.settings && gameState.settings.musicEnabled === false) {
       console.log("Music is disabled in settings");
+      audioMutex = false;
       return;
     }
-
-    // Stop any existing music
-    await stopBgMusic();
 
     // Check if the music exists
     if (!music[musicName]) {
       console.error(`Music ${musicName} not found`);
+      // Try to find a fallback music
+      if (musicName === "battle" && music["battle1"]) {
+        console.log("Using battle1 as fallback for battle");
+        musicName = "battle1";
+      } else {
+        audioMutex = false;
+        return;
+      }
+    }
+
+    // If the requested music is already playing, don't restart it
+    if (currentMusicName === musicName && bgMusic) {
+      console.log(`Music ${musicName} is already playing`);
+      audioMutex = false;
       return;
     }
 
-    // Create and play the new background music
+    // Stop any current background music
+    await stopBgMusic(true); // Pass true to indicate internal call
+
+    // Load and play the new music
     const { sound } = await Audio.Sound.createAsync(
       music[musicName],
-      { isLooping: true }
+      { isLooping: true, volume: volume }
     );
 
     bgMusic = sound;
-    await bgMusic.setVolumeAsync(volume); // Set the volume
+    currentMusicName = musicName;
     await bgMusic.playAsync();
-    console.log("Background music playing:", musicName);
+    console.log(`Now playing ${musicName} music`);
+    
+    audioMutex = false;
+    
+    // Check if there's a pending operation
+    if (pendingAudioOperation) {
+      const operation = pendingAudioOperation;
+      pendingAudioOperation = null;
+      if (operation.type === 'play') {
+        playBgMusic(operation.musicName, operation.volume);
+      } else if (operation.type === 'stop') {
+        stopBgMusic();
+      }
+    }
   } catch (error) {
-    console.error("Failed to play background music:", error);
+    console.error(`Failed to play music ${musicName}:`, error);
+    audioMutex = false;
+  }
+};
+
+export const stopBgMusic = async (isInternalCall = false) => {
+  try {
+    // Only check mutex for external calls
+    if (!isInternalCall) {
+      if (audioMutex) {
+        pendingAudioOperation = { type: 'stop' };
+        console.log('Queuing stopBgMusic request');
+        return;
+      }
+      
+      audioMutex = true;
+    }
+    
+    if (bgMusic) {
+      console.log(`Stopping ${currentMusicName} music`);
+      try {
+        await bgMusic.stopAsync();
+      } catch (e) {
+        console.log("Error stopping music:", e);
+      }
+
+      try {
+        await bgMusic.unloadAsync();
+      } catch (e) {
+        console.log("Error unloading music:", e);
+      }
+
+      bgMusic = null;
+      currentMusicName = null; // Clear current music name
+      console.log("Background music stopped and unloaded");
+    }
+    
+    if (!isInternalCall) {
+      audioMutex = false;
+      
+      // Check for pending operations
+      if (pendingAudioOperation) {
+        const operation = pendingAudioOperation;
+        pendingAudioOperation = null;
+        if (operation.type === 'play') {
+          playBgMusic(operation.musicName, operation.volume);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Failed to stop background music:", error);
+    // Reset the variables even if there was an error
+    bgMusic = null;
+    currentMusicName = null;
+    
+    if (!isInternalCall) {
+      audioMutex = false;
+    }
   }
 };
 
@@ -165,20 +263,6 @@ export const resumeBgMusic = async () => {
     }
   } catch (error) {
     console.error("Failed to resume background music:", error);
-  }
-};
-
-export const stopBgMusic = async () => {
-  try {
-    if (bgMusic) {
-      await bgMusic.stopAsync();
-      await bgMusic.unloadAsync();
-      bgMusic = null;
-      currentMusicName = null; // Clear current music name
-      console.log("Background music stopped");
-    }
-  } catch (error) {
-    console.error("Failed to stop background music:", error);
   }
 };
 

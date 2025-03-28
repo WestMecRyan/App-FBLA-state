@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import { View, StyleSheet, Animated, BackHandler, Modal, TouchableOpacity, Text, Image, Alert, ScrollView } from "react-native"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 import MonsterDisplay from "../components/battle/MonsterDisplay"
 import MovesPanel from "../components/battle/MovesPanel"
 import ProblemModal from "../components/battle/ProblemModal"
@@ -29,6 +29,46 @@ const createFreshTrainerMonsters = (trainerMonsters) => {
 }
 
 export default function BattleScreen() {
+  useFocusEffect(
+    useCallback(() => {
+      // When battle screen comes into focus, stop any existing music and play battle music
+      const setupBattleAudio = async () => {
+        await stopBgMusic(); // Ensure all music is stopped first
+
+        // Select battle music based on trainer position in the school
+        if (isRandomBattle) {
+          // For random encounters, use battle1
+          await playBgMusic("battle1", 0.1);
+        } else {
+          // For trainer battles, select music based on trainer position
+          const school = SCHOOLS.find((s) => s.id === schoolId);
+          if (school) {
+            const trainerIndex = school.trainers.findIndex((t) => t.id === trainerId);
+            if (trainerIndex === 0) {
+              await playBgMusic("battle1", 0.1);
+            } else if (trainerIndex === 1) {
+              await playBgMusic("battle2", 0.1);
+            } else if (trainerIndex === 2) {
+              await playBgMusic("battle3", 0.1);
+            } else {
+              await playBgMusic("battle1", 0.1);
+            }
+          } else {
+            // Default if school not found
+            await playBgMusic("battle1", 0.1);
+          }
+        }
+      };
+
+      setupBattleAudio();
+
+      // Cleanup function when screen loses focus
+      return () => {
+        stopBgMusic(); // Stop battle music when leaving
+      };
+    }, [schoolId, trainerId, isRandomBattle]) // Make sure to add dependencies
+  );
+
   const navigation = useNavigation()
   const route = useRoute()
   const { trainerId, schoolId, isRandomEncounter, isPreTrainerEncounter } = route.params || {}
@@ -84,7 +124,7 @@ export default function BattleScreen() {
 
   useEffect(() => {
     initializeBattle()
-    playBgMusic("battle")
+    // playBgMusic("battle")
 
     const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress)
 
@@ -129,22 +169,6 @@ export default function BattleScreen() {
       setBackgroundImage(require("../assets/battle-bg-grass.jpg"));
     }
   }, [schoolId]);
-
-  useEffect(() => {
-    const school = SCHOOLS.find((s) => s.id === schoolId);
-    if (school) {
-      const trainerIndex = school.trainers.findIndex((t) => t.id === trainerId);
-      if (trainerIndex === 0) {
-        playBgMusic("battle1", 0.1);
-      } else if (trainerIndex === 1) {
-        playBgMusic("battle2", 0.1);
-      } else if (trainerIndex === 2) {
-        playBgMusic("battle3", 0.1);
-      } else {
-        playBgMusic("battle1", 0.1);
-      }
-    }
-  }, [schoolId, trainerId]);
 
   const initializeBattle = async () => {
     try {
@@ -217,7 +241,7 @@ export default function BattleScreen() {
         playerExpAnim.setValue(playerTeamWithExp[0].exp || 0)
 
         setBattleText(`A wild ${wildMonster.name} appeared!`)
-        playSound("battleStart")
+        // playSound("battleStart")
         setInitializationComplete(true)
       } else {
         // Regular trainer battle
@@ -286,7 +310,7 @@ export default function BattleScreen() {
         playerExpAnim.setValue(playerTeamWithExp[0].exp || 0)
 
         setBattleText(`${trainer.name} wants to battle!`)
-        playSound("battleStart")
+        // playSound("battleStart")
         setInitializationComplete(true) // Set to true after successful initialization
       }
     } catch (error) {
