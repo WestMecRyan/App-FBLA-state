@@ -11,17 +11,22 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { loadGameState, healTeam } from '../utils/gameState';
+import { updateProgression } from "../utils/gameState";
 import { PROBLEMS } from '../data/problems';
+import { playSound, playBgMusic, stopBgMusic } from "../utils/audio"
 
 export default function TeamManagementScreen() {
   const navigation = useNavigation();
   const [team, setTeam] = useState([]);
   const [showHealModal, setShowHealModal] = useState(false);
-  const [currentProblem, setCurrentProblem] = useState(PROBLEMS.math[0]);
+  const [currentProblem, setCurrentProblem] = useState(null);
   const [healingInProgress, setHealingInProgress] = useState(false);
+  const [selectedExplanation, setSelectedExplanation] = useState(null);
+  const [isCorrect, setIsCorrect] = useState(false);
 
   useEffect(() => {
     loadTeam();
+    playBgMusic("healCenter", 0.1);
   }, []);
 
   const loadTeam = async () => {
@@ -29,15 +34,51 @@ export default function TeamManagementScreen() {
     setTeam(gameState.playerTeam);
   };
 
+  const getRandomProblem = () => {
+    const getSubjectProblems = async () => {
+      try {
+        const gameState = await loadGameState();
+        console.log("gameState:", gameState);
+        const subject = gameState.settings?.subject || "math"; // Default to math if no subject is set
+        const difficulty = gameState.settings?.difficulty || "normal"; // Default to math if no subject is set
+        const subjectProblems = PROBLEMS[subject][difficulty];
+
+        // Select a random problem from indices 0-29 (problems 1-30)
+        const randomIndex = Math.floor(Math.random() * Math.min(30, subjectProblems.length));
+        setCurrentProblem(subjectProblems[randomIndex]);
+      } catch (error) {
+        console.error("Error getting random problem:", error);
+        // Fallback to a math problem if there's an error
+        const mathProblems = PROBLEMS.math;
+        const randomIndex = Math.floor(Math.random() * Math.min(30, mathProblems.length));
+        setCurrentProblem(mathProblems[randomIndex]);
+      }
+    };
+
+    getSubjectProblems();
+  };
+
   const handleHealAttempt = async (answer) => {
-    if (answer === currentProblem.correctAnswer) {
+    const selectedAnswer = currentProblem.answers.find(
+      (ans) => ans.answer === answer.answer
+    );
+
+    setIsCorrect(selectedAnswer.answer === currentProblem.correctAnswer);
+    setSelectedExplanation(selectedAnswer.explanation);
+
+    if (selectedAnswer.answer === currentProblem.correctAnswer) {
+      playSound("correctAnswer", 0.3);
+      const gameState = await loadGameState();
+
       setHealingInProgress(true);
       await healTeam();
       const updatedState = await loadGameState();
       setTeam(updatedState.playerTeam);
-      setShowHealModal(false);
       setHealingInProgress(false);
+
+      updateProgression(gameState.settings.subject);
     } else {
+      playSound("wrongAnswer", 0.3);
       setHealingInProgress(false);
     }
   };
@@ -48,11 +89,11 @@ export default function TeamManagementScreen() {
 
     return (
       <View style={styles.healthBarContainer}>
-        <View 
+        <View
           style={[
             styles.healthBar,
             { width: `${percentage}%`, backgroundColor: barColor }
-          ]} 
+          ]}
         />
       </View>
     );
@@ -62,14 +103,21 @@ export default function TeamManagementScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            playSound("click", 0.3);
+            navigation.navigate("Map")
+          }}
           style={styles.backButton}
         >
-          <Ionicons name="arrow-back" size={24} color="#000" />
+          <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.title}>Team Management</Text>
         <TouchableOpacity
-          onPress={() => setShowHealModal(true)}
+          onPress={() => {
+            playSound("click", 0.3);
+            getRandomProblem(); // Get a random problem when heal button is pressed
+            setShowHealModal(true);
+          }}
           style={styles.healButton}
           disabled={healingInProgress}
         >
@@ -104,27 +152,56 @@ export default function TeamManagementScreen() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Answer to Heal Your Team</Text>
-            <Text style={styles.question}>{currentProblem.question}</Text>
-            
-            <View style={styles.answersContainer}>
-              {currentProblem.answers.map((answer, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.answerButton}
-                  onPress={() => handleHealAttempt(answer)}
-                  disabled={healingInProgress}
-                >
-                  <Text style={styles.answerText}>{answer}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowHealModal(false)}
-            >
-              <Text style={styles.closeButtonText}>Cancel</Text>
-            </TouchableOpacity>
+            {currentProblem ? (
+              <>
+                {selectedExplanation ? (
+                  // Show explanation and "Continue" button after an answer is selected
+                  <>
+                    <Text
+                      style={[
+                        styles.explanationText,
+                        { color: isCorrect ? "green" : "red" },
+                      ]}
+                    >
+                      {selectedExplanation}
+                    </Text>
+                    <TouchableOpacity
+                      style={[
+                        styles.continueButton,
+                        { backgroundColor: isCorrect ? "#4CAF50" : "#F44336" },
+                      ]}
+                      onPress={() => {
+                        setSelectedExplanation(null); // Reset explanation
+                        if (isCorrect) {
+                          setShowHealModal(false); // Close modal if correct
+                        }
+                      }}
+                    >
+                      <Text style={styles.continueButtonText}>Continue</Text>
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  // Show question and answers initially
+                  <>
+                    <Text style={styles.question}>{currentProblem.question}</Text>
+                    <View style={styles.answersContainer}>
+                      {currentProblem.answers.map((answer, index) => (
+                        <TouchableOpacity
+                          key={index}
+                          style={styles.answerButton}
+                          onPress={() => handleHealAttempt(answer)}
+                          disabled={healingInProgress}
+                        >
+                          <Text style={styles.answerText}>{answer.answer}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </>
+                )}
+              </>
+            ) : (
+              <Text style={styles.question}>Loading problem...</Text>
+            )}
           </View>
         </View>
       </Modal>
@@ -136,10 +213,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',
-    paddingTop: 50
+    // paddingTop: 50
   },
   header: {
     flexDirection: 'row',
+    backgroundColor: "#333",
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
@@ -147,11 +225,13 @@ const styles = StyleSheet.create({
     borderBottomColor: '#DDD'
   },
   backButton: {
-    padding: 5
+    padding: 5,
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold'
+    // fontWeight: 'bold',
+    color: "white",
+    fontFamily: "pixel-font",
   },
   healButton: {
     padding: 5
@@ -178,7 +258,7 @@ const styles = StyleSheet.create({
   monsterImage: {
     width: 80,
     height: 80,
-    borderRadius: 40,
+    // borderRadius: 40,
     marginRight: 15
   },
   monsterInfo: {
@@ -186,13 +266,15 @@ const styles = StyleSheet.create({
   },
   monsterName: {
     fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5
+    // fontWeight: 'bold',
+    marginBottom: 5,
+    fontFamily: "pixel-font",
   },
   monsterLevel: {
     fontSize: 14,
     color: '#666',
-    marginBottom: 10
+    marginBottom: 10,
+    fontFamily: "pixel-font",
   },
   healthBarContainer: {
     height: 10,
@@ -206,7 +288,8 @@ const styles = StyleSheet.create({
   healthText: {
     fontSize: 12,
     color: '#666',
-    marginTop: 5
+    marginTop: 5,
+    fontFamily: "pixel-font",
   },
   modalContainer: {
     flex: 1,
@@ -222,38 +305,64 @@ const styles = StyleSheet.create({
     maxHeight: '80%'
   },
   modalTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 18,
+    // fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20
+    marginBottom: 20,
+    fontFamily: "pixel-font",
   },
   question: {
-    fontSize: 18,
+    fontSize: 14,
     textAlign: 'center',
-    marginBottom: 20
+    marginBottom: 20,
+    fontFamily: "pixel-font",
   },
   answersContainer: {
-    marginBottom: 20
+    // marginBottom: 20
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
   answerButton: {
-    backgroundColor: '#F5F5F5',
+    // backgroundColor: '#F5F5F5',
+    // padding: 15,
+    // borderRadius: 10,
+    // marginBottom: 10
+    backgroundColor: "#4CAF50",
     padding: 15,
+    paddingVertical: 20,
     borderRadius: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    width: "48%",
+    margin: "auto",
   },
   answerText: {
-    fontSize: 16,
-    textAlign: 'center'
-  },
-  closeButton: {
-    backgroundColor: '#666',
-    padding: 15,
-    borderRadius: 10
-  },
-  closeButtonText: {
-    color: '#FFF',
+    color: "#FFF",
+    fontSize: 14,
     textAlign: 'center',
+    fontFamily: "pixel-font",
+  },
+  explanationText: {
     fontSize: 16,
-    fontWeight: 'bold'
-  }
+    textAlign: "center",
+    marginTop: 20,
+    fontFamily: "pixel-font",
+  },
+  continueButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+    alignSelf: "center",
+  },
+  continueButtonText: {
+    color: "#FFF",
+    fontSize: 16,
+    textAlign: "center",
+    fontFamily: "pixel-font",
+    marginRight: 8,
+  },
 });

@@ -2,6 +2,13 @@
   "expo": {
     "name": "FBLA-app",
     "slug": "FBLA-app",
+    "fonts": [
+      {
+        "name": "Pixel Font",
+        "asset": "./assets/fonts/pixel-font.ttf",
+        "fontFamily": "pixel-font"
+      }
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,16 +20,18 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "permissions": ["AUDIO_RECORDING"]
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["AUDIO_RECORDING"]
     },
     "web": {
-      "favicon": "./assets/monsters/test-mon.png"
+      "favicon": "./assets/monsters/ignekko.png"
     }
   }
 }

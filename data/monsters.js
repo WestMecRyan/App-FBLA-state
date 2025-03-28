@@ -1,103 +1,193 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export const MONSTERS = [
-  // Fire Types
   {
     id: 1,
-    name: 'Flamander',
-    type: 'fire',
-    health: 100,
-    maxHealth: 100,
-    level: 5,
+    name: "Ignekko",
+    type: "Fire",
+    baseHealth: 100,
+    image: require('../assets/monsters/ignekko.png'),
     moves: [
-      { id: 1, name: 'Ember', power: 40, type: 'fire' },
-      { id: 2, name: 'Scratch', power: 30, type: 'normal' },
-      { id: 3, name: 'Fire Fang', power: 50, type: 'fire' },
-      { id: 4, name: 'Quick Attack', power: 35, type: 'normal' }
+      { id: 1, name: "Tail Whip", power: 20, type: "Normal" },
+      { id: 3, name: "Fast Attack", power: 30, type: "Normal" },
+      { id: 2, name: "Fire Fang", power: 25, type: "Fire" },
+      { id: 4, name: "Blister Burst", power: 35, type: "Fire" },
     ],
-    // image: require('../assets/monsters/flamander.png')
-    image: require('../assets/monsters/test-mon.png')
+    evolutions: [
+      { level: 9, id: 11 }, 
+      { level: 14, id: 12 }, 
+    ],
+  },
+  {
+    id: 11,
+    name: "Smeltail",
+    type: "Fire",
+    baseHealth: 150,
+    image: require('../assets/monsters/smeltail.png'),
+    moves: [
+      { id: 1, name: "Tail Whip", power: 25, type: "normal" },
+      { id: 3, name: "Fast Attack", power: 40, type: "normal" },
+      { id: 2, name: "Blister Burst", power: 30, type: "fire" },
+      { id: 4, name: "Infernal Spiral", power: 45, type: "fire" },
+    ],
+    evolutions: [
+      { level: 14, id: 12 }, 
+    ],
+  },
+  {
+    id: 12,
+    name: "Forjek",
+    type: "Fire",
+    baseHealth: 200,
+    image: require('../assets/monsters/test-mon.png'),
+    moves: [
+      { id: 1, name: "Tail Whip", power: 30, type: "normal" },
+      { id: 3, name: "Fast Attack", power: 50, type: "normal" },
+      { id: 2, name: "Infernal Spiral", power: 35, type: "fire" },
+      { id: 4, name: "Volcanic Vortex", power: 60, type: "fire" },
+    ],
+    evolutions: [], 
   },
   {
     id: 2,
-    name: 'Blazix',
-    type: 'fire',
-    health: 120,
-    maxHealth: 120,
-    level: 15,
+    name: "Aquotl",
+    type: "Water",
+    baseHealth: 90,
+    image: require('../assets/monsters/aquotl.png'),
     moves: [
-      { id: 5, name: 'Flamethrower', power: 70, type: 'fire' },
-      { id: 6, name: 'Fire Blast', power: 85, type: 'fire' },
-      { id: 7, name: 'Dragon Breath', power: 60, type: 'dragon' },
-      { id: 8, name: 'Slash', power: 55, type: 'normal' }
+      { id: 5, name: "Tail Whip", power: 20, type: "Normal" },
+      { id: 6, name: "Punch", power: 25, type: "Normal" },
+      { id: 7, name: "Bubble", power: 30, type: "Water" },
+      { id: 8, name: "Aqua Cyclone", power: 35, type: "Water" },
     ],
-    // image: require('../assets/monsters/blazix.png')
-    image: require('../assets/monsters/test-mon.png')
+    evolutions: [
+      { level: 9, id: 21 }, 
+      { level: 14, id: 22 }, 
+    ],
   },
-
-  // Water Types
+  {
+    id: 21,
+    name: "Riptotl",
+    type: "Water",
+    baseHealth: 140,
+    image: require('../assets/monsters/test-mon.png'),
+    moves: [
+      { id: 5, name: "Tail Whip", power: 25, type: "Normal" },
+      { id: 6, name: "Spin Attack", power: 30, type: "Normal" },
+      { id: 7, name: "Aqua Cyclone", power: 40, type: "Water" },
+      { id: 8, name: "Hydro Pulse", power: 45, type: "Water" },
+    ],
+    evolutions: [
+      { level: 14, id: 22 },
+    ],
+  },
+  {
+    id: 22,
+    name: "Trickzotl",
+    type: "Water",
+    baseHealth: 190,
+    image: require('../assets/monsters/test-mon.png'),
+    moves: [
+      { id: 5, name: "Spin Attack", power: 30, type: "Normal" },
+      { id: 6, name: "Tail Bash", power: 35, type: "Normal" },
+      { id: 7, name: "Hydro Pulse", power: 50, type: "Water" },
+      { id: 8, name: "Tidal Crush", power: 60, type: "Water" },
+    ],
+    evolutions: [],
+  },
   {
     id: 3,
-    name: 'Aquatle',
-    type: 'water',
-    health: 95,
-    maxHealth: 95,
-    level: 5,
+    name: "Mossloth",
+    type: "Grass",
+    baseHealth: 95,
+    image: require('../assets/monsters/mossloth.png'),
     moves: [
-      { id: 9, name: 'Water Gun', power: 40, type: 'water' },
-      { id: 10, name: 'Tackle', power: 30, type: 'normal' },
-      { id: 11, name: 'Bubble', power: 45, type: 'water' },
-      { id: 12, name: 'Quick Attack', power: 35, type: 'normal' }
+      { id: 9, name: "Low Kick", power: 20, type: "Normal" },
+      { id: 10, name: "Rollout", power: 25, type: "Normal" },
+      { id: 11, name: "Sap Strike", power: 30, type: "Grass" },
+      { id: 12, name: "Thorn Throttle", power: 35, type: "Grass" },
     ],
-    // image: require('../assets/monsters/aquatle.png')
-    image: require('../assets/monsters/test-mon.png')
+    evolutions: [
+      { level: 9, id: 31 }, 
+      { level: 14, id: 32 }, 
+    ],
   },
   {
-    id: 4,
-    name: 'Hydrakon',
-    type: 'water',
-    health: 115,
-    maxHealth: 115,
-    level: 15,
+    id: 31,
+    name: "Vinepaws",
+    type: "Grass",
+    baseHealth: 145,
+    image: require('../assets/monsters/test-mon.png'),
     moves: [
-      { id: 13, name: 'Hydro Pump', power: 80, type: 'water' },
-      { id: 14, name: 'Aqua Jet', power: 65, type: 'water' },
-      { id: 15, name: 'Ice Beam', power: 70, type: 'ice' },
-      { id: 16, name: 'Slam', power: 55, type: 'normal' }
+      { id: 9, name: "Rollout", power: 25, type: "Normal" },
+      { id: 10, name: "Cannonball", power: 30, type: "Normal" },
+      { id: 11, name: "Thorn Throttle", power: 40, type: "Grass" },
+      { id: 12, name: "Root Rampage", power: 45, type: "Grass" },
     ],
-    // image: require('../assets/monsters/hydrakon.png')
-    image: require('../assets/monsters/test-mon.png')
+    evolutions: [
+      { level: 14, id: 32 }, 
+    ],
   },
+  {
+    id: 32,
+    name: "Gaialoth",
+    type: "Grass",
+    baseHealth: 195,
+    // image: require("../assets/monsters/einsteinium.png"),
+    image: require('../assets/monsters/test-mon.png'),
+    moves: [
+      { id: 9, name: "Rollout", power: 30, type: "science" },
+      { id: 10, name: "Cannonball", power: 35, type: "science" },
+      { id: 11, name: "Root Rampage", power: 50, type: "science" },
+      { id: 12, name: "Canopy Crash", power: 60, type: "science" },
+    ],
+    evolutions: [], 
+  },
+]
 
-  // Grass Types
-  {
-    id: 5,
-    name: 'Leafling',
-    type: 'grass',
-    health: 90,
-    maxHealth: 90,
-    level: 5,
-    moves: [
-      { id: 17, name: 'Vine Whip', power: 40, type: 'grass' },
-      { id: 18, name: 'Tackle', power: 30, type: 'normal' },
-      { id: 19, name: 'Razor Leaf', power: 45, type: 'grass' },
-      { id: 20, name: 'Quick Attack', power: 35, type: 'normal' }
-    ],
-    // image: require('../assets/monsters/leafling.png')
-    image: require('../assets/monsters/test-mon.png')
-  },
-  {
-    id: 6,
-    name: 'Florabeast',
-    type: 'grass',
-    health: 110,
-    maxHealth: 110,
-    level: 15,
-    moves: [
-      { id: 21, name: 'Solar Beam', power: 85, type: 'grass' },
-      { id: 22, name: 'Leaf Storm', power: 75, type: 'grass' },
-      { id: 23, name: 'Energy Ball', power: 65, type: 'grass' },
-      { id: 24, name: 'Body Slam', power: 60, type: 'normal' }
-    ],
-    // image: require('../assets/monsters/florabeast.png')
-    image: require('../assets/monsters/test-mon.png')
+// Function to create a new monster instance
+export function createMonster(id, level = 1) {
+  const baseMonster = MONSTERS.find((m) => m.id === id)
+  if (!baseMonster) return null
+
+  return {
+    ...baseMonster,
+    id: baseMonster.id,
+    level: level,
+    exp: 0,
+    expToNextLevel: calculateExpToNextLevel(level),
+    health: calculateHealth(baseMonster.baseHealth, level),
+    maxHealth: calculateHealth(baseMonster.baseHealth, level),
+    uniqueId: uuidv4(),
   }
-];
+}
+
+// Calculate health based on base health and level
+function calculateHealth(baseHealth, level) {
+  return Math.floor(baseHealth * (1 + (level - 1) * 0.1))
+}
+
+// Calculate experience needed for next level
+export function calculateExpToNextLevel(level) {
+  // Exponential growth formula for exp requirements
+  return Math.floor(50 * (1.3 * level))
+}
+
+// Calculate experience gained from defeating an enemy
+export function calculateExpGain(defeatedLevel, playerLevel) {
+  const bonusMultiplier = 1.5
+
+  return Math.floor(100 * bonusMultiplier * (defeatedLevel * 0.6));
+}
+
+// Find evolution for a monster at its current level
+export function getEvolution(monsterId, level) {
+  const monster = MONSTERS.find((m) => m.id === monsterId)
+  if (!monster || !monster.evolutions.length) return null
+
+  // Find the first evolution that matches the level requirement
+  const evolution = monster.evolutions.find((e) => level >= e.level)
+  if (!evolution) return null
+
+  return MONSTERS.find((m) => m.id === evolution.id)
+}
