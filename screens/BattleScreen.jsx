@@ -29,46 +29,6 @@ const createFreshTrainerMonsters = (trainerMonsters) => {
 }
 
 export default function BattleScreen() {
-  useFocusEffect(
-    useCallback(() => {
-      // When battle screen comes into focus, stop any existing music and play battle music
-      const setupBattleAudio = async () => {
-        await stopBgMusic(); // Ensure all music is stopped first
-
-        // Select battle music based on trainer position in the school
-        if (isRandomBattle) {
-          // For random encounters, use battle1
-          await playBgMusic("battle1", 0.1);
-        } else {
-          // For trainer battles, select music based on trainer position
-          const school = SCHOOLS.find((s) => s.id === schoolId);
-          if (school) {
-            const trainerIndex = school.trainers.findIndex((t) => t.id === trainerId);
-            if (trainerIndex === 0) {
-              await playBgMusic("battle1", 0.1);
-            } else if (trainerIndex === 1) {
-              await playBgMusic("battle2", 0.1);
-            } else if (trainerIndex === 2) {
-              await playBgMusic("battle3", 0.1);
-            } else {
-              await playBgMusic("battle1", 0.1);
-            }
-          } else {
-            // Default if school not found
-            await playBgMusic("battle1", 0.1);
-          }
-        }
-      };
-
-      setupBattleAudio();
-
-      // Cleanup function when screen loses focus
-      return () => {
-        stopBgMusic(); // Stop battle music when leaving
-      };
-    }, [schoolId, trainerId, isRandomBattle]) // Make sure to add dependencies
-  );
-
   const navigation = useNavigation()
   const route = useRoute()
   const { trainerId, schoolId, isRandomEncounter, isPreTrainerEncounter } = route.params || {}
@@ -121,6 +81,46 @@ export default function BattleScreen() {
   const playerHealthAnim = useRef(new Animated.Value(100)).current
   const enemyHealthAnim = useRef(new Animated.Value(100)).current
   const playerExpAnim = useRef(new Animated.Value(0)).current
+
+  useFocusEffect(
+    useCallback(() => {
+      // When battle screen comes into focus, stop any existing music and play battle music
+      const setupBattleAudio = async () => {
+        await stopBgMusic(); // Ensure all music is stopped first
+
+        // Select battle music based on trainer position in the school
+        if (isRandomBattle) {
+          // For random encounters, use battle1
+          await playBgMusic("battle1", 0.1);
+        } else {
+          // For trainer battles, select music based on trainer position
+          const school = SCHOOLS.find((s) => s.id === schoolId);
+          if (school) {
+            const trainerIndex = school.trainers.findIndex((t) => t.id === trainerId);
+            if (trainerIndex === 0) {
+              await playBgMusic("battle1", 0.1);
+            } else if (trainerIndex === 1) {
+              await playBgMusic("battle2", 0.1);
+            } else if (trainerIndex === 2) {
+              await playBgMusic("battle3", 0.1);
+            } else {
+              await playBgMusic("battle1", 0.1);
+            }
+          } else {
+            // Default if school not found
+            await playBgMusic("battle1", 0.1);
+          }
+        }
+      };
+
+      setupBattleAudio();
+
+      // Cleanup function when screen loses focus
+      return () => {
+        stopBgMusic(); // Stop battle music when leaving
+      };
+    }, [schoolId, trainerId, isRandomBattle])
+  );
 
   useEffect(() => {
     initializeBattle()
@@ -488,12 +488,12 @@ export default function BattleScreen() {
       let effectivenessText = "";
       if (typeBonus > 1) {
         effectivenessText = " It's super effective!";
-        playSound("hit");
+        playSound("hit", 0.4);
       } else if (typeBonus < 1) {
         effectivenessText = " It's not very effective...";
-        playSound("hit");
+        playSound("hit", 0.4);
       } else {
-        playSound("hit");
+        playSound("hit", 0.4);
       }
 
       setBattleText(`${currentActiveMonster.name} used ${move?.name || "attack"}!${effectivenessText}`);
@@ -571,12 +571,12 @@ export default function BattleScreen() {
     let effectivenessText = "";
     if (typeBonus > 1) {
       effectivenessText = " It's super effective!";
-      playSound("hit");
+      playSound("hit", 0.4);
     } else if (typeBonus < 1) {
       effectivenessText = " It's not very effective...";
-      playSound("hit");
+      playSound("hit", 0.4);
     } else {
-      playSound("hit");
+      playSound("hit", 0.4);
     }
 
     // setBattleText(`Enemy ${enemyMonster.name} used ${enemyMove.name}!`)
@@ -657,7 +657,7 @@ export default function BattleScreen() {
 
     // Monster is caught!
     setBattleText(`${enemyMonster.name} has been caught!`)
-    playSound("capture", 0.5)
+    playSound("capture", 0.2)
 
     // Add the caught monster to the player's team
     try {
@@ -883,7 +883,7 @@ export default function BattleScreen() {
       setTimeout(() => {
         setEnemyMonster(freshNextMonster)
         setBattleText(`${enemyTrainer?.name} sent out ${freshNextMonster.name}!`)
-        playSound("switch", 0.2)
+        playSound("switch", 0.1)
         setIsProcessingTurn(false)
       }, 100)
     } else {
@@ -927,7 +927,7 @@ export default function BattleScreen() {
         playerHealthAnim.setValue(nextMonster.health)
         playerExpAnim.setValue(nextMonster.exp || 0)
         setBattleText(`Go, ${nextMonster.name}!`)
-        playSound("switch", 0.2)
+        playSound("switch", 0.1)
         setIsProcessingTurn(false)
       }, 2000)
     } else {

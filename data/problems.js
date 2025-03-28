@@ -381,12 +381,12 @@ export const PROBLEMS = {
         id: 35,
         question: "What is 5(2x + 3) if x = 2?",
         answers: [
-          { answer: "25", explanation: "Correct! Substitute x = 2 into the expression: 5(2(2) + 3) = 5(4 + 3) = 5(7) = 35." },
+          { answer: "35", explanation: "Correct! Substitute x = 2 into the expression: 5(2(2) + 3) = 5(4 + 3) = 5(7) = 35." },
           { answer: "27", explanation: "This is close, but double-check your multiplication steps." },
           { answer: "29", explanation: "This is too high. Recheck the values and multiply properly." },
           { answer: "31", explanation: "This is too high. Recheck the equation with x = 2." }
         ],
-        correctAnswer: "25"
+        correctAnswer: "35"
       },
       {
         id: 36,

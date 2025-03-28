@@ -11,11 +11,11 @@
     ],
     "version": "1.0.0",
     "orientation": "landscape",
-    "icon": "./assets/ignekko.png",
+    "icon": "./assets/monsters/ignekko.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/ignekko.png",
+      "image": "./assets/monsters/ignekko.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -25,7 +25,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/ignekko.png",
+        "foregroundImage": "./assets/monsters/ignekko.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": ["AUDIO_RECORDING"]
