@@ -67,7 +67,7 @@ app.post('/register', async (c) => {
 	}
 });
 
-
+app.get('/login', (c) => c.text('GET login route is working'));
 
 app.post('/login', async (c) => {
 	const { DB } = c.env;

@@ -93,8 +93,8 @@ export default function App() {
       <StatusBar barStyle="light-content" backgroundColor="#000" />
       <NavigationContainer>
         <Stack.Navigator
-          // initialRouteName={isLoggedIn ? "Home" : "Login"}
-          initialRouteName="Home"
+          initialRouteName={isLoggedIn ? "Home" : "Login"}
+          // initialRouteName="Home"
           screenOptions={{
             headerShown: false,
             animation: "slide_from_right",

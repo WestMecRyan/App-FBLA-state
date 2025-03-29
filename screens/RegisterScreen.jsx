@@ -11,13 +11,10 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
-  Keyboard,
   Alert,
   ScrollView,
 } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-
-const API_URL = "https://api.santiagohe75.workers.dev/register"
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("")
@@ -31,43 +28,47 @@ export default function RegisterScreen() {
   // Detect orientation changes
   useEffect(() => {
     const updateOrientation = () => {
-      const { width, height } = Dimensions.get('window');
-      setOrientation(width > height ? "landscape" : "portrait");
-    };
+      const { width, height } = Dimensions.get("window")
+      setOrientation(width > height ? "landscape" : "portrait")
+    }
 
     // Set initial orientation
-    updateOrientation();
+    updateOrientation()
 
     // Add event listener for orientation changes
-    Dimensions.addEventListener('change', updateOrientation);
+    Dimensions.addEventListener("change", updateOrientation)
 
     // Clean up
     return () => {
       // Remove event listener (for older React Native versions)
       if (Dimensions.removeEventListener) {
-        Dimensions.removeEventListener('change', updateOrientation);
+        Dimensions.removeEventListener("change", updateOrientation)
       }
-    };
-  }, []);
+    }
+  }, [])
 
   // Function to validate user input
   const validateForm = () => {
     if (!username.trim()) {
+      console.log("Error: Please enter a username")
       Alert.alert("Error", "Please enter a username")
       return false
     }
 
     if (!email.trim() || !email.includes("@") || !email.includes(".")) {
+      console.log("Error: Please enter a valid email address")
       Alert.alert("Error", "Please enter a valid email address")
       return false
     }
 
     if (password.length < 6) {
+      console.log("Error: Password must be at least 6 characters")
       Alert.alert("Error", "Password must be at least 6 characters")
       return false
     }
 
     if (password !== confirmPassword) {
+      console.log("Error: Passwords do not match")
       Alert.alert("Error", "Passwords do not match")
       return false
     }
@@ -79,27 +80,44 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     if (!validateForm()) return
 
+    console.log("Debug: Starting registration request")
+    Alert.alert("Debug", "Starting registration request")
     setIsLoading(true)
+
+    const url = "https://api.santiagohe75.workers.dev/register"
+    console.log(`Debug: Request URL: ${url}`)
+    Alert.alert("Debug", `Request URL: ${url}`)
+
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
       })
 
-      const result = await response.json()
+      console.log(`Debug: Response status: ${response.status}`)
+      Alert.alert("Debug", `Response status: ${response.status}`)
 
       if (response.ok) {
-        Alert.alert("Registration Successful", "Your account has been created. Please log in.", [
+        const message = await response.text()
+        console.log(`Registration Successful: ${message || "Your account has been created. Please log in."}`)
+        Alert.alert("Registration Successful", message || "Your account has been created. Please log in.", [
           { text: "OK", onPress: () => navigation.navigate("Login") },
         ])
       } else {
-        Alert.alert("Registration Failed", result.message || "Could not create account")
+        const errorMessage = await response.text()
+        console.log(`Registration Failed: ${errorMessage || "Could not create account"}`)
+        Alert.alert("Registration Failed", errorMessage || "Could not create account")
       }
     } catch (error) {
-      Alert.alert("Error", "An error occurred during registration")
+      console.log(`Network Error: ${error.message}`)
+      Alert.alert("Network Error", `Error message: ${error.message}`)
       console.error("Registration Error:", error)
     } finally {
       setIsLoading(false)
@@ -107,20 +125,15 @@ export default function RegisterScreen() {
   }
 
   return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === "ios" ? "padding" : "height"} 
-      style={styles.container}
-    >
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
       {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
-      <ScrollView 
-        contentContainerStyle={orientation === "landscape" ? styles.landscapeScroll : styles.portraitScroll}
-      >
+      <ScrollView contentContainerStyle={orientation === "landscape" ? styles.landscapeScroll : styles.portraitScroll}>
         <View style={orientation === "landscape" ? styles.landscapeInner : styles.portraitInner}>
           {/* Logo Section */}
           <View style={orientation === "landscape" ? styles.landscapeLogoContainer : styles.portraitLogoContainer}>
-            <Image 
-              source={require("../assets/edumon-logo-education.png")} 
-              style={orientation === "landscape" ? styles.landscapeLogo : styles.portraitLogo} 
+            <Image
+              source={require("../assets/edumon-logo-education.png")}
+              style={orientation === "landscape" ? styles.landscapeLogo : styles.portraitLogo}
             />
             <Text style={styles.appTitle}>Create Account</Text>
           </View>
@@ -185,69 +198,69 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: "#f5f5f5" 
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
   },
-  
+
   // Portrait styles
-  portraitScroll: { 
-    flexGrow: 1 
+  portraitScroll: {
+    flexGrow: 1,
   },
-  portraitInner: { 
-    flex: 1, 
-    justifyContent: "center", 
-    alignItems: "center", 
-    padding: 20 
+  portraitInner: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
   },
-  portraitLogoContainer: { 
-    alignItems: "center", 
-    marginBottom: 30, 
-    marginTop: 40 
+  portraitLogoContainer: {
+    alignItems: "center",
+    marginBottom: 30,
+    marginTop: 40,
   },
-  portraitLogo: { 
-    width: 80, 
-    height: 80, 
-    resizeMode: "contain" 
+  portraitLogo: {
+    width: 80,
+    height: 80,
+    resizeMode: "contain",
   },
-  portraitFormContainer: { 
-    width: "100%", 
-    maxWidth: 400 
+  portraitFormContainer: {
+    width: "100%",
+    maxWidth: 400,
   },
-  
+
   // Landscape styles
-  landscapeScroll: { 
-    flexGrow: 1 
+  landscapeScroll: {
+    flexGrow: 1,
   },
-  landscapeInner: { 
-    flex: 1, 
-    flexDirection: 'row',
-    justifyContent: "space-around", 
-    alignItems: "center", 
-    padding: 20 
+  landscapeInner: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    padding: 20,
   },
-  landscapeLogoContainer: { 
+  landscapeLogoContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 20
+    marginRight: 20,
   },
-  landscapeLogo: { 
-    width: 160, 
-    height: 160, 
-    resizeMode: "contain" 
+  landscapeLogo: {
+    width: 160,
+    height: 160,
+    resizeMode: "contain",
   },
-  landscapeFormContainer: { 
+  landscapeFormContainer: {
     flex: 2,
-    maxWidth: 500
+    maxWidth: 500,
   },
-  
+
   // Common styles
-  appTitle: { 
-    fontSize: 24, 
-    fontWeight: "bold", 
-    // marginTop: 10, 
-    color: "#333" 
+  appTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    // marginTop: 10,
+    color: "#333",
   },
   input: {
     backgroundColor: "white",
@@ -258,34 +271,35 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     fontSize: 16,
   },
-  button: { 
-    backgroundColor: "#4a90e2", 
-    borderRadius: 8, 
-    padding: 15, 
-    alignItems: "center", 
-    marginTop: 10 
+  button: {
+    backgroundColor: "#4a90e2",
+    borderRadius: 8,
+    padding: 15,
+    alignItems: "center",
+    marginTop: 10,
   },
-  buttonDisabled: { 
-    backgroundColor: "#a0c4e7" 
+  buttonDisabled: {
+    backgroundColor: "#a0c4e7",
   },
-  buttonText: { 
-    color: "white", 
-    fontSize: 16, 
-    fontWeight: "bold" 
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
-  loginLinkContainer: { 
-    flexDirection: "row", 
-    justifyContent: "center", 
-    marginTop: 20, 
-    marginBottom: 20 
+  loginLinkContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 20,
+    marginBottom: 20,
   },
-  loginText: { 
-    color: "#333", 
-    fontSize: 14 
+  loginText: {
+    color: "#333",
+    fontSize: 14,
   },
-  loginLink: { 
-    color: "#4a90e2", 
-    fontSize: 14, 
-    fontWeight: "bold" 
+  loginLink: {
+    color: "#4a90e2",
+    fontSize: 14,
+    fontWeight: "bold",
   },
 })
+
