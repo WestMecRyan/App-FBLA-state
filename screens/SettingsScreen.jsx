@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Modal, ScrollView, SafeAreaView } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useFocusEffect } from "@react-navigation/native"
 import { loadGameState, saveGameState, resetGameState } from "../utils/gameState"
-import { notifySettingsChanged } from '../utils/audio';
 import { Ionicons } from "@expo/vector-icons"
-import { playSound } from "../utils/audio"
+import { notifySettingsChanged, playSound, playBgMusic, stopBgMusic } from '../utils/audio'
 
 export default function SettingsScreen() {
   const navigation = useNavigation()
@@ -19,6 +18,24 @@ export default function SettingsScreen() {
   useEffect(() => {
     loadSettings()
   }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      // When settings screen comes into focus, stop any existing music and play settings music
+      const setupSettingsAudio = async () => {
+        await stopBgMusic(); // Ensure all music is stopped first
+        await playBgMusic("healCenter", 0.1); // Play healing center music for settings
+      };
+
+      setupSettingsAudio();
+
+      // Cleanup function when screen loses focus
+      return () => {
+        // Let the next screen handle its own music
+        stopBgMusic();
+      };
+    }, [])
+  );
 
   const loadSettings = async () => {
     try {

@@ -206,13 +206,54 @@ export default function BattleScreen() {
           return
         }
 
-        // Create a fake trainer for the wild monster
+        // const wildTrainer = {
+        //   id: `wild-${Date.now()}`, // Unique ID
+        //   name: "Wild Monster",
+        //   monsters: [wildMonster],
+        //   problems: SCHOOLS.find((s) => s.id === schoolId)?.trainers[randomTrainerId]?.problems || [],
+        // }
+
         const wildTrainer = {
           id: `wild-${Date.now()}`, // Unique ID
           name: "Wild Monster",
           monsters: [wildMonster],
-          problems: SCHOOLS.find((s) => s.id === schoolId)?.trainers[0]?.problems || [],
-        }
+          // Create a problems function that returns random problems from all available
+          problems: async () => {
+            try {
+              const gameState = await loadGameState();
+              const subject = gameState.settings?.subject || "math";
+              const difficulty = gameState.settings?.difficulty || "normal";
+
+              // Gather all problems from all schools and trainers
+              const allProblems = [];
+
+              // Loop through all schools to collect problems
+              for (const school of SCHOOLS) {
+                for (const trainer of school.trainers) {
+                  if (trainer.problems) {
+                    const trainerProblems = await trainer.problems();
+                    if (trainerProblems && trainerProblems.length > 0) {
+                      allProblems.push(...trainerProblems);
+                    }
+                  }
+                }
+              }
+
+              // If no problems found, return an empty array
+              if (allProblems.length === 0) {
+                console.warn("No problems found for wild encounter");
+                return [];
+              }
+
+              // Shuffle the problems and return 5 (or fewer if not enough)
+              const shuffledProblems = [...allProblems].sort(() => Math.random() - 0.5);
+              return shuffledProblems.slice(0, 5);
+            } catch (error) {
+              console.error("Error getting random problems for wild encounter:", error);
+              return [];
+            }
+          }
+        };
 
         // Make sure exp is set
         const playerTeamWithExp = gameState.playerTeam.map((monster) => ({
@@ -657,6 +698,7 @@ export default function BattleScreen() {
 
     // Monster is caught!
     setBattleText(`${enemyMonster.name} has been caught!`)
+    stopBgMusic();
     playSound("capture", 0.2)
 
     // Add the caught monster to the player's team
