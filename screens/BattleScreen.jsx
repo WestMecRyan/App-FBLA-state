@@ -117,7 +117,7 @@ export default function BattleScreen() {
 
       // Cleanup function when screen loses focus
       return () => {
-        stopBgMusic(); // Stop battle music when leaving
+        // stopBgMusic(); // Stop battle music when leaving
       };
     }, [schoolId, trainerId, isRandomBattle])
   );
@@ -128,10 +128,10 @@ export default function BattleScreen() {
 
     const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress)
 
-    return () => {
-      backHandler.remove()
-      stopBgMusic()
-    }
+    // return () => {
+    //   backHandler.remove()
+    //   stopBgMusic()
+    // }
   }, [])
 
   // Update the ref whenever activeMonster changes
@@ -142,10 +142,6 @@ export default function BattleScreen() {
   }, [activeMonster])
 
   const handleBackPress = () => {
-    if (isBattleOver) {
-      // navigation.goBack()
-      return true
-    }
     return false
   }
 
@@ -529,12 +525,12 @@ export default function BattleScreen() {
       let effectivenessText = "";
       if (typeBonus > 1) {
         effectivenessText = " It's super effective!";
-        playSound("hit", 0.4);
+        playSound("hit", 0.2);
       } else if (typeBonus < 1) {
         effectivenessText = " It's not very effective...";
-        playSound("hit", 0.4);
+        playSound("hit", 0.2);
       } else {
-        playSound("hit", 0.4);
+        playSound("hit", 0.2);
       }
 
       setBattleText(`${currentActiveMonster.name} used ${move?.name || "attack"}!${effectivenessText}`);
@@ -612,17 +608,16 @@ export default function BattleScreen() {
     let effectivenessText = "";
     if (typeBonus > 1) {
       effectivenessText = " It's super effective!";
-      playSound("hit", 0.4);
+      playSound("hit", 0.2);
     } else if (typeBonus < 1) {
       effectivenessText = " It's not very effective...";
-      playSound("hit", 0.4);
+      playSound("hit", 0.2);
     } else {
-      playSound("hit", 0.4);
+      playSound("hit", 0.2);
     }
 
     // setBattleText(`Enemy ${enemyMonster.name} used ${enemyMove.name}!`)
     setBattleText(`Enemy ${enemyMonster.name} used ${enemyMove.name}!${effectivenessText}`);
-    // playSound("hit")
 
     // Wait for damage animation to complete
     await new Promise((resolve) => setTimeout(resolve, 400))
@@ -836,6 +831,7 @@ export default function BattleScreen() {
     // Show appropriate messages
     setTimeout(() => {
       // playSound("expGain", 0.5);
+      playSound("levelUp", 0.2)
       setBattleText(`${currentActiveMonster.name} gained ${expGained} EXP!`)
 
       setTimeout(() => {
@@ -863,7 +859,7 @@ export default function BattleScreen() {
           }, 5000) // Evolution animation duration
         } else if (leveledUp) {
           setBattleText(`${currentActiveMonster.name} leveled up to level ${updatedMonster.level}!`)
-          playSound("levelUp", 0.3)
+          playSound("levelUp", 0.2)
 
           // Update active monster
           setActiveMonster(updatedMonster)

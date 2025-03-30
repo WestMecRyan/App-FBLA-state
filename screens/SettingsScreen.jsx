@@ -32,7 +32,7 @@ export default function SettingsScreen() {
       // Cleanup function when screen loses focus
       return () => {
         // Let the next screen handle its own music
-        stopBgMusic();
+        // stopBgMusic();
       };
     }, [])
   );

@@ -29,7 +29,7 @@ export default function TeamManagementScreen() {
       
       // Cleanup function when screen loses focus
       return () => {
-        stopBgMusic(); // Stop team management music when leaving
+        // stopBgMusic(); // Stop team management music when leaving
       };
     }, [])
   );

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground, Modal, SafeAreaView, Linking, Alert } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useFocusEffect } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { LinearGradient } from 'expo-linear-gradient';
 import { hasSelectedStarter } from "../utils/gameState"
@@ -11,6 +11,24 @@ export default function HomeScreen() {
   const [starterSelected, setStarterSelected] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
 
+  useFocusEffect(
+    useCallback(() => {
+      // When home screen comes into focus, stop any existing music and play home music
+      const setupHomeAudio = async () => {
+        await stopBgMusic(); // Ensure all music is stopped first
+        await playBgMusic("home", 0.1); // Play home music
+      };
+
+      setupHomeAudio();
+
+      // Cleanup function when screen loses focus
+      return () => {
+        // Let the next screen handle its own music
+        // stopBgMusic();
+      };
+    }, [])
+  );
+
   useEffect(() => {
     const checkStarterSelection = async () => {
       const hasStarter = await hasSelectedStarter()
@@ -18,7 +36,6 @@ export default function HomeScreen() {
     }
 
     checkStarterSelection()
-    playBgMusic("home", 0.1);
   }, [])
 
   const handlePlay = () => {
@@ -201,6 +218,9 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: "100%",
     alignItems: "center",
+    borderWidth: 3,
+    borderStyle: "solid",
+    borderColor: "#fff",
   },
   playButtonText: {
     color: "#FFF",
@@ -217,6 +237,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     width: "100%",
     alignItems: "center",
+    borderWidth: 3,
+    borderStyle: "solid",
+    borderColor: "#fff",
   },
   settingsButtonText: {
     color: "#FFF",
@@ -233,6 +256,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
+    borderWidth: 3,
+    borderStyle: "solid",
+    borderColor: "#fff",
   },
   shareButtonText: {
     color: "#FFF",

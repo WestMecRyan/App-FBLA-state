@@ -41,7 +41,7 @@ export default function MapScreen() {
       return () => {
         // Let the next screen handle its own music
         // We'll stop this music in the cleanup
-        stopBgMusic();
+        // stopBgMusic();
       };
     }, [])
   );
@@ -53,7 +53,7 @@ export default function MapScreen() {
 
     return () => {
       backHandler.remove()
-      stopBgMusic()
+      // stopBgMusic()
     }
   }, [])
 
