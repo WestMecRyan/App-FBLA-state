@@ -173,26 +173,29 @@ export const stopSound = async () => {
 
 export const playSound = async (soundName, volume = 0.3) => {
   try {
-    if (!isSoundEnabled) return;
-    
-    // Get the cached sound or load it if not available
-    let sound = audioCache.sounds[soundName];
-    if (!sound) {
-      // Fallback if not preloaded
-      console.warn(`Sound ${soundName} not found in cache, loading now...`);
-      const source = soundSources[soundName] || null;
-      if (!source) {
-        console.error(`Sound source for ${soundName} not found`);
-        return;
+    const gameState = await loadGameState();
+    if (gameState.settings.soundEnabled === true) {
+      if (!isSoundEnabled) return;
+
+      // Get the cached sound or load it if not available
+      let sound = audioCache.sounds[soundName];
+      if (!sound) {
+        // Fallback if not preloaded
+        console.warn(`Sound ${soundName} not found in cache, loading now...`);
+        const source = soundSources[soundName] || null;
+        if (!source) {
+          console.error(`Sound source for ${soundName} not found`);
+          return;
+        }
+        const { sound: newSound } = await Audio.Sound.createAsync(source, { shouldPlay: false });
+        sound = newSound;
+        audioCache.sounds[soundName] = sound;
       }
-      const { sound: newSound } = await Audio.Sound.createAsync(source, { shouldPlay: false });
-      sound = newSound;
-      audioCache.sounds[soundName] = sound;
+
+      // Make a clone to allow multiple sounds at once
+      await sound.setVolumeAsync(volume);
+      await sound.playFromPositionAsync(0);
     }
-    
-    // Make a clone to allow multiple sounds at once
-    await sound.setVolumeAsync(volume);
-    await sound.playFromPositionAsync(0);
   } catch (error) {
     console.error(`Failed to play sound ${soundName}:`, error);
   }
@@ -204,41 +207,44 @@ let pendingAudioOperation = null;
 
 export const playBgMusic = async (musicName, volume = 0.3) => {
   try {
-    setMusicLoading(true);
-    
-    if (!isMusicEnabled) {
-      setMusicLoading(false);
-      return false;
-    }
-    
-    // Stop any currently playing music
-    await stopBgMusic();
-    
-    // Get the cached sound or load it if not available
-    let sound = audioCache.music[musicName];
-    if (!sound) {
-      // Fallback if not preloaded
-      console.warn(`Music ${musicName} not found in cache, loading now...`);
-      const source = musicSources[musicName] || null;
-      if (!source) {
-        console.error(`Music source for ${musicName} not found`);
+    const gameState = await loadGameState();
+    if (gameState.settings.musicEnabled === true) {
+      setMusicLoading(true);
+
+      if (!isMusicEnabled) {
         setMusicLoading(false);
         return false;
       }
-      const { sound: newSound } = await Audio.Sound.createAsync(source, { shouldPlay: false });
-      sound = newSound;
-      audioCache.music[musicName] = sound;
+
+      // Stop any currently playing music
+      await stopBgMusic();
+
+      // Get the cached sound or load it if not available
+      let sound = audioCache.music[musicName];
+      if (!sound) {
+        // Fallback if not preloaded
+        console.warn(`Music ${musicName} not found in cache, loading now...`);
+        const source = musicSources[musicName] || null;
+        if (!source) {
+          console.error(`Music source for ${musicName} not found`);
+          setMusicLoading(false);
+          return false;
+        }
+        const { sound: newSound } = await Audio.Sound.createAsync(source, { shouldPlay: false });
+        sound = newSound;
+        audioCache.music[musicName] = sound;
+      }
+
+      // Set as current and play
+      bgMusic = sound;
+      currentMusicName = musicName;
+      await sound.setIsLoopingAsync(true);
+      await sound.setVolumeAsync(volume);
+      await sound.playAsync();
+
+      setMusicLoading(false);
+      return true;
     }
-    
-    // Set as current and play
-    bgMusic = sound;
-    currentMusicName = musicName;
-    await sound.setIsLoopingAsync(true);
-    await sound.setVolumeAsync(volume);
-    await sound.playAsync();
-    
-    setMusicLoading(false);
-    return true;
   } catch (error) {
     console.error(`Failed to play music ${musicName}:`, error);
     setMusicLoading(false);
@@ -361,14 +367,14 @@ export const unloadAllAudio = async () => {
   try {
     // Unload all music
     await Promise.all(Object.values(audioCache.music).map(sound => sound.unloadAsync()));
-    
+
     // Unload all sound effects
     await Promise.all(Object.values(audioCache.sounds).map(sound => sound.unloadAsync()));
-    
+
     // Clear the cache
     audioCache.music = {};
     audioCache.sounds = {};
-    
+
     console.log("All audio unloaded");
   } catch (error) {
     console.error("Error unloading audio:", error);

@@ -34,9 +34,9 @@ export default function MapScreen() {
         await stopBgMusic(); // Ensure all music is stopped first
         await playBgMusic("map", 0.1); // Play map music
       };
-      
+
       setupMapAudio();
-      
+
       // Cleanup function when screen loses focus
       return () => {
         // Let the next screen handle its own music
@@ -119,57 +119,73 @@ export default function MapScreen() {
     return !allDefeated
   }
 
-  const isTrainerLocked = (trainer) => {
-    // First trainer in each school is always unlocked
-    if (trainer.id === SCHOOLS.find((s) => s.id === trainer.schoolId)?.trainers[0]?.id) {
-      return false
-    }
-
-    // Find the previous trainer in the same school
-    const school = SCHOOLS.find((s) => s.id === trainer.schoolId)
-    if (!school) return true
-
-    const trainerIndex = school.trainers.findIndex((t) => t.id === trainer.id)
-    if (trainerIndex <= 0) return false // First trainer or not found
-
-    const previousTrainer = school.trainers[trainerIndex - 1]
-    const isLocked = !defeatedTrainers.includes(previousTrainer.id)
-
-    console.log(
-      `Trainer ${trainer.id} locked status:`,
-      isLocked,
-      "Previous trainer:",
-      previousTrainer.id,
-      "Defeated:",
-      defeatedTrainers.includes(previousTrainer.id),
-    )
-    return isLocked
-  }
-
   const handleTrainerSelect = async (trainer) => {
-    if (!isTrainerLocked(trainer)) {
-      playSound("click", 0.3);
-      setShowTrainers(false) // Close the modal before navigation
+    try {
+      if (!isTrainerLocked(trainer)) {
+        try {
+          await playSound("click", 0.3);
+        } catch (error) {
+          console.log("Error playing sound:", error);
+        }
 
-      // Check if this trainer has a random encounter before it and if it hasn't been completed yet
-      if (trainer.hasRandomEncounterBefore && !completedEncounters.includes(trainer.id)) {
-        // Navigate to a random encounter first
-        navigation.navigate("Battle", {
-          trainerId: trainer.id, // We'll need this later to know which trainer the player was trying to battle
-          schoolId: trainer.schoolId,
-          isRandomEncounter: true,
-          isPreTrainerEncounter: true, // Flag to indicate this is a pre-trainer encounter
-        })
-      } else {
-        // Navigate directly to the trainer battle
-        navigation.navigate("Battle", {
-          trainerId: trainer.id,
-          schoolId: trainer.schoolId,
-          isRandomEncounter: false,
-        })
+        setShowTrainers(false); // Close the modal before navigation
+
+        // Add a small delay to ensure modal is closed before navigation
+        setTimeout(() => {
+          try {
+            // Check if this trainer has a random encounter before it
+            if (trainer &&
+              trainer.hasRandomEncounterBefore === true &&
+              !completedEncounters.includes(trainer.id)) {
+              // Navigate to a random encounter first
+              navigation.navigate("Battle", {
+                trainerId: trainer.id,
+                schoolId: trainer.schoolId,
+                isRandomEncounter: true,
+                isPreTrainerEncounter: true,
+              });
+            } else {
+              // Navigate directly to the trainer battle
+              navigation.navigate("Battle", {
+                trainerId: trainer.id,
+                schoolId: trainer.schoolId,
+                isRandomEncounter: false,
+              });
+            }
+          } catch (navError) {
+            console.error("Navigation error:", navError);
+          }
+        }, 100);
       }
+    } catch (error) {
+      console.error("Error in handleTrainerSelect:", error);
     }
-  }
+  };
+
+  const isTrainerLocked = (trainer) => {
+    try {
+      if (!trainer || typeof trainer !== 'object') return true;
+
+      // First trainer in each school is always unlocked
+      const school = SCHOOLS.find((s) => s.id === trainer.schoolId);
+      if (!school || !Array.isArray(school.trainers) || school.trainers.length === 0) return true;
+
+      if (trainer.id === school.trainers[0]?.id) {
+        return false;
+      }
+
+      const trainerIndex = school.trainers.findIndex((t) => t.id === trainer.id);
+      if (trainerIndex <= 0) return false; // First trainer or not found
+
+      const previousTrainer = school.trainers[trainerIndex - 1];
+      if (!previousTrainer) return true;
+
+      return !defeatedTrainers.includes(previousTrainer.id);
+    } catch (error) {
+      console.error("Error in isTrainerLocked:", error);
+      return true; // Default to locked if there's an error
+    }
+  };
 
   const handleShare = (platform) => {
     // Define the text you want to share
@@ -300,76 +316,90 @@ export default function MapScreen() {
         </View>
 
         {/* Trainers Modal */}
-        <Modal
-          visible={showTrainers}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={() => setShowTrainers(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <TouchableOpacity style={styles.closeButton} onPress={() => {
-                playSound("click", 0.3);
-                setShowTrainers(false)
-              }}>
-                <Ionicons name="close" size={24} color="#000" />
-              </TouchableOpacity>
+        {showTrainers && (
+          <View style={styles.absoluteOverlay}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => {
+                    try {
+                      playSound("click", 0.3);
+                    } catch (error) {
+                      console.log("Error playing sound:", error);
+                    }
+                    setShowTrainers(false);
+                  }}
+                >
+                  <Ionicons name="close" size={24} color="#000" />
+                </TouchableOpacity>
 
-              <Text style={styles.modalTitle}>{selectedSchool?.name} Trainers</Text>
+                <Text style={styles.modalTitle}>
+                  {selectedSchool ? selectedSchool.name : ''} Trainers
+                </Text>
 
-              <View style={styles.trainersGrid}>
-                {selectedSchool?.trainers.map((trainer) => (
-                  <TouchableOpacity
-                    key={trainer.id}
-                    style={[
-                      styles.trainerCard,
-                      isTrainerLocked(trainer) && styles.lockedTrainer,
-                      defeatedTrainers.includes(trainer.id) && styles.defeatedTrainer,
-                      trainer.hasRandomEncounterBefore &&
-                      !completedEncounters.includes(trainer.id) &&
-                      styles.trainerWithEncounter,
-                    ]}
-                    onPress={() => handleTrainerSelect(trainer)}
-                    disabled={isTrainerLocked(trainer)}
-                  >
-                    <View style={styles.trainerCardContent}>
-                      <Image source={trainer.image} style={styles.trainerImage} />
-                      <View style={styles.trainerInfo}>
-                        <Text style={styles.trainerName}>{trainer.name}</Text>
-                        <Text style={styles.trainerType}>{trainer.isLeader ? "School Leader" : "Trainer"}</Text>
-                        {trainer.hasRandomEncounterBefore && !completedEncounters.includes(trainer.id) && (
-                          <Text style={styles.encounterWarning}>
-                            <Ionicons name="warning" size={14} color="#FF9800" /> Wild monster area
-                          </Text>
-                        )}
-                      </View>
-                      {isTrainerLocked(trainer) && (
-                        <Ionicons name="lock-closed" size={24} color="#666" style={styles.trainerIcon} />
-                      )}
-                      {defeatedTrainers.includes(trainer.id) && (
-                        <Ionicons name="checkmark-circle" size={24} color="#4CAF50" style={styles.trainerIcon} />
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                ))}
+                <ScrollView style={{ maxHeight: 400 }}>
+                  <View style={styles.trainersGrid}>
+                    {selectedSchool && Array.isArray(selectedSchool.trainers) ?
+                      selectedSchool.trainers.map((trainer) => (
+                        <TouchableOpacity
+                          key={trainer.id}
+                          style={[
+                            styles.trainerCard,
+                            isTrainerLocked(trainer) && styles.lockedTrainer,
+                            defeatedTrainers.includes(trainer.id) && styles.defeatedTrainer,
+                            trainer.hasRandomEncounterBefore === true &&
+                            !completedEncounters.includes(trainer.id) &&
+                            styles.trainerWithEncounter,
+                          ]}
+                          onPress={() => handleTrainerSelect(trainer)}
+                          disabled={isTrainerLocked(trainer)}
+                        >
+                          <View style={styles.trainerCardContent}>
+                            <Image
+                              source={trainer.image ? trainer.image : require('../assets/trainers/default-trainer.png')}
+                              style={styles.trainerImage}
+                              resizeMode="contain"
+                            />
+
+                            <View style={styles.trainerInfo}>
+                              <Text style={styles.trainerName}>{trainer.name || 'Unknown'}</Text>
+                              <Text style={styles.trainerType}>
+                                {trainer.isLeader ? "School Leader" : "Trainer"}
+                              </Text>
+                              {trainer.hasRandomEncounterBefore === true &&
+                                !completedEncounters.includes(trainer.id) && (
+                                  <Text style={styles.encounterWarning}>
+                                    ⚠️ Wild monster area
+                                  </Text>
+                                )}
+                            </View>
+
+                            {isTrainerLocked(trainer) && (
+                              <Ionicons name="lock-closed" size={24} color="#666" style={styles.trainerIcon} />
+                            )}
+                            {defeatedTrainers.includes(trainer.id) && (
+                              <Ionicons name="checkmark-circle" size={24} color="#4CAF50" style={styles.trainerIcon} />
+                            )}
+                          </View>
+                        </TouchableOpacity>
+                      )) : null}
+                  </View>
+                </ScrollView>
               </View>
             </View>
           </View>
-        </Modal>
+        )}
 
         {/* Share Modal */}
-        <Modal
-          visible={showShareModal}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => setShowShareModal(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.shareModalContent}>
-              <Text style={styles.shareModalTitle}>Share Your Progress</Text>
+        {showShareModal && (
+          <View style={styles.absoluteOverlay}>
+            <View style={styles.modalOverlay}>
+              <View style={styles.shareModalContent}>
+                <Text style={styles.shareModalTitle}>Share Your Progress</Text>
 
-              <View style={styles.shareButtons}>
-                {/* <TouchableOpacity
+                <View style={styles.shareButtons}>
+                  {/* <TouchableOpacity
                   style={[styles.shareButton, styles.instagramButton]}
                   onPress={() => handleShare("instagram")}
                 >
@@ -377,47 +407,48 @@ export default function MapScreen() {
                   <Text style={styles.shareButtonText}>Instagram</Text>
                 </TouchableOpacity> */}
 
-                <TouchableOpacity
-                  style={styles.shareButton}
-                  onPress={() => handleShare("instagram")}
-                >
-                  <LinearGradient
-                    colors={['#f09433', '#e6683c', '#dc2743', '#cc2366', '#bc1888']}
-                    start={{ x: 0.0, y: 0.0 }}
-                    end={{ x: 1.0, y: 1.0 }}
-                    style={styles.instagramGradient}
+                  <TouchableOpacity
+                    style={styles.shareButton}
+                    onPress={() => handleShare("instagram")}
                   >
-                    <Ionicons name="logo-instagram" size={24} color="#FFF" />
-                    <Text style={styles.shareButtonText}>Share on Instagram</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
+                    <LinearGradient
+                      colors={['#f09433', '#e6683c', '#dc2743', '#cc2366', '#bc1888']}
+                      start={{ x: 0.0, y: 0.0 }}
+                      end={{ x: 1.0, y: 1.0 }}
+                      style={styles.instagramGradient}
+                    >
+                      <Ionicons name="logo-instagram" size={24} color="#FFF" />
+                      <Text style={styles.shareButtonText}>Share on Instagram</Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[styles.shareButton, styles.twitterButton]}
-                  onPress={() => handleShare("twitter")}
-                >
-                  <Ionicons name="logo-twitter" size={24} color="#FFF" />
-                  <Text style={styles.shareButtonText}>Share on X</Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.shareButton, styles.twitterButton]}
+                    onPress={() => handleShare("twitter")}
+                  >
+                    <Ionicons name="logo-twitter" size={24} color="#FFF" />
+                    <Text style={styles.shareButtonText}>Share on X</Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[styles.shareButton, styles.facebookButton]}
-                  onPress={() => handleShare("facebook")}
-                >
-                  <Ionicons name="logo-facebook" size={24} color="#FFF" />
-                  <Text style={styles.shareButtonText}>Share on Facebook</Text>
+                  <TouchableOpacity
+                    style={[styles.shareButton, styles.facebookButton]}
+                    onPress={() => handleShare("facebook")}
+                  >
+                    <Ionicons name="logo-facebook" size={24} color="#FFF" />
+                    <Text style={styles.shareButtonText}>Share on Facebook</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity style={styles.cancelShareButton} onPress={() => {
+                  playSound("click", 0.3);
+                  setShowShareModal(false)
+                }}>
+                  <Text style={styles.cancelShareText}>Cancel</Text>
                 </TouchableOpacity>
               </View>
-
-              <TouchableOpacity style={styles.cancelShareButton} onPress={() => {
-                playSound("click", 0.3);
-                setShowShareModal(false)
-              }}>
-                <Text style={styles.cancelShareText}>Cancel</Text>
-              </TouchableOpacity>
             </View>
           </View>
-        </Modal>
+        )}
 
         {/* Tooltip Button */}
         <TouchableOpacity style={styles.tooltipButton} onPress={toggleTooltip}>
@@ -425,30 +456,27 @@ export default function MapScreen() {
         </TouchableOpacity>
 
         {/* Tooltip Modal */}
-        <Modal
-          visible={tooltipVisible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={toggleTooltip}
-        >
-          <View style={styles.tooltipOverlay}>
-            <View style={styles.tooltipContainer}>
-              <Text style={styles.tooltipTitle}>Help</Text>
-              <Text style={styles.tooltipText}>
-                - You can re-fight old trainers to level up your monsters. Simply revisit their location on the map and challenge them again.
-              </Text>
-              <Text style={styles.tooltipText}>
-                - Heal your monsters at the healing center. Click the green cross button in the top right in the navigation bar!
-              </Text>
-              <Text style={styles.tooltipText}>
-                - Type advantages: Fire beats Grass, Grass beats Water, Water beats Fire. Use this to your advantage in battles!
-              </Text>
-              <TouchableOpacity style={styles.closeToolButton} onPress={toggleTooltip}>
-                <Text style={styles.closeToolButtonText}>Close</Text>
-              </TouchableOpacity>
+        {tooltipVisible && (
+          <View style={styles.absoluteOverlay}>
+            <View style={styles.tooltipOverlay}>
+              <View style={styles.tooltipContainer}>
+                <Text style={styles.tooltipTitle}>Help</Text>
+                <Text style={styles.tooltipText}>
+                  - You can re-fight old trainers to level up your monsters. Simply revisit their location on the map and challenge them again.
+                </Text>
+                <Text style={styles.tooltipText}>
+                  - Heal your monsters at the healing center. Click the green cross button in the top right in the navigation bar!
+                </Text>
+                <Text style={styles.tooltipText}>
+                  - Type advantages: Fire beats Grass, Grass beats Water, Water beats Fire. Use this to your advantage in battles!
+                </Text>
+                <TouchableOpacity style={styles.closeToolButton} onPress={toggleTooltip}>
+                  <Text style={styles.closeToolButtonText}>Close</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </Modal>
+        )}
 
 
       </View >
@@ -574,6 +602,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    paddingBottom: 20,
   },
   trainerCard: {
     width: "30%",
@@ -586,6 +615,8 @@ const styles = StyleSheet.create({
   },
   trainerCardContent: {
     // marginVertical: "auto",
+    width: "100%",
+    alignItems: "center",
   },
   trainerWithEncounter: {
     borderLeftWidth: 5,
@@ -631,6 +662,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 5,
     right: 5,
+  },
+  absoluteOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 2000,
   },
   // Share modal styles
   modalOverlay: {

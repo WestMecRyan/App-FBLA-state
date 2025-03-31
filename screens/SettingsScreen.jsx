@@ -203,35 +203,41 @@ export default function SettingsScreen() {
         </ScrollView>
 
         {/* Reset Confirmation Modal */}
-        <Modal
-          visible={showResetModal}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => setShowResetModal(false)}
-        >
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Reset Progress</Text>
-              <Text style={styles.modalText}>
-                Are you sure you want to reset all game progress? This will delete your team and all progress.
-              </Text>
-              <View style={styles.modalButtons}>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.cancelButton]}
-                  onPress={() => {
-                    playSound("click", 0.3);
-                    setShowResetModal(false)
-                  }}
-                >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.modalButton, styles.confirmButton]} onPress={handleResetProgress}>
-                  <Text style={styles.confirmButtonText}>Reset</Text>
-                </TouchableOpacity>
+        {showResetModal && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              zIndex: 1000, // Ensure it appears above other content
+            }}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>Reset Progress</Text>
+                <Text style={styles.modalText}>
+                  Are you sure you want to reset all game progress? This will delete your team and all progress.
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.cancelButton]}
+                    onPress={() => {
+                      playSound("click", 0.3);
+                      setShowResetModal(false)
+                    }}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[styles.modalButton, styles.confirmButton]} onPress={handleResetProgress}>
+                    <Text style={styles.confirmButtonText}>Reset</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
-        </Modal>
+        )}
       </View>
     </SafeAreaView>
   )
