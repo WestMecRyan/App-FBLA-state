@@ -63,7 +63,7 @@ export default function LoginScreen() {
     Alert.alert("Debug", "Starting login request");
     setIsLoading(true);
   
-    const url = `https://worker-name/login?username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+    const url = `https://api.santiagohe75.workers.dev/login?username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
     Alert.alert("Debug", `Request URL: ${url}`);
   
     try {
