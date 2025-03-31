@@ -13,7 +13,8 @@ export default function SettingsScreen() {
     difficulty: "normal",
     subject: "math",
   })
-  const [showResetModal, setShowResetModal] = useState(false)
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     loadSettings()
@@ -91,6 +92,15 @@ export default function SettingsScreen() {
       console.error("Error resetting game state:", error)
     }
   }
+
+  const handleLogout = async () => {
+    // await AsyncStorage.removeItem("userId"); 
+    stopBgMusic();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }], // Navigate to Login screen
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -186,6 +196,17 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.settingSection}>
+            <Text style={styles.sectionTitle}>Account</Text>
+            <TouchableOpacity style={styles.logoutButton} onPress={() => {
+              playSound("click", 0.3);
+              setShowLogoutModal(true)
+            }
+            }>
+              <Text style={styles.logoutButtonText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.settingSection}>
             <Text style={styles.sectionTitle}>Game Data</Text>
 
             <TouchableOpacity style={styles.resetButton} onPress={() => {
@@ -234,6 +255,33 @@ export default function SettingsScreen() {
                     <Text style={styles.confirmButtonText}>Reset</Text>
                   </TouchableOpacity>
                 </View>
+              </View>
+            </View>
+          </View>
+        )}
+
+        {showLogoutModal && (
+          <View style={styles.overlay}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalTitle}>Logout</Text>
+              <Text style={styles.modalText}>Are you sure you want to log out?</Text>
+              <View style={styles.modalButtons}>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.cancelButton]}
+                  onPress={() => {
+                    playSound("click", 0.3);
+                    setShowLogoutModal(false)
+                  }
+                  }
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.confirmButton]}
+                  onPress={handleLogout}
+                >
+                  <Text style={styles.confirmButtonText}>Logout</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -429,5 +477,75 @@ const styles = StyleSheet.create({
     // fontWeight: "bold",
     fontFamily: "pixel-font",
   },
-})
+  logoutButton: {
+    backgroundColor: "slategray",
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  logoutButtonText: {
+    color: "#FFF",
+    // fontSize: 16,
+    fontFamily: "pixel-font",
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: "80%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    // fontWeight: "bold",
+    marginBottom: 15,
+    color: "#333",
+    fontFamily: "pixel-font",
+  },
+  modalText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#666",
+    fontFamily: "pixel-font",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    padding: 12,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "48%",
+  },
+  cancelButton: {
+    backgroundColor: "#9E9E9E",
+  },
+  confirmButton: {
+    backgroundColor: "#F44336",
+  },
+  cancelButtonText: {
+    color: "white",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
+  },
+  confirmButtonText: {
+    color: "white",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
+  },
+});
 

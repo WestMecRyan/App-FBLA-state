@@ -392,7 +392,7 @@ export const PROBLEMS = {
         id: 36,
         question: "Simplify the expression: 3(4x + 2) - 5x",
         answers: [
-          { answer: "7x + 2", explanation: "This is too high. Expand and combine like terms." },
+          { answer: "7x + 3", explanation: "This is too high. Expand and combine like terms." },
           { answer: "5x + 2", explanation: "This is too low. Try distributing 3 and combining the x terms." },
           { answer: "7x + 2", explanation: "This is too low. Recheck the distribution and simplification." },
           { answer: "7x + 6", explanation: "Correct! Distribute 3 across the parentheses: 3(4x) + 3(2) = 12x + 6. Then subtract 5x to get 7x + 6." }

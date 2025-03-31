@@ -1209,6 +1209,7 @@ export default function BattleScreen() {
         onComplete={() => {
           if (isBattleOver) {
             setTimeout(() => {
+              stopSound("victory")
               navigation.goBack()
             }, 2000);
           }

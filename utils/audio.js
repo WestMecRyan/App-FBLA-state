@@ -158,16 +158,32 @@ export const notifySettingsChanged = async () => {
   settingsChangeListeners.forEach(listener => listener(gameState.settings));
 };
 
-export const stopSound = async () => {
+// export const stopSound = async () => {
+//   try {
+//     if (activeSound) {
+//       console.log("Stopping sound effect");
+//       await activeSound.stopAsync();
+//       await activeSound.unloadAsync();
+//       activeSound = null; // Clear the reference to the sound
+//     }
+//   } catch (error) {
+//     console.error("Failed to stop sound effect:", error);
+//   }
+// };
+
+export const stopSound = async (soundName) => {
   try {
-    if (activeSound) {
-      console.log("Stopping sound effect");
-      await activeSound.stopAsync();
-      await activeSound.unloadAsync();
-      activeSound = null; // Clear the reference to the sound
+    const sound = audioCache.sounds[soundName]; // Retrieve the sound from the cache
+    if (sound) {
+      console.log(`Stopping sound: ${soundName}`);
+      await sound.stopAsync();
+      await sound.unloadAsync();
+      delete audioCache.sounds[soundName]; // Remove the sound from the cache
+    } else {
+      console.warn(`No active sound found for: ${soundName}`);
     }
   } catch (error) {
-    console.error("Failed to stop sound effect:", error);
+    console.error(`Failed to stop sound ${soundName}:`, error);
   }
 };
 
