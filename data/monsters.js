@@ -15,7 +15,7 @@ export const MONSTERS = [
     ],
     evolutions: [
       { level: 9, id: 11 }, 
-      { level: 14, id: 12 }, 
+      // { level: 14, id: 12 }, 
     ],
   },
   {
@@ -31,7 +31,7 @@ export const MONSTERS = [
       { id: 4, name: "Infernal Spiral", power: 45, type: "fire" },
     ],
     evolutions: [
-      { level: 14, id: 12 }, 
+      // { level: 14, id: 12 }, 
     ],
   },
   {
@@ -61,8 +61,8 @@ export const MONSTERS = [
       { id: 8, name: "Aqua Cyclone", power: 35, type: "Water" },
     ],
     evolutions: [
-      { level: 9, id: 21 }, 
-      { level: 14, id: 22 }, 
+      // { level: 9, id: 21 }, 
+      // { level: 14, id: 22 }, 
     ],
   },
   {
@@ -78,7 +78,7 @@ export const MONSTERS = [
       { id: 8, name: "Hydro Pulse", power: 45, type: "Water" },
     ],
     evolutions: [
-      { level: 14, id: 22 },
+      // { level: 14, id: 22 },
     ],
   },
   {
@@ -108,8 +108,8 @@ export const MONSTERS = [
       { id: 12, name: "Thorn Throttle", power: 35, type: "Grass" },
     ],
     evolutions: [
-      { level: 9, id: 31 }, 
-      { level: 14, id: 32 }, 
+      // { level: 9, id: 31 }, 
+      // { level: 14, id: 32 }, 
     ],
   },
   {
@@ -125,7 +125,7 @@ export const MONSTERS = [
       { id: 12, name: "Root Rampage", power: 45, type: "Grass" },
     ],
     evolutions: [
-      { level: 14, id: 32 }, 
+      // { level: 14, id: 32 }, 
     ],
   },
   {
@@ -133,7 +133,6 @@ export const MONSTERS = [
     name: "Gaialoth",
     type: "Grass",
     baseHealth: 195,
-    // image: require("../assets/monsters/einsteinium.png"),
     image: require('../assets/monsters/test-mon.png'),
     moves: [
       { id: 9, name: "Rollout", power: 30, type: "science" },
