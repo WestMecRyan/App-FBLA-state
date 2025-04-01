@@ -80,13 +80,11 @@ export default function RegisterScreen() {
   const handleRegister = async () => {
     if (!validateForm()) return
 
-    console.log("Debug: Starting registration request")
-    Alert.alert("Debug", "Starting registration request")
+  
     setIsLoading(true)
 
     const url = "https://api.santiagohe75.workers.dev/register"
-    console.log(`Debug: Request URL: ${url}`)
-    Alert.alert("Debug", `Request URL: ${url}`)
+   
 
     try {
       const response = await fetch(url, {
@@ -101,8 +99,7 @@ export default function RegisterScreen() {
         }),
       })
 
-      console.log(`Debug: Response status: ${response.status}`)
-      Alert.alert("Debug", `Response status: ${response.status}`)
+    
 
       if (response.ok) {
         const message = await response.text()
