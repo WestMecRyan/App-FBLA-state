@@ -12,22 +12,12 @@ import {
   Platform,
   Dimensions,
   ScrollView,
-  Keyboard,
   Alert,
 } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
-const authenticateUser = (username, password) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(username.length > 0 && password.length > 0)
-    }, 1000)
-  })
-}
-
-export default function LoginScreen() {
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+export default function ForgotPasswordScreen() {
+  const [email, setEmail] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [orientation, setOrientation] = useState("portrait")
   const navigation = useNavigation()
@@ -35,124 +25,102 @@ export default function LoginScreen() {
   // Detect orientation changes
   useEffect(() => {
     const updateOrientation = () => {
-      const { width, height } = Dimensions.get('window');
-      setOrientation(width > height ? "landscape" : "portrait");
-    };
+      const { width, height } = Dimensions.get("window")
+      setOrientation(width > height ? "landscape" : "portrait")
+    }
 
     // Set initial orientation
-    updateOrientation();
+    updateOrientation()
 
     // Add event listener for orientation changes
-    Dimensions.addEventListener('change', updateOrientation);
+    Dimensions.addEventListener("change", updateOrientation)
 
     // Clean up
     return () => {
       // Remove event listener (for older React Native versions)
       if (Dimensions.removeEventListener) {
-        Dimensions.removeEventListener('change', updateOrientation);
+        Dimensions.removeEventListener("change", updateOrientation)
       }
-    };
-  }, []);
-
-  const handleLogin = async () => {
-    if (!username || !password) {
-      Alert.alert("Error", "Please enter both username and password");
-      return;
     }
+  }, [])
+
+  const validateEmail = () => {
+    if (!email.trim() || !email.includes("@") || !email.includes(".")) {
+      console.log("Error: Please enter a valid email address")
+      Alert.alert("Error", "Please enter a valid email address")
+      return false
+    }
+    return true
+  }
+
+  const handleResetPassword = async () => {
+    if (!validateEmail()) return
   
-    setIsLoading(true);
+    setIsLoading(true)
   
     try {
-      const response = await fetch("https://api.santiagohe75.workers.dev/login", {
+      const response = await fetch("https://api.santiagohe75.workers.dev/reset-password", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username: username, password }),
-      });
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
   
-      if (response.ok) {
-        const message = await response.text();
-        Alert.alert("Success", message);
-        navigation.replace("Home");
-      } else {
-        const errorMessage = await response.text();
-        Alert.alert("Login Failed", errorMessage);
-      }
+      const message = await response.text()
+      Alert.alert(response.ok ? "Success" : "Error", message)
     } catch (error) {
-      Alert.alert("Network Error", `Error message: ${error.message}`);
-      console.error("Login error:", error);
+      Alert.alert("Network Error", error.message)
     } finally {
-      setIsLoading(false);
-    }}
-  
-  
-  const handleRegister = () => {
-    navigation.navigate("Register")
+      setIsLoading(false)
+    }
   }
+  
 
-  const handleForgotPassword = () => {
-    console.log("Navigating to Forgot Password screen")
-    navigation.navigate("ForgotPassword")
-  }
   return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === "ios" ? "padding" : "height"} 
-      style={styles.container}
-    >
-      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
       <ScrollView contentContainerStyle={orientation === "landscape" ? styles.landscapeScroll : styles.portraitScroll}>
         <View style={orientation === "landscape" ? styles.landscapeInner : styles.portraitInner}>
           {/* Logo Section */}
           <View style={orientation === "landscape" ? styles.landscapeLogoContainer : styles.portraitLogoContainer}>
-            <Image 
-              source={require("../assets/edumon-logo-education.png")} 
-              style={orientation === "landscape" ? styles.landscapeLogo : styles.portraitLogo} 
+            <Image
+              source={require("../assets/edumon-logo-education.png")}
+              style={orientation === "landscape" ? styles.landscapeLogo : styles.portraitLogo}
             />
+            <Text style={styles.appTitle}>Reset Password</Text>
           </View>
 
           {/* Form Section */}
           <View style={orientation === "landscape" ? styles.landscapeFormContainer : styles.portraitFormContainer}>
+            <Text style={styles.instructionText}>
+              Enter your email address and we'll send you instructions to reset your password.
+            </Text>
+
             <TextInput
               style={styles.input}
-              placeholder="Username"
-              value={username}
-              onChangeText={setUsername}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
               autoFocus={true}
             />
 
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-
             <TouchableOpacity
               style={[styles.button, isLoading && styles.buttonDisabled]}
-              onPress={handleLogin}
+              onPress={handleResetPassword}
               disabled={isLoading}
             >
-              <Text style={styles.buttonText}>{isLoading ? "Logging in..." : "Login"}</Text>
+              <Text style={styles.buttonText}>{isLoading ? "Sending..." : "Reset Password"}</Text>
             </TouchableOpacity>
 
-            <View style={styles.linksContainer}>
-              <TouchableOpacity onPress={handleForgotPassword}>
-                <Text style={styles.link}>Forgot Password?</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={handleRegister}>
-                <Text style={styles.link}>Create Account</Text>
+            <View style={styles.loginLinkContainer}>
+              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                <Text style={styles.loginLink}>Back to Login</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </ScrollView>
-      {/* </TouchableWithoutFeedback> */}
     </KeyboardAvoidingView>
   )
 }
@@ -174,8 +142,8 @@ const styles = StyleSheet.create({
   },
   portraitLogoContainer: {
     alignItems: "center",
-    marginBottom: 40,
-    width: '100%',
+    marginBottom: 30,
+    width: "100%",
   },
   portraitLogo: {
     width: 100,
@@ -186,16 +154,16 @@ const styles = StyleSheet.create({
     width: "100%",
     maxWidth: 400,
   },
-  
+
   // Landscape mode styles
   landscapeScroll: {
     flexGrow: 1,
   },
   landscapeInner: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
     padding: 20,
   },
   landscapeLogoContainer: {
@@ -205,16 +173,28 @@ const styles = StyleSheet.create({
     marginRight: 30,
   },
   landscapeLogo: {
-    width: 250,
-    height: 250,
+    width: 200,
+    height: 200,
     resizeMode: "contain",
   },
   landscapeFormContainer: {
     flex: 1,
     maxWidth: 500,
   },
-  
+
   // Common styles
+  appTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#333",
+    marginTop: 10,
+  },
+  instructionText: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 20,
+    textAlign: "center",
+  },
   input: {
     backgroundColor: "white",
     borderRadius: 8,
@@ -239,13 +219,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  linksContainer: {
+  loginLinkContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     marginTop: 20,
   },
-  link: {
+  loginLink: {
     color: "#4a90e2",
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: "bold",
   },
 })
+
