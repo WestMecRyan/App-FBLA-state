@@ -60,18 +60,17 @@ export default function LoginScreen() {
       return;
     }
   
-
     setIsLoading(true);
   
-    const url = `https://api.santiagohe75.workers.dev/login`;
-
     try {
-      const response = await fetch(url, {
+      const response = await fetch("https://api.santiagohe75.workers.dev/login", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: username, password }),
       });
-    
-      Alert.alert("Debug", `Response status: ${response.status}`);
-    
+  
       if (response.ok) {
         const message = await response.text();
         Alert.alert("Success", message);
@@ -87,14 +86,15 @@ export default function LoginScreen() {
       setIsLoading(false);
     }}
   
+  
   const handleRegister = () => {
     navigation.navigate("Register")
   }
 
   const handleForgotPassword = () => {
-    Alert.alert("Forgot Password", "Password reset functionality to be implemented")
+    console.log("Navigating to Forgot Password screen")
+    navigation.navigate("ForgotPassword")
   }
-
   return (
     <KeyboardAvoidingView 
       behavior={Platform.OS === "ios" ? "padding" : "height"} 

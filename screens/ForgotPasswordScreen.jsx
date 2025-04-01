@@ -11,16 +11,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   Dimensions,
-  Alert,
   ScrollView,
+  Alert,
 } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
-export default function RegisterScreen() {
-  const [username, setUsername] = useState("")
+export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [orientation, setOrientation] = useState("portrait")
   const navigation = useNavigation()
@@ -47,107 +44,55 @@ export default function RegisterScreen() {
     }
   }, [])
 
-  // Function to validate user input
-  const validateForm = () => {
-    if (!username.trim()) {
-      console.log("Error: Please enter a username")
-      Alert.alert("Error", "Please enter a username")
-      return false
-    }
-
+  const validateEmail = () => {
     if (!email.trim() || !email.includes("@") || !email.includes(".")) {
       console.log("Error: Please enter a valid email address")
       Alert.alert("Error", "Please enter a valid email address")
       return false
     }
-
-    if (password.length < 6) {
-      console.log("Error: Password must be at least 6 characters")
-      Alert.alert("Error", "Password must be at least 6 characters")
-      return false
-    }
-
-    if (password !== confirmPassword) {
-      console.log("Error: Passwords do not match")
-      Alert.alert("Error", "Passwords do not match")
-      return false
-    }
-
     return true
   }
 
-  // Function to handle user registration
-  const handleRegister = async () => {
-    if (!validateForm()) return
-
-    console.log("Debug: Starting registration request")
-    Alert.alert("Debug", "Starting registration request")
+  const handleResetPassword = async () => {
+    if (!validateEmail()) return
+  
     setIsLoading(true)
-
-    const url = "https://api.santiagohe75.workers.dev/register"
-    console.log(`Debug: Request URL: ${url}`)
-    Alert.alert("Debug", `Request URL: ${url}`)
-
+  
     try {
-      const response = await fetch(url, {
+      const response = await fetch("https://api.santiagohe75.workers.dev/reset-password", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       })
-
-      console.log(`Debug: Response status: ${response.status}`)
-      Alert.alert("Debug", `Response status: ${response.status}`)
-
-      if (response.ok) {
-        const message = await response.text()
-        console.log(`Registration Successful: ${message || "Your account has been created. Please log in."}`)
-        Alert.alert("Registration Successful", message || "Your account has been created. Please log in.", [
-          { text: "OK", onPress: () => navigation.navigate("Login") },
-        ])
-      } else {
-        const errorMessage = await response.text()
-        console.log(`Registration Failed: ${errorMessage || "Could not create account"}`)
-        Alert.alert("Registration Failed", errorMessage || "Could not create account")
-      }
+  
+      const message = await response.text()
+      Alert.alert(response.ok ? "Success" : "Error", message)
     } catch (error) {
-      console.log(`Network Error: ${error.message}`)
-      Alert.alert("Network Error", `Error message: ${error.message}`)
-      console.error("Registration Error:", error)
+      Alert.alert("Network Error", error.message)
     } finally {
       setIsLoading(false)
     }
   }
+  
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}>
-      {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
       <ScrollView contentContainerStyle={orientation === "landscape" ? styles.landscapeScroll : styles.portraitScroll}>
         <View style={orientation === "landscape" ? styles.landscapeInner : styles.portraitInner}>
           {/* Logo Section */}
           <View style={orientation === "landscape" ? styles.landscapeLogoContainer : styles.portraitLogoContainer}>
             <Image
-              source={require("../assets/monsters/ignekko.png")}
+              source={require("../assets/edumon-logo-education.png")}
               style={orientation === "landscape" ? styles.landscapeLogo : styles.portraitLogo}
             />
-            <Text style={styles.appTitle}>Create Account</Text>
+            <Text style={styles.appTitle}>Reset Password</Text>
           </View>
 
           {/* Form Section */}
           <View style={orientation === "landscape" ? styles.landscapeFormContainer : styles.portraitFormContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Username"
-              value={username}
-              onChangeText={setUsername}
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
+            <Text style={styles.instructionText}>
+              Enter your email address and we'll send you instructions to reset your password.
+            </Text>
 
             <TextInput
               style={styles.input}
@@ -157,42 +102,25 @@ export default function RegisterScreen() {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
+              autoFocus={true}
             />
 
             <TouchableOpacity
               style={[styles.button, isLoading && styles.buttonDisabled]}
-              onPress={handleRegister}
+              onPress={handleResetPassword}
               disabled={isLoading}
             >
-              <Text style={styles.buttonText}>{isLoading ? "Creating Account..." : "Sign Up"}</Text>
+              <Text style={styles.buttonText}>{isLoading ? "Sending..." : "Reset Password"}</Text>
             </TouchableOpacity>
 
             <View style={styles.loginLinkContainer}>
-              <Text style={styles.loginText}>Already have an account? </Text>
               <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                <Text style={styles.loginLink}>Log In</Text>
+                <Text style={styles.loginLink}>Back to Login</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </ScrollView>
-      {/* </TouchableWithoutFeedback> */}
     </KeyboardAvoidingView>
   )
 }
@@ -202,8 +130,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
   },
-
-  // Portrait styles
+  // Portrait mode styles
   portraitScroll: {
     flexGrow: 1,
   },
@@ -216,11 +143,11 @@ const styles = StyleSheet.create({
   portraitLogoContainer: {
     alignItems: "center",
     marginBottom: 30,
-    marginTop: 40,
+    width: "100%",
   },
   portraitLogo: {
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
     resizeMode: "contain",
   },
   portraitFormContainer: {
@@ -228,41 +155,45 @@ const styles = StyleSheet.create({
     maxWidth: 400,
   },
 
-  // Landscape styles
+  // Landscape mode styles
   landscapeScroll: {
     flexGrow: 1,
   },
   landscapeInner: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-around",
     alignItems: "center",
+    justifyContent: "space-around",
     padding: 20,
   },
   landscapeLogoContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 20,
+    marginRight: 30,
   },
   landscapeLogo: {
-    width: 160,
-    height: 160,
+    width: 200,
+    height: 200,
     resizeMode: "contain",
-    marginTop: -40,
   },
   landscapeFormContainer: {
-    flex: 2,
+    flex: 1,
     maxWidth: 500,
   },
 
   // Common styles
   appTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
-    // marginTop: 10,
     color: "#333",
-    fontFamily: "pixel-font",
+    marginTop: 10,
+  },
+  instructionText: {
+    fontSize: 16,
+    color: "#666",
+    marginBottom: 20,
+    textAlign: "center",
   },
   input: {
     backgroundColor: "white",
@@ -292,15 +223,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 20,
-    marginBottom: 20,
-  },
-  loginText: {
-    color: "#333",
-    fontSize: 14,
   },
   loginLink: {
     color: "#4a90e2",
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "bold",
   },
 })
