@@ -15,6 +15,7 @@
 // };
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { nanoid } from 'nanoid' // For generating unique tokens
 const app = new Hono()
 app.use('*', cors()) // Allow all origins
 
@@ -69,8 +70,10 @@ app.post('/register', async (c) => {
 
 app.post('/login', async (c) => {
 	const { DB } = c.env;
-	const { username, password } = await c.req.json(); // Read body as JSON
-  
+
+    const body = await c.req.json(); // Get request body
+	const { username, password } = body;
+
 	if (!DB) {
 	  return c.text('Database not configured', 500);
 	}
@@ -93,5 +96,69 @@ app.post('/login', async (c) => {
 	}
   });
   
+  app.post('/reset-password', async (c) => {
+	const { DB } = c.env // Cloudflare D1 database
+	const { email } = await c.req.json()
+  
+	if (!DB) return c.text('Database not configured', 500)
+	if (!email || !email.includes('@')) return c.text('Invalid email', 400)
+  
+	try {
+	  // Check if user exists
+	  const userQuery = 'SELECT * FROM users WHERE email = ?'
+	  const user = await DB.prepare(userQuery).bind(email).first()
+  
+	  if (!user) return c.text('No account found with this email', 404)
+  
+	  // Generate a secure reset token
+	  const resetToken = nanoid(32) // Generates a random string
+	  const expiration = Math.floor(Date.now() / 1000) + 3600 // 1-hour expiration
+  
+	  // Store the reset token in the database
+	  const insertTokenQuery = `
+		INSERT INTO password_resets (email, token, expires_at)
+		VALUES (?, ?, ?)
+		ON CONFLICT(email) DO UPDATE SET token = excluded.token, expires_at = excluded.expires_at
+	  `
+	  await DB.prepare(insertTokenQuery).bind(email, resetToken, expiration).run()
+  
+	  // Send reset email (placeholder for email service)
+	  console.log(`Password reset link: https://yourapp.com/reset-password?token=${resetToken}`)
+  
+	  return c.text('Password reset link sent to your email')
+	} catch (error) {
+	  return c.text(`Error: ${error.message}`, 500)
+	}
+  })
+
+  app.post('/confirm-reset', async (c) => {
+	const { DB } = c.env
+	const { token, newPassword } = await c.req.json()
+  
+	if (!DB) return c.text('Database not configured', 500)
+	if (!token || !newPassword) return c.text('Token and new password required', 400)
+  
+	try {
+	  // Check if token is valid and not expired
+	  const query = 'SELECT email FROM password_resets WHERE token = ? AND expires_at > ?'
+	  const result = await DB.prepare(query).bind(token, Math.floor(Date.now() / 1000)).first()
+  
+	  if (!result) return c.text('Invalid or expired token', 400)
+  
+	  const { email } = result
+  
+	  // Update the user’s password (store securely in production!)
+	  const updateQuery = 'UPDATE users SET password = ? WHERE email = ?'
+	  await DB.prepare(updateQuery).bind(newPassword, email).run()
+  
+	  // Remove the used reset token
+	  const deleteQuery = 'DELETE FROM password_resets WHERE email = ?'
+	  await DB.prepare(deleteQuery).bind(email).run()
+  
+	  return c.text('Password reset successfully')
+	} catch (error) {
+	  return c.text(`Error: ${error.message}`, 500)
+	}
+  })
 
 export default app
