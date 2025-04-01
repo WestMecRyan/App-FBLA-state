@@ -63,16 +63,22 @@ export default function LoginScreen() {
     Alert.alert("Debug", "Starting login request");
     setIsLoading(true);
   
-    const url = `https://worker-name/login?username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
-    Alert.alert("Debug", `Request URL: ${url}`);
-  
+    const url = `https://api.santiagohe75.workers.dev/login`;
+
     try {
       const response = await fetch(url, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
       });
-  
+    
       Alert.alert("Debug", `Response status: ${response.status}`);
-  
+    
       if (response.ok) {
         const message = await response.text();
         Alert.alert("Success", message);
@@ -87,7 +93,6 @@ export default function LoginScreen() {
     } finally {
       setIsLoading(false);
     }
-  };
   
   const handleRegister = () => {
     navigation.navigate("Register")
@@ -250,4 +255,4 @@ const styles = StyleSheet.create({
     color: "#4a90e2",
     fontSize: 14,
   },
-})
+})}
