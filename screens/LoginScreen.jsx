@@ -17,16 +17,16 @@ import {
 } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 
-const authenticateUser = (email, password) => {
+const authenticateUser = (username, password) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(email.length > 0 && password.length > 0)
+      resolve(username.length > 0 && password.length > 0)
     }, 1000)
   })
 }
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [orientation, setOrientation] = useState("portrait")
@@ -55,23 +55,21 @@ export default function LoginScreen() {
   }, []);
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please enter both email and password");
+    if (!username || !password) {
+      Alert.alert("Error", "Please enter both username and password");
       return;
     }
   
-    Alert.alert("Debug", "Starting login request");
     setIsLoading(true);
   
-    const url = `https://api.santiagohe75.workers.dev/login?username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
-    Alert.alert("Debug", `Request URL: ${url}`);
-  
     try {
-      const response = await fetch(url, {
+      const response = await fetch("https://api.santiagohe75.workers.dev/login", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username: username, password }),
       });
-  
-      Alert.alert("Debug", `Response status: ${response.status}`);
   
       if (response.ok) {
         const message = await response.text();
@@ -88,6 +86,7 @@ export default function LoginScreen() {
       setIsLoading(false);
     }
   };
+  
   
   const handleRegister = () => {
     navigation.navigate("Register")
@@ -117,9 +116,9 @@ export default function LoginScreen() {
           <View style={orientation === "landscape" ? styles.landscapeFormContainer : styles.portraitFormContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
+              placeholder="Username"
+              value={username}
+              onChangeText={setUsername}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}

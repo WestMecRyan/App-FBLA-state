@@ -71,8 +71,9 @@ app.get('/login', (c) => c.text('GET login route is working'));
 
 app.post('/login', async (c) => {
 	const { DB } = c.env;
-	const username = c.req.query('username');
-	const password = c.req.query('password');
+
+    const body = await c.req.json(); // Get request body
+	const { username, password } = body;
 
 	if (!DB) {
 		return c.text('Database not configured', 500);
