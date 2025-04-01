@@ -67,33 +67,31 @@ app.post('/register', async (c) => {
 	}
 });
 
-app.get('/login', (c) => c.text('GET login route is working'));
-
 app.post('/login', async (c) => {
 	const { DB } = c.env;
-	const username = c.req.query('username');
-	const password = c.req.query('password');
-
+	const { username, password } = await c.req.json(); // Read body as JSON
+  
 	if (!DB) {
-		return c.text('Database not configured', 500);
+	  return c.text('Database not configured', 500);
 	}
-
+  
 	if (!username || !password) {
-		return c.text('Username and password are required', 400);
+	  return c.text('Username and password are required', 400);
 	}
-
+  
 	try {
-		const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
-		const user = await DB.prepare(query).bind(username, password).first();
-
-		if (!user) {
-			return c.text('Invalid credentials', 401);
-		}
-
-		return c.text(`Login successful. Welcome ${user.username}`);
+	  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+	  const user = await DB.prepare(query).bind(username, password).first();
+  
+	  if (!user) {
+		return c.text('Invalid credentials', 401);
+	  }
+  
+	  return c.text(`Login successful. Welcome ${user.username}`);
 	} catch (error) {
-		return c.text(error.message, 500);
+	  return c.text(error.message, 500);
 	}
-});
+  });
+  
 
 export default app

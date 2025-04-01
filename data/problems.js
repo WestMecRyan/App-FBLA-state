@@ -392,12 +392,12 @@ export const PROBLEMS = {
         id: 36,
         question: "Simplify the expression: 3(4x + 2) - 5x",
         answers: [
-          { answer: "7x + 2", explanation: "This is too high. Expand and combine like terms." },
+          { answer: "7x + 3", explanation: "This is too high. Expand and combine like terms." },
           { answer: "5x + 2", explanation: "This is too low. Try distributing 3 and combining the x terms." },
-          { answer: "7x + 6", explanation: "This is too high. Recheck the distribution and simplification." },
-          { answer: "7x + 2", explanation: "Correct! Distribute 3 across the parentheses: 3(4x) + 3(2) = 12x + 6. Then subtract 5x to get 7x + 6." }
+          { answer: "7x + 2", explanation: "This is too low. Recheck the distribution and simplification." },
+          { answer: "7x + 6", explanation: "Correct! Distribute 3 across the parentheses: 3(4x) + 3(2) = 12x + 6. Then subtract 5x to get 7x + 6." }
         ],
-        correctAnswer: "7x + 2"
+        correctAnswer: "7x + 6"
       },
       {
         id: 37,
@@ -480,12 +480,12 @@ export const PROBLEMS = {
         id: 44,
         question: "What is 2(x + 4) = 18?",
         answers: [
-          { answer: "7", explanation: "Correct! First, divide both sides by 2 to get x + 4 = 9, then subtract 4 to get x = 7." },
-          { answer: "8", explanation: "This is too high. Recheck the steps to solve for x." },
-          { answer: "9", explanation: "This is too high. Double-check your division and subtraction." },
-          { answer: "10", explanation: "This is too high. Recheck the equation and solve it step-by-step." }
+          { answer: "5", explanation: "Correct! First, divide both sides by 2 to get x + 4 = 9, then subtract 4 to get x = 5." },
+          { answer: "6", explanation: "This is too high. Recheck the steps to solve for x." },
+          { answer: "7", explanation: "This is too high. Double-check your division and subtraction." },
+          { answer: "9", explanation: "This is too high. Recheck the equation and solve it step-by-step." }
         ],
-        correctAnswer: "7"
+        correctAnswer: "5"
       },
       {
         id: 45,
@@ -656,12 +656,12 @@ export const PROBLEMS = {
         id: 60,
         question: "Solve for x: 4(x + 6) = 32",
         answers: [
-          { answer: "5", explanation: "This is incorrect. Recheck your distribution and solving steps." },
+          { answer: "8", explanation: "This is incorrect. Recheck your distribution and solving steps." },
           { answer: "6", explanation: "This is incorrect. Recheck the equation and simplify it properly." },
-          { answer: "7", explanation: "This is incorrect. Double-check the steps after distributing the 4." },
-          { answer: "4", explanation: "Correct! First, divide both sides by 4 to get x + 6 = 8, then subtract 6 to get x = 4." }
+          { answer: "4", explanation: "This is incorrect. Double-check the steps after distributing the 4." },
+          { answer: "2", explanation: "Correct! First, divide both sides by 4 to get x + 6 = 8, then subtract 6 to get x = 2." }
         ],
-        correctAnswer: "4"
+        correctAnswer: "2"
       }
     ],
     hard: [
