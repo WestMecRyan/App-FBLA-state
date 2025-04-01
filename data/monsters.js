@@ -61,7 +61,7 @@ export const MONSTERS = [
       { id: 8, name: "Aqua Cyclone", power: 35, type: "Water" },
     ],
     evolutions: [
-      // { level: 9, id: 21 }, 
+      { level: 9, id: 21 }, 
       // { level: 14, id: 22 }, 
     ],
   },
@@ -70,7 +70,7 @@ export const MONSTERS = [
     name: "Riptotl",
     type: "Water",
     baseHealth: 140,
-    image: require('../assets/monsters/test-mon.png'),
+    image: require('../assets/monsters/riptotl.png'),
     moves: [
       { id: 5, name: "Tail Whip", power: 25, type: "Normal" },
       { id: 6, name: "Spin Attack", power: 30, type: "Normal" },
@@ -108,7 +108,7 @@ export const MONSTERS = [
       { id: 12, name: "Thorn Throttle", power: 35, type: "Grass" },
     ],
     evolutions: [
-      // { level: 9, id: 31 }, 
+      { level: 9, id: 31 }, 
       // { level: 14, id: 32 }, 
     ],
   },
@@ -117,7 +117,7 @@ export const MONSTERS = [
     name: "Vinepaws",
     type: "Grass",
     baseHealth: 145,
-    image: require('../assets/monsters/test-mon.png'),
+    image: require('../assets/monsters/vinepaws.png'),
     moves: [
       { id: 9, name: "Rollout", power: 25, type: "Normal" },
       { id: 10, name: "Cannonball", power: 30, type: "Normal" },
@@ -141,6 +141,39 @@ export const MONSTERS = [
       { id: 12, name: "Canopy Crash", power: 60, type: "science" },
     ],
     evolutions: [], 
+  },
+  {
+    id: 4,
+    name: "Gloobit",
+    type: "Normal",
+    baseHealth: 95,
+    image: require('../assets/monsters/gloobit.png'),
+    moves: [
+      { id: 9, name: "Slap", power: 20, type: "Normal" },
+      { id: 10, name: "Bounce", power: 25, type: "Normal" },
+      { id: 11, name: "Goo Strike", power: 30, type: "Normal" },
+      { id: 12, name: "Slime Blast", power: 35, type: "Normal" },
+    ],
+    evolutions: [
+      { level: 9, id: 41 }, 
+      // { level: 14, id: 32 }, 
+    ],
+  },
+  {
+    id: 41,
+    name: "Gloobrain",
+    type: "Normal",
+    baseHealth: 145,
+    image: require('../assets/monsters/gloobrain.png'),
+    moves: [
+      { id: 9, name: "Slap", power: 25, type: "Normal" },
+      { id: 10, name: "Bounce", power: 30, type: "Normal" },
+      { id: 11, name: "Slime Blast", power: 40, type: "Grass" },
+      { id: 12, name: "Goo Barage", power: 45, type: "Grass" },
+    ],
+    evolutions: [
+      // { level: 14, id: 32 }, 
+    ],
   },
 ]
 

@@ -66,20 +66,21 @@ export const SCHOOLS = [
           {
             monsterId: 3, 
             levelRange: { min: 4, max: 5 },
-            chance: 0.9,
+            // chance: 0.9,
+            chance: 1,
           },
-          {
-            monsterId: 31, 
-            levelRange: { min: 6, max: 8 },
-            chance: 0.1,
-          },
+          // {
+          //   monsterId: 31, 
+          //   levelRange: { min: 6, max: 8 },
+          //   chance: 0.1,
+          // },
         ],
       },
       {
         id: 3,
         name: "Master Flora",
         type: "grass",
-        monsters: [createMonster(3, 7), createMonster(2, 6), createMonster(31, 10)],
+        monsters: [createMonster(4, 7), createMonster(2, 6), createMonster(31, 10)],
         problems: async () => await getTrainerProblems(6, 9),
         isLeader: true,
         schoolId: 1,
