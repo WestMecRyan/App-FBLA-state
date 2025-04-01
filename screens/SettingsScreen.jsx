@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Modal, ScrollView, SafeAreaView } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useFocusEffect } from "@react-navigation/native"
 import { loadGameState, saveGameState, resetGameState } from "../utils/gameState"
-import { notifySettingsChanged } from '../utils/audio';
 import { Ionicons } from "@expo/vector-icons"
-import { playSound } from "../utils/audio"
+import { notifySettingsChanged, playSound, playBgMusic, stopBgMusic } from '../utils/audio'
 
 export default function SettingsScreen() {
   const navigation = useNavigation()
@@ -14,11 +13,30 @@ export default function SettingsScreen() {
     difficulty: "normal",
     subject: "math",
   })
-  const [showResetModal, setShowResetModal] = useState(false)
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     loadSettings()
   }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      // When settings screen comes into focus, stop any existing music and play settings music
+      const setupSettingsAudio = async () => {
+        await stopBgMusic(); // Ensure all music is stopped first
+        await playBgMusic("healCenter", 0.1); // Play healing center music for settings
+      };
+
+      setupSettingsAudio();
+
+      // Cleanup function when screen loses focus
+      return () => {
+        // Let the next screen handle its own music
+        // stopBgMusic();
+      };
+    }, [])
+  );
 
   const loadSettings = async () => {
     try {
@@ -74,6 +92,15 @@ export default function SettingsScreen() {
       console.error("Error resetting game state:", error)
     }
   }
+
+  const handleLogout = async () => {
+    // await AsyncStorage.removeItem("userId"); 
+    stopBgMusic();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }], // Navigate to Login screen
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -169,6 +196,17 @@ export default function SettingsScreen() {
           </View>
 
           <View style={styles.settingSection}>
+            <Text style={styles.sectionTitle}>Account</Text>
+            <TouchableOpacity style={styles.logoutButton} onPress={() => {
+              playSound("click", 0.3);
+              setShowLogoutModal(true)
+            }
+            }>
+              <Text style={styles.logoutButtonText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.settingSection}>
             <Text style={styles.sectionTitle}>Game Data</Text>
 
             <TouchableOpacity style={styles.resetButton} onPress={() => {
@@ -186,35 +224,68 @@ export default function SettingsScreen() {
         </ScrollView>
 
         {/* Reset Confirmation Modal */}
-        <Modal
-          visible={showResetModal}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={() => setShowResetModal(false)}
-        >
-          <View style={styles.modalOverlay}>
+        {showResetModal && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              zIndex: 1000, // Ensure it appears above other content
+            }}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>Reset Progress</Text>
+                <Text style={styles.modalText}>
+                  Are you sure you want to reset all game progress? This will delete your team and all progress.
+                </Text>
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.cancelButton]}
+                    onPress={() => {
+                      playSound("click", 0.3);
+                      setShowResetModal(false)
+                    }}
+                  >
+                    <Text style={styles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[styles.modalButton, styles.confirmButton]} onPress={handleResetProgress}>
+                    <Text style={styles.confirmButtonText}>Reset</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+        )}
+
+        {showLogoutModal && (
+          <View style={styles.overlay}>
             <View style={styles.modalContainer}>
-              <Text style={styles.modalTitle}>Reset Progress</Text>
-              <Text style={styles.modalText}>
-                Are you sure you want to reset all game progress? This will delete your team and all progress.
-              </Text>
+              <Text style={styles.modalTitle}>Logout</Text>
+              <Text style={styles.modalText}>Are you sure you want to log out?</Text>
               <View style={styles.modalButtons}>
                 <TouchableOpacity
                   style={[styles.modalButton, styles.cancelButton]}
                   onPress={() => {
                     playSound("click", 0.3);
-                    setShowResetModal(false)
-                  }}
+                    setShowLogoutModal(false)
+                  }
+                  }
                 >
                   <Text style={styles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.modalButton, styles.confirmButton]} onPress={handleResetProgress}>
-                  <Text style={styles.confirmButtonText}>Reset</Text>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.confirmButton]}
+                  onPress={handleLogout}
+                >
+                  <Text style={styles.confirmButtonText}>Logout</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
-        </Modal>
+        )}
       </View>
     </SafeAreaView>
   )
@@ -406,5 +477,75 @@ const styles = StyleSheet.create({
     // fontWeight: "bold",
     fontFamily: "pixel-font",
   },
-})
+  logoutButton: {
+    backgroundColor: "slategray",
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  logoutButtonText: {
+    color: "#FFF",
+    // fontSize: 16,
+    fontFamily: "pixel-font",
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: "80%",
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    // fontWeight: "bold",
+    marginBottom: 15,
+    color: "#333",
+    fontFamily: "pixel-font",
+  },
+  modalText: {
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 20,
+    color: "#666",
+    fontFamily: "pixel-font",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  modalButton: {
+    padding: 12,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "48%",
+  },
+  cancelButton: {
+    backgroundColor: "#9E9E9E",
+  },
+  confirmButton: {
+    backgroundColor: "#F44336",
+  },
+  cancelButtonText: {
+    color: "white",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
+  },
+  confirmButtonText: {
+    color: "white",
+    // fontWeight: "bold",
+    fontFamily: "pixel-font",
+  },
+});
 

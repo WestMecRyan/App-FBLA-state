@@ -69,6 +69,8 @@ export default function BattleScreen() {
   const [isEnemyFainted, setIsEnemyFainted] = useState(false)
   const [isPlayerFainted, setIsPlayerFainted] = useState(false)
 
+  const [showMovesModal, setShowMovesModal] = useState(false);
+
   const [backgroundImage, setBackgroundImage] = useState(null); // Store the background image
 
   // Create a ref to store the latest team data that persists between function calls
@@ -82,57 +84,81 @@ export default function BattleScreen() {
   const enemyHealthAnim = useRef(new Animated.Value(100)).current
   const playerExpAnim = useRef(new Animated.Value(0)).current
 
+  // Update the useFocusEffect to fix the audio overlap
+
   useFocusEffect(
     useCallback(() => {
       // When battle screen comes into focus, stop any existing music and play battle music
       const setupBattleAudio = async () => {
-        await stopBgMusic(); // Ensure all music is stopped first
+        try {
+          console.log("Stopping all previous background music");
+          await stopBgMusic(); // Ensure all music is stopped first
 
-        // Select battle music based on trainer position in the school
-        if (isRandomBattle) {
-          // For random encounters, use battle1
-          await playBgMusic("battle1", 0.1);
-        } else {
-          // For trainer battles, select music based on trainer position
-          const school = SCHOOLS.find((s) => s.id === schoolId);
-          if (school) {
-            const trainerIndex = school.trainers.findIndex((t) => t.id === trainerId);
-            if (trainerIndex === 0) {
-              await playBgMusic("battle1", 0.1);
-            } else if (trainerIndex === 1) {
-              await playBgMusic("battle2", 0.1);
-            } else if (trainerIndex === 2) {
-              await playBgMusic("battle3", 0.1);
+          // Add a small delay to ensure previous audio is fully stopped
+          await new Promise(resolve => setTimeout(resolve, 100));
+
+          console.log("Starting battle music, isRandomBattle:", isRandomBattle);
+
+          // Select battle music based on trainer position in the school
+          if (isRandomBattle) {
+            console.log("Playing random battle music");
+            await playBgMusic("battle1", 0.1);
+          } else {
+            // For trainer battles, select music based on trainer position
+            const school = SCHOOLS.find((s) => s.id === schoolId);
+            if (school) {
+              const trainerIndex = school.trainers.findIndex((t) => t.id === trainerId);
+              if (trainerIndex === 0) {
+                await playBgMusic("battle1", 0.1);
+              } else if (trainerIndex === 1) {
+                await playBgMusic("battle2", 0.1);
+              } else if (trainerIndex === 2) {
+                await playBgMusic("battle3", 0.1);
+              } else {
+                await playBgMusic("battle1", 0.1);
+              }
             } else {
+              // Default if school not found
               await playBgMusic("battle1", 0.1);
             }
-          } else {
-            // Default if school not found
-            await playBgMusic("battle1", 0.1);
           }
+        } catch (error) {
+          console.error("Error setting up battle audio:", error);
         }
       };
 
-      setupBattleAudio();
+      // Only set up audio once initialization is complete to prevent double audio
+      if (initializationComplete) {
+        setupBattleAudio();
+      }
 
       // Cleanup function when screen loses focus
       return () => {
-        stopBgMusic(); // Stop battle music when leaving
+        // Don't stop music here - we'll handle this elsewhere
       };
-    }, [schoolId, trainerId, isRandomBattle])
+    }, [schoolId, trainerId, isRandomBattle, initializationComplete])
   );
 
   useEffect(() => {
-    initializeBattle()
-    // playBgMusic("battle")
+    // Stop all background music before initializing battle
+    const initialize = async () => {
+      try {
+        await stopBgMusic(); // Stop any existing music first
+        await initializeBattle(); // Initialize battle after music stops
+      } catch (error) {
+        console.error("Initialization error:", error);
+      }
+    };
 
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress)
+    initialize();
+
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress);
 
     return () => {
-      backHandler.remove()
-      stopBgMusic()
-    }
-  }, [])
+      backHandler.remove();
+      // Don't stop music here - it can cause issues with transitions
+    };
+  }, []);
 
   // Update the ref whenever activeMonster changes
   useEffect(() => {
@@ -142,10 +168,6 @@ export default function BattleScreen() {
   }, [activeMonster])
 
   const handleBackPress = () => {
-    if (isBattleOver) {
-      // navigation.goBack()
-      return true
-    }
     return false
   }
 
@@ -169,6 +191,24 @@ export default function BattleScreen() {
       setBackgroundImage(require("../assets/battle-bg-grass.jpg"));
     }
   }, [schoolId]);
+
+  const handleFightPress = () => {
+    setShowMovesModal(true);
+  };
+
+  const handleMoveSelectFromModal = (move) => {
+    setShowMovesModal(false);
+    handleMoveSelect(move);
+  };
+
+  const getTypeColor = (type) => {
+    const typeColors = {
+      fire: "#FFE0B2", // Light Orange
+      water: "#BBDEFB", // Light Blue
+      grass: "#C8E6C9", // Light Green
+    }
+    return typeColors[type?.toLowerCase()] || "#F5F5F5" // Default color
+  }
 
   const initializeBattle = async () => {
     try {
@@ -206,13 +246,54 @@ export default function BattleScreen() {
           return
         }
 
-        // Create a fake trainer for the wild monster
+        // const wildTrainer = {
+        //   id: `wild-${Date.now()}`, // Unique ID
+        //   name: "Wild Monster",
+        //   monsters: [wildMonster],
+        //   problems: SCHOOLS.find((s) => s.id === schoolId)?.trainers[randomTrainerId]?.problems || [],
+        // }
+
         const wildTrainer = {
           id: `wild-${Date.now()}`, // Unique ID
           name: "Wild Monster",
           monsters: [wildMonster],
-          problems: SCHOOLS.find((s) => s.id === schoolId)?.trainers[0]?.problems || [],
-        }
+          // Create a problems function that returns random problems from all available
+          problems: async () => {
+            try {
+              const gameState = await loadGameState();
+              const subject = gameState.settings?.subject || "math";
+              const difficulty = gameState.settings?.difficulty || "normal";
+
+              // Gather all problems from all schools and trainers
+              const allProblems = [];
+
+              // Loop through all schools to collect problems
+              for (const school of SCHOOLS) {
+                for (const trainer of school.trainers) {
+                  if (trainer.problems) {
+                    const trainerProblems = await trainer.problems();
+                    if (trainerProblems && trainerProblems.length > 0) {
+                      allProblems.push(...trainerProblems);
+                    }
+                  }
+                }
+              }
+
+              // If no problems found, return an empty array
+              if (allProblems.length === 0) {
+                console.warn("No problems found for wild encounter");
+                return [];
+              }
+
+              // Shuffle the problems and return 5 (or fewer if not enough)
+              const shuffledProblems = [...allProblems].sort(() => Math.random() - 0.5);
+              return shuffledProblems.slice(0, 5);
+            } catch (error) {
+              console.error("Error getting random problems for wild encounter:", error);
+              return [];
+            }
+          }
+        };
 
         // Make sure exp is set
         const playerTeamWithExp = gameState.playerTeam.map((monster) => ({
@@ -488,12 +569,12 @@ export default function BattleScreen() {
       let effectivenessText = "";
       if (typeBonus > 1) {
         effectivenessText = " It's super effective!";
-        playSound("hit", 0.4);
+        playSound("hit", 0.2);
       } else if (typeBonus < 1) {
         effectivenessText = " It's not very effective...";
-        playSound("hit", 0.4);
+        playSound("hit", 0.2);
       } else {
-        playSound("hit", 0.4);
+        playSound("hit", 0.2);
       }
 
       setBattleText(`${currentActiveMonster.name} used ${move?.name || "attack"}!${effectivenessText}`);
@@ -571,17 +652,16 @@ export default function BattleScreen() {
     let effectivenessText = "";
     if (typeBonus > 1) {
       effectivenessText = " It's super effective!";
-      playSound("hit", 0.4);
+      playSound("hit", 0.2);
     } else if (typeBonus < 1) {
       effectivenessText = " It's not very effective...";
-      playSound("hit", 0.4);
+      playSound("hit", 0.2);
     } else {
-      playSound("hit", 0.4);
+      playSound("hit", 0.2);
     }
 
     // setBattleText(`Enemy ${enemyMonster.name} used ${enemyMove.name}!`)
     setBattleText(`Enemy ${enemyMonster.name} used ${enemyMove.name}!${effectivenessText}`);
-    // playSound("hit")
 
     // Wait for damage animation to complete
     await new Promise((resolve) => setTimeout(resolve, 400))
@@ -657,6 +737,7 @@ export default function BattleScreen() {
 
     // Monster is caught!
     setBattleText(`${enemyMonster.name} has been caught!`)
+    stopBgMusic();
     playSound("capture", 0.2)
 
     // Add the caught monster to the player's team
@@ -794,6 +875,7 @@ export default function BattleScreen() {
     // Show appropriate messages
     setTimeout(() => {
       // playSound("expGain", 0.5);
+      playSound("levelUp", 0.2)
       setBattleText(`${currentActiveMonster.name} gained ${expGained} EXP!`)
 
       setTimeout(() => {
@@ -818,10 +900,10 @@ export default function BattleScreen() {
 
             // Continue with battle flow after evolution completes
             checkForNextEnemyMonster(newDefeatedCount)
-          }, 5000) // Evolution animation duration
+          }, 5000) 
         } else if (leveledUp) {
           setBattleText(`${currentActiveMonster.name} leveled up to level ${updatedMonster.level}!`)
-          playSound("levelUp", 0.3)
+          playSound("levelUp", 0.2)
 
           // Update active monster
           setActiveMonster(updatedMonster)
@@ -1127,6 +1209,7 @@ export default function BattleScreen() {
         onComplete={() => {
           if (isBattleOver) {
             setTimeout(() => {
+              stopSound("victory")
               navigation.goBack()
             }, 2000);
           }
@@ -1139,6 +1222,7 @@ export default function BattleScreen() {
         <MovesPanel
           monster={activeMonster}
           onMoveSelect={handleMoveSelect}
+          onFightPress={handleFightPress}
           onSwitchPress={() => {
             playSound("click", 0.3);
             setShowSwitchModal(true)
@@ -1160,18 +1244,21 @@ export default function BattleScreen() {
       )}
 
       {/* Switch Monster Modal */}
-      <Modal
-        visible={showSwitchModal}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setShowSwitchModal(false)}
-      >
-        <View style={styles.modalContainer}>
+      {showSwitchModal && (
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000,
+        }}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Choose a Monster</Text>
 
-            {/* Make this section scrollable */}
-            {/* <ScrollView style={styles.monsterListContainer}> */}
             <ScrollView>
               <View style={styles.monsterListContainer}>
                 {playerTeam.map((monster, index) => {
@@ -1214,7 +1301,6 @@ export default function BattleScreen() {
               </View>
             </ScrollView>
 
-            {/* Sticky button at bottom */}
             <View style={styles.stickyButtonContainer}>
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -1229,48 +1315,102 @@ export default function BattleScreen() {
             </View>
           </View>
         </View>
-      </Modal>
+      )}
+
+      {/* Move Selection Modal */}
+      {showMovesModal && activeMonster && (
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000,
+        }}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Select a Move</Text>
+            <ScrollView>
+              <View style={styles.movesFlex}>
+                {activeMonster.moves.map((move, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[styles.moveButton, { backgroundColor: getTypeColor(move.type) }]}
+                    onPress={() => handleMoveSelectFromModal(move)}
+                  >
+                    <Text style={styles.moveName}>{move.name}</Text>
+                    <View style={styles.moveInfo}>
+                      <Text style={styles.moveType}>{move.type}</Text>
+                      <Text style={styles.movePower}>Power: {move.power}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+            <View style={styles.stickyButtonContainer}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => {
+                  playSound("click", 0.3);
+                  setShowMovesModal(false);
+                }}
+                disabled={isProcessingTurn}
+              >
+                <Text style={styles.cancelButtonText}>Back</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
 
 
       {/* Fainted Team Screen */}
-      <Modal
-        visible={showFaintedTeamScreen}
-        transparent={false}
-        animationType="fade"
-      >
-        <View style={styles.faintedTeamContainer}>
-          <View style={styles.faintedTeamHeader}>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => {
-                setShowFaintedTeamScreen(false);
-                navigation.goBack();
-              }}
-            >
-              <Ionicons name="arrow-back" size={24} color="white" />
-            </TouchableOpacity>
-            <Text style={styles.faintedTeamTitle}>Team Fainted</Text>
-          </View>
+      {showFaintedTeamScreen && (
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: "white",
+          zIndex: 2000,
+        }}>
+          <View style={styles.faintedTeamContainer}>
+            <View style={styles.faintedTeamHeader}>
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => {
+                  setShowFaintedTeamScreen(false);
+                  navigation.goBack();
+                }}
+              >
+                <Ionicons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+              <Text style={styles.faintedTeamTitle}>Team Fainted</Text>
+            </View>
 
-          <View style={styles.faintedTeamContent}>
-            <Ionicons name="alert-circle" size={80} color="#F44336" />
-            <Text style={styles.faintedTeamMessage}>
-              All of your monsters have fainted! Visit the healing center to restore your team's health.
-            </Text>
+            <View style={styles.faintedTeamContent}>
+              <Ionicons name="alert-circle" size={80} color="#F44336" />
+              <Text style={styles.faintedTeamMessage}>
+                All of your monsters have fainted! Visit the healing center to restore your team's health.
+              </Text>
 
-            <TouchableOpacity
-              style={styles.healingCenterButton}
-              onPress={() => {
-                setShowFaintedTeamScreen(false);
-                navigation.navigate("TeamManagement");
-              }}
-            >
-              <Ionicons name="medical" size={24} color="white" />
-              <Text style={styles.healingCenterButtonText}>Healing Center</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.healingCenterButton}
+                onPress={() => {
+                  setShowFaintedTeamScreen(false);
+                  navigation.navigate("TeamManagement");
+                }}
+              >
+                <Ionicons name="medical" size={24} color="white" />
+                <Text style={styles.healingCenterButtonText}>Healing Center</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </Modal>
+      )}
     </View>
   )
 }
@@ -1308,11 +1448,11 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 80, // Add padding at bottom to make room for sticky button
     width: "90%",
-    maxHeight: "80%",
+    maxHeight: "87%",
     overflow: "scroll",
   },
   modalTitle: {
-    fontSize: 22,
+    fontSize: 16,
     // fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
@@ -1370,7 +1510,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     backgroundColor: "#666",
-    padding: 15,
+    padding: 10,
     borderRadius: 10,
     width: "100%",
   },
@@ -1450,6 +1590,38 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     marginLeft: 10,
+    fontFamily: "pixel-font",
+  },
+  movesFlex: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: 'space-between'
+  },
+  moveButton: {
+    width: "48%",
+    backgroundColor: '#F5F5F5',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+    marginHorizontal: '1%'
+  },
+  moveName: {
+    fontSize: 14,
+    fontFamily: "pixel-font",
+  },
+  moveInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 5
+  },
+  moveType: {
+    color: '#666',
+    fontSize: 12,
+    fontFamily: "pixel-font",
+  },
+  movePower: {
+    color: '#666',
+    fontSize: 12,
     fontFamily: "pixel-font",
   },
 })

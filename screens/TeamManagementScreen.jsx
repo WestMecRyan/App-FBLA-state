@@ -24,16 +24,16 @@ export default function TeamManagementScreen() {
         await stopBgMusic(); // Ensure all music is stopped first
         await playBgMusic("healCenter", 0.1); // Play heal center music
       };
-      
+
       setupTeamAudio();
-      
+
       // Cleanup function when screen loses focus
       return () => {
-        stopBgMusic(); // Stop team management music when leaving
+        // stopBgMusic(); // Stop team management music when leaving
       };
     }, [])
   );
-  
+
   const navigation = useNavigation();
   const [team, setTeam] = useState([]);
   const [showHealModal, setShowHealModal] = useState(false);
@@ -162,67 +162,72 @@ export default function TeamManagementScreen() {
         ))}
       </ScrollView>
 
-      <Modal
-        visible={showHealModal}
-        transparent={true}
-        animationType="slide"
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Answer to Heal Your Team</Text>
-            {currentProblem ? (
-              <>
-                {selectedExplanation ? (
-                  // Show explanation and "Continue" button after an answer is selected
-                  <>
-                    <Text
-                      style={[
-                        styles.explanationText,
-                        { color: isCorrect ? "green" : "red" },
-                      ]}
-                    >
-                      {selectedExplanation}
-                    </Text>
-                    <TouchableOpacity
-                      style={[
-                        styles.continueButton,
-                        { backgroundColor: isCorrect ? "#4CAF50" : "#F44336" },
-                      ]}
-                      onPress={() => {
-                        setSelectedExplanation(null); // Reset explanation
-                        if (isCorrect) {
-                          setShowHealModal(false); // Close modal if correct
-                        }
-                      }}
-                    >
-                      <Text style={styles.continueButtonText}>Continue</Text>
-                    </TouchableOpacity>
-                  </>
-                ) : (
-                  // Show question and answers initially
-                  <>
-                    <Text style={styles.question}>{currentProblem.question}</Text>
-                    <View style={styles.answersContainer}>
-                      {currentProblem.answers.map((answer, index) => (
-                        <TouchableOpacity
-                          key={index}
-                          style={styles.answerButton}
-                          onPress={() => handleHealAttempt(answer)}
-                          disabled={healingInProgress}
-                        >
-                          <Text style={styles.answerText}>{answer.answer}</Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </>
-                )}
-              </>
-            ) : (
-              <Text style={styles.question}>Loading problem...</Text>
-            )}
+      {showHealModal && (
+        <View style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+        }}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Answer to Heal Your Team</Text>
+              {currentProblem ? (
+                <>
+                  {selectedExplanation ? (
+                    // Show explanation and "Continue" button after an answer is selected
+                    <>
+                      <Text
+                        style={[
+                          styles.explanationText,
+                          { color: isCorrect ? "green" : "red" },
+                        ]}
+                      >
+                        {selectedExplanation}
+                      </Text>
+                      <TouchableOpacity
+                        style={[
+                          styles.continueButton,
+                          { backgroundColor: isCorrect ? "#4CAF50" : "#F44336" },
+                        ]}
+                        onPress={() => {
+                          setSelectedExplanation(null); // Reset explanation
+                          if (isCorrect) {
+                            setShowHealModal(false); // Close modal if correct
+                          }
+                        }}
+                      >
+                        <Text style={styles.continueButtonText}>Continue</Text>
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    // Show question and answers initially
+                    <>
+                      <Text style={styles.question}>{currentProblem.question}</Text>
+                      <View style={styles.answersContainer}>
+                        {currentProblem.answers.map((answer, index) => (
+                          <TouchableOpacity
+                            key={index}
+                            style={styles.answerButton}
+                            onPress={() => handleHealAttempt(answer)}
+                            disabled={healingInProgress}
+                          >
+                            <Text style={styles.answerText}>{answer.answer}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    </>
+                  )}
+                </>
+              ) : (
+                <Text style={styles.question}>Loading problem...</Text>
+              )}
+            </View>
           </View>
         </View>
-      </Modal>
+      )}
     </View>
   );
 }

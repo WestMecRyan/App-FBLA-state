@@ -79,7 +79,7 @@ export const SCHOOLS = [
         id: 3,
         name: "Master Flora",
         type: "grass",
-        monsters: [createMonster(2, 6), createMonster(31, 10), createMonster(3, 19)],
+        monsters: [createMonster(3, 7), createMonster(2, 6), createMonster(31, 10)],
         problems: async () => await getTrainerProblems(6, 9),
         isLeader: true,
         schoolId: 1,

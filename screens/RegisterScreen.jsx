@@ -132,7 +132,7 @@ export default function RegisterScreen() {
           {/* Logo Section */}
           <View style={orientation === "landscape" ? styles.landscapeLogoContainer : styles.portraitLogoContainer}>
             <Image
-              source={require("../assets/edumon-logo-education.png")}
+              source={require("../assets/monsters/ignekko.png")}
               style={orientation === "landscape" ? styles.landscapeLogo : styles.portraitLogo}
             />
             <Text style={styles.appTitle}>Create Account</Text>
@@ -249,6 +249,7 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
     resizeMode: "contain",
+    marginTop: -40,
   },
   landscapeFormContainer: {
     flex: 2,
@@ -257,10 +258,11 @@ const styles = StyleSheet.create({
 
   // Common styles
   appTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     // marginTop: 10,
     color: "#333",
+    fontFamily: "pixel-font",
   },
   input: {
     backgroundColor: "white",

@@ -11,13 +11,13 @@
     ],
     "version": "1.0.0",
     "orientation": "landscape",
-    "icon": "./assets/monsters/ignekko.png",
+    "icon": "./assets/edumon-logo-education.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/monsters/ignekko.png",
+      "image": "./assets/edumon-logo-education.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
