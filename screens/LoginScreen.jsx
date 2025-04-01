@@ -92,7 +92,7 @@ export default function LoginScreen() {
       console.error("Login error:", error);
     } finally {
       setIsLoading(false);
-    }
+    }}
   
   const handleRegister = () => {
     navigation.navigate("Register")
@@ -255,4 +255,4 @@ const styles = StyleSheet.create({
     color: "#4a90e2",
     fontSize: 14,
   },
-})}
+})
