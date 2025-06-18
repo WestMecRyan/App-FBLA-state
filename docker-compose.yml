@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   frontend:
@@ -9,31 +9,3 @@ services:
       - "80:8081"
     environment:
       - NODE_ENV=production
-    depends_on:
-      - backend
-    volumes:
-      - ./:/app
-      - /app/node_modules
-
-  backend:
-    build:
-      context: ./backend/fbla-app
-      dockerfile: Dockerfile.backend
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./backend/fbla-app:/app
-      - /app/node_modules
-
-  nginx:
-    image: nginx:alpine
-    ports:
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - frontend
-      - backend
-    restart: unless-stopped
