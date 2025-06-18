@@ -15,8 +15,14 @@ COPY . .
 # Clear any potential cache issues
 RUN npx expo install --fix
 
+# Build the web version for production
+RUN npx expo export:web
+
+# Install a simple web server
+RUN npm install -g serve
+
 # Expose port
 EXPOSE 8081
 
-# Start the web version using npx
-CMD ["npx", "expo", "start", "--web", "--host", "tunnel", "--port", "8081"]
+# Serve the built files instead of running dev server
+CMD ["serve", "-s", "dist", "-l", "8081"]
