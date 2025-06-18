@@ -1,5 +1,5 @@
 # Backend Dockerfile
-FROM node:18-alpine
+FROM node:18-slim
 
 WORKDIR /app
 
@@ -15,5 +15,6 @@ COPY . .
 # Expose port
 EXPOSE 3000
 
-# Start the server
-CMD ["npm", "start"]
+# Create a simple Node.js server instead of using Wrangler
+# We'll create a basic server that can serve your API
+CMD ["node", "src/index.js"]

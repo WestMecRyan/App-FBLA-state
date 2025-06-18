@@ -19,4 +19,4 @@ RUN npx expo install --fix
 EXPOSE 8081
 
 # Start the web version using npx
-CMD ["npx", "expo", "start", "--web", "--host", "0.0.0.0", "--port", "8081"]
+CMD ["npx", "expo", "start", "--web", "--host", "tunnel", "--port", "8081"]
