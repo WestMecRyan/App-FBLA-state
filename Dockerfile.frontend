@@ -16,7 +16,7 @@ COPY . .
 RUN npx expo install --fix
 
 # Build the web version for production
-RUN npx expo export:web
+RUN npx expo export --platform web
 
 # Install a simple web server
 RUN npm install -g serve
